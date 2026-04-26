@@ -20,4 +20,4 @@ export default async function switchLanguage(request, response) {
         language
     });
 }
-//# sourceMappingURL=switchLanguage.js.map
+//# sourceMappingURL=%5BbodyParser%5DswitchLanguage.js.map
