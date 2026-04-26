@@ -28,3 +28,10 @@ Out of Stock, Rupture de stock
 SOLD OUT, ÉPUISÉ
 Contact for pricing, Contactez-nous pour le prix
 Product is out of stock, Le produit est en rupture de stock
+${count} Products, ${count} produits
+No categories found for "${term}", Aucune catégorie trouvée pour "${term}"
+No options found for "${code}", Aucune option trouvée pour "${code}"
+Price: ${value}, Prix : ${value}
+SKU ${sku}, SKU ${sku}
+SKU: ${sku}, SKU : ${sku}
+Show all ${count} options, Afficher les ${count} options

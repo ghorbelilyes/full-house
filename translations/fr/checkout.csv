@@ -144,3 +144,6 @@ Coupon removed successfully!, Coupon supprimé avec succès !
 Invalid coupon, Coupon invalide
 A coupon is already applied, Un coupon est déjà appliqué
 No coupon to remove, Aucun coupon à supprimer
+Discount(${coupon}), Remise (${coupon})
+Inclusive of tax ${totalTaxAmount}, Taxes incluses ${totalTaxAmount}
+Shipping (${method}), Expédition (${method})
