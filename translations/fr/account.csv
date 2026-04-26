@@ -43,3 +43,27 @@ Reset your password, Réinitialiser votre mot de passe
 Enter your new password, Entrez votre nouveau mot de passe
 UPDATE PASSWORD, METTRE À JOUR LE MOT DE PASSE
 Your password has been updated successfully., Votre mot de passe a été mis à jour avec succès.
+Add new address, Ajouter une nouvelle adresse
+Edit Address, Modifier l'adresse
+Edit, Modifier
+Delete, Supprimer
+Set as default, Définir par défaut
+You have no addresses saved, Vous n'avez aucune adresse enregistrée
+Address has been saved successfully!, L'adresse a été enregistrée avec succès !
+Address has been updated successfully!, L'adresse a été mise à jour avec succès !
+Address has been deleted successfully!, L'adresse a été supprimée avec succès !
+Failed to add address, Échec de l'ajout de l'adresse
+Failed to update address, Échec de la mise à jour de l'adresse
+Failed to delete address, Échec de la suppression de l'adresse
+No address data received, Aucune donnée d'adresse reçue
+Add address API not available, API d'ajout d'adresse non disponible
+Update address API not available, API de mise à jour d'adresse non disponible
+Delete address API not available, API de suppression d'adresse non disponible
+Registration failed, Échec de l'inscription
+Successfully logged in, Connexion réussie
+Successfully logged out, Déconnexion réussie
+Logging out..., Déconnexion en cours...
+Logout failed, Échec de la déconnexion
+You are already logged in, Vous êtes déjà connecté
+Reset Password, Réinitialiser le mot de passe
+We have sent you an email with a link to reset your password. Please check your inbox., Nous vous avons envoyé un email avec un lien pour réinitialiser votre mot de passe. Veuillez vérifier votre boîte de réception.
