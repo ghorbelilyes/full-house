@@ -8,7 +8,7 @@ interface FooterProps {
 
 export function Footer({ copyRight }: FooterProps) {
   return (
-    <footer className="footer bg-gray-100 mt-24 pt-2.5 pb-2.5 border-t border-gray-300">
+    <footer className="footer bg-muted mt-24 pt-2.5 pb-2.5 border-t border-border">
       <Area id="footerTop" className="footer__top" />
       <div className="footer__middle flex justify-between items-center">
         <Area id="footerMiddleLeft" className="footer__middle__left" />

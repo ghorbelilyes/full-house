@@ -64,7 +64,9 @@ function renderDevelopment(
   const classes = route.isAdmin
     ? `admin ${route.id}`
     : `frontStore ${route.id}`;
-  const language = getConfig('shop.language', 'en');
+  const configLanguage = getConfig('shop.language', 'en');
+  const cookieLanguage = request.cookies?.evershop_language;
+  const language = cookieLanguage && ['en', 'fr'].includes(cookieLanguage) ? cookieLanguage : configLanguage;
   if (!route) {
     // In testing mode, we do not have devMiddleware
     response.send(`
@@ -85,11 +87,28 @@ function renderDevelopment(
     isScriptContext: true
   });
   const langCode = request.currentRoute?.isAdmin ? 'en' : language;
+  const translations = get(request, 'locals.context.translations', {});
+  const translationsScript = Object.keys(translations).length > 0
+    ? `window.__translations__=${jsesc(translations, { json: true, isScriptContext: true })};`
+    : '';
   const scriptPath = route.isAdmin ? '/backend/admin-main.js' : '/main.js';
   response.send(`
             <!doctype html><html lang="${langCode}">
                 <head>
-                  <script>var eContext = ${safeContextValue}</script>
+                  <script>var eContext = ${safeContextValue};${translationsScript}</script>
+                  <script>
+                    (function() {
+                      try {
+                        var stored = localStorage.getItem('evershop_theme');
+                        var theme = stored || 'system';
+                        var resolved = theme;
+                        if (theme === 'system') {
+                          resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                        }
+                        document.documentElement.setAttribute('data-theme', resolved);
+                      } catch(e) {}
+                    })();
+                  </script>
                 </head>
                 <body class="${classes}">
                 <div id="app"></div>
@@ -100,7 +119,9 @@ function renderDevelopment(
 }
 
 function renderProduction(request, response) {
-  const language = getConfig('shop.language', 'en');
+  const configLanguage = getConfig('shop.language', 'en');
+  const cookieLanguage = request.cookies?.evershop_language;
+  const language = cookieLanguage && ['en', 'fr'].includes(cookieLanguage) ? cookieLanguage : configLanguage;
   const route = request.currentRoute;
   const langCode = route.isAdmin === true ? 'en' : language;
   const serverIndexPath = path.resolve(
@@ -128,10 +149,14 @@ function renderProduction(request, response) {
     }
   }
   const contextValue = buildContextData(request, response);
+  const translations = get(request, 'locals.context.translations', {});
   const safeContextValue = jsesc(contextValue, {
     json: true,
     isScriptContext: true
   });
+  const translationsScript = Object.keys(translations).length > 0
+    ? `window.__translations__=${jsesc(translations, { json: true, isScriptContext: true })};`
+    : '';
   import(pathToFileURL(serverIndexPath).toString())
     .then((module) => {
       const source = processPreloadImages(
@@ -140,7 +165,8 @@ function renderProduction(request, response) {
           assets.js,
           cssList,
           safeContextValue,
-          langCode
+          langCode,
+          translationsScript
         )
       );
       response.send(source);

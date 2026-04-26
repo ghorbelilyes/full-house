@@ -4,3 +4,34 @@ Sort By, Trier par
 There is no product to display, Aucun produit à afficher
 ${count} products, ${count} produits
 Search results for "${keyword}", Résultats de recherche pour "${keyword}"
+Search results for: ${keyword}, Résultats de recherche pour : ${keyword}
+Product not found, Produit non trouvé
+Product name is required, Le nom du produit est requis
+SKU must be unique, Le SKU doit être unique
+Enter value for ${attribute}, Entrez la valeur pour ${attribute}
+Product Filters, Filtres de produits
+Filter Products, Filtrer les produits
+Filters, Filtres
+Active Filters, Filtres actifs
+Apply Filters, Appliquer les filtres
+Clear All, Tout effacer
+Categories, Catégories
+Select sort, Sélectionner le tri
+Default, Par défaut
+Name, Nom
+Price, Prix
+No products found, Aucun produit trouvé
+Search, Rechercher
+Product Description, Description du produit
+In Stock, En stock
+Out of Stock, Rupture de stock
+SOLD OUT, ÉPUISÉ
+Contact for pricing, Contactez-nous pour le prix
+Product is out of stock, Le produit est en rupture de stock
+${count} Products, ${count} produits
+No categories found for "${term}", Aucune catégorie trouvée pour "${term}"
+No options found for "${code}", Aucune option trouvée pour "${code}"
+Price: ${value}, Prix : ${value}
+SKU ${sku}, SKU ${sku}
+SKU: ${sku}, SKU : ${sku}
+Show all ${count} options, Afficher les ${count} options

@@ -5,6 +5,7 @@ Continue to shipping, Continuer vers l'expédition
 Continue shopping, Continuer vos achats
 CONTINUE SHOPPING, CONTINUER VOS ACHATS
 Shopping cart, Panier
+Shopping Cart, Panier
 Product, Produit
 Price, Prix
 Quantity, Quantité
@@ -15,12 +16,15 @@ Discount($coupon), Remise ($coupon)
 Order summary, Résumé de la commande
 Taxes and shipping calculated at checkout, Taxes et expédition calculés lors du paiement
 CHECKOUT, PASSER À LA CAISSE
+Checkout, Paiement
+Checkout success, Paiement réussi
 Change, Changer
 Payment Method, Mode de paiement
 Shipping Address, Adresse de livraison
 Shipping Method, Mode de livraison
 No payment methods available, Aucun mode de paiement disponible
 Place Order, Passer la commande
+Order Placed, Commande passée
 My billing address is same as shipping address, Mon adresse de facturation est la même que mon adresse de livraison
 $count items, $count articles
 Discount, Remise
@@ -34,8 +38,10 @@ No payment method available, Aucun mode de paiement disponible
 Ship to, Expédier à
 Shipment, Envoi
 Thank you $name!, Merci $name !
+Thank you ${name}!, Merci ${name} !
 Contact information, Informations de contact
 Order #$orderNumber, Commande #$orderNumber
+Order #${orderNumber}, Commande #${orderNumber}
 ADD TO CART, AJOUTER AU PANIER
 Please select variant options, Veuillez sélectionner les options de variantes
 VIEW CART ($count), VOIR LE PANIER ($count)
@@ -51,7 +57,6 @@ City, Ville
 Country, Pays
 Postcode, Code postal
 Inclusive of tax, Taxes incluses
-Sorry, there is no available method for your address, Désolé, aucun mode de livraison n'est disponible pour votre adresse
 Full name is required, Le nom complet est requis
 Telephone is required, Le téléphone est requis
 Address is required, L'adresse est requise
@@ -59,3 +64,86 @@ City is required, La ville est requise
 Country is required, Le pays est requis
 Postcode is required, Le code postal est requis
 Contact, Contact
+Invalid cart, Panier invalide
+Invalid quantity, Quantité invalide
+Requires at least one item to create a cart, Il faut au moins un article pour créer un panier
+Some products are not available, Certains produits ne sont pas disponibles
+Too many items requested, Trop d'articles demandés
+Failed to set shipping method, Échec de la définition du mode de livraison
+Failed to set shipping note, Échec de la définition de la note de livraison
+Coupon does not match, Le coupon ne correspond pas
+Your order has been confirmed!, Votre commande a été confirmée !
+No shipping required, Aucune expédition requise
+Placing Order..., Commande en cours...
+Failed to place order. Please try again., Échec de la commande. Veuillez réessayer.
+Contact Information, Informations de contact
+Enter your email, Entrez votre email
+Log in, Se connecter
+Logging in..., Connexion en cours...
+Login failed, Échec de la connexion
+Email is required, L'email est requis
+Enter your password, Entrez votre mot de passe
+Cancel, Annuler
+Logged in as, Connecté en tant que
+Address 2, Adresse 2
+Full Name is required, Le nom complet est requis
+Available shipping methods will appear once you provide your address details, Les modes de livraison disponibles apparaîtront une fois votre adresse renseignée
+No shipping methods available, Aucun mode de livraison disponible
+No shipping options are available for your location, Aucune option de livraison n'est disponible pour votre emplacement
+No shipping is required for this order, Aucune expédition requise pour cette commande
+Select shipping method, Sélectionnez un mode de livraison
+FREE, GRATUIT
+Payment Information, Informations de paiement
+Pick a payment method, Choisissez un mode de paiement
+Select a payment method, Sélectionnez un mode de paiement
+Please select a payment method, Veuillez sélectionner un mode de paiement
+Please select a shipping method, Veuillez sélectionner un mode de livraison
+Same as shipping address, Identique à l'adresse de livraison
+Use a different billing address, Utiliser une adresse de facturation différente
+Please provide billing address to proceed, Veuillez fournir une adresse de facturation pour continuer
+Complete Order, Finaliser la commande
+Conveniently pay with cash at your doorstep when your order is delivered., Payez facilement en espèces à votre porte lors de la livraison de votre commande.
+Cart is not initialized, Le panier n'est pas initialisé
+Cart ID is required to checkout, L'identifiant du panier est requis pour passer la commande
+Cannot add contact info: cart not initialized, Impossible d'ajouter les informations de contact : panier non initialisé
+Cannot add shipping address: cart not initialized, Impossible d'ajouter l'adresse de livraison : panier non initialisé
+Cannot add shipping method: cart not initialized, Impossible d'ajouter le mode de livraison : panier non initialisé
+Cannot add billing address: cart not initialized, Impossible d'ajouter l'adresse de facturation : panier non initialisé
+Cannot add payment method: cart not initialized, Impossible d'ajouter le mode de paiement : panier non initialisé
+Cannot apply coupon: cart not initialized, Impossible d'appliquer le coupon : panier non initialisé
+Cannot remove coupon: cart not initialized, Impossible de supprimer le coupon : panier non initialisé
+Failed to add contact info, Échec de l'ajout des informations de contact
+Failed to add contact info., Échec de l'ajout des informations de contact.
+Failed to add shipping address, Échec de l'ajout de l'adresse de livraison
+Failed to add shipping address., Échec de l'ajout de l'adresse de livraison.
+Failed to add shipping method, Échec de l'ajout du mode de livraison
+Failed to add shipping method., Échec de l'ajout du mode de livraison.
+Failed to add billing address, Échec de l'ajout de l'adresse de facturation
+Failed to add billing address., Échec de l'ajout de l'adresse de facturation.
+Failed to add payment method, Échec de l'ajout du mode de paiement
+Failed to add payment method., Échec de l'ajout du mode de paiement.
+Failed to apply coupon, Échec de l'application du coupon
+Failed to remove coupon, Échec de la suppression du coupon
+Failed to remove coupon., Échec de la suppression du coupon.
+Failed to checkout, Échec du paiement
+Failed to place order, Échec de la commande
+Failed to update shipment, Échec de la mise à jour de l'envoi
+Failed to add item to cart, Échec de l'ajout de l'article au panier
+Your Cart, Votre panier
+Your cart is empty, Votre panier est vide
+Add some items to get started, Ajoutez des articles pour commencer
+Subtotal, Sous-total
+View Cart (${totalQty}), Voir le panier (${totalQty})
+Add to Cart, Ajouter au panier
+Adding..., Ajout en cours...
+Failed to add product to cart, Échec de l'ajout du produit au panier
+Coupon code is required, Le code coupon est requis
+Please enter a coupon code, Veuillez entrer un code coupon
+Coupon applied successfully!, Coupon appliqué avec succès !
+Coupon removed successfully!, Coupon supprimé avec succès !
+Invalid coupon, Coupon invalide
+A coupon is already applied, Un coupon est déjà appliqué
+No coupon to remove, Aucun coupon à supprimer
+Discount(${coupon}), Remise (${coupon})
+Inclusive of tax ${totalTaxAmount}, Taxes incluses ${totalTaxAmount}
+Shipping (${method}), Expédition (${method})
