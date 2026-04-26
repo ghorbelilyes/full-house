@@ -164,8 +164,9 @@ function renderProduction(request, response) {
           request.currentRoute,
           assets.js,
           cssList,
-          `${safeContextValue};${translationsScript}`,
-          langCode
+          safeContextValue,
+          langCode,
+          translationsScript
         )
       );
       response.send(source);
