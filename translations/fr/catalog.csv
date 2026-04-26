@@ -4,3 +4,8 @@ Sort By, Trier par
 There is no product to display, Aucun produit à afficher
 ${count} products, ${count} produits
 Search results for "${keyword}", Résultats de recherche pour "${keyword}"
+Search results for: ${keyword}, Résultats de recherche pour : ${keyword}
+Product not found, Produit non trouvé
+Product name is required, Le nom du produit est requis
+SKU must be unique, Le SKU doit être unique
+Enter value for ${attribute}, Entrez la valeur pour ${attribute}

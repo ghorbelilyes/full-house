@@ -5,6 +5,7 @@ Continue to shipping, Continuer vers l'expédition
 Continue shopping, Continuer vos achats
 CONTINUE SHOPPING, CONTINUER VOS ACHATS
 Shopping cart, Panier
+Shopping Cart, Panier
 Product, Produit
 Price, Prix
 Quantity, Quantité
@@ -15,12 +16,15 @@ Discount($coupon), Remise ($coupon)
 Order summary, Résumé de la commande
 Taxes and shipping calculated at checkout, Taxes et expédition calculés lors du paiement
 CHECKOUT, PASSER À LA CAISSE
+Checkout, Paiement
+Checkout success, Paiement réussi
 Change, Changer
 Payment Method, Mode de paiement
 Shipping Address, Adresse de livraison
 Shipping Method, Mode de livraison
 No payment methods available, Aucun mode de paiement disponible
 Place Order, Passer la commande
+Order Placed, Commande passée
 My billing address is same as shipping address, Mon adresse de facturation est la même que mon adresse de livraison
 $count items, $count articles
 Discount, Remise
@@ -34,8 +38,10 @@ No payment method available, Aucun mode de paiement disponible
 Ship to, Expédier à
 Shipment, Envoi
 Thank you $name!, Merci $name !
+Thank you ${name}!, Merci ${name} !
 Contact information, Informations de contact
 Order #$orderNumber, Commande #$orderNumber
+Order #${orderNumber}, Commande #${orderNumber}
 ADD TO CART, AJOUTER AU PANIER
 Please select variant options, Veuillez sélectionner les options de variantes
 VIEW CART ($count), VOIR LE PANIER ($count)
@@ -51,7 +57,6 @@ City, Ville
 Country, Pays
 Postcode, Code postal
 Inclusive of tax, Taxes incluses
-Sorry, there is no available method for your address, Désolé, aucun mode de livraison n'est disponible pour votre adresse
 Full name is required, Le nom complet est requis
 Telephone is required, Le téléphone est requis
 Address is required, L'adresse est requise
@@ -59,3 +64,15 @@ City is required, La ville est requise
 Country is required, Le pays est requis
 Postcode is required, Le code postal est requis
 Contact, Contact
+Invalid cart, Panier invalide
+Invalid quantity, Quantité invalide
+Requires at least one item to create a cart, Il faut au moins un article pour créer un panier
+Some products are not available, Certains produits ne sont pas disponibles
+Too many items requested, Trop d'articles demandés
+Failed to set shipping method, Échec de la définition du mode de livraison
+Failed to set shipping note, Échec de la définition de la note de livraison
+Coupon does not match, Le coupon ne correspond pas
+Your order has been confirmed!, Votre commande a été confirmée !
+No shipping required, Aucune expédition requise
+Placing Order..., Commande en cours...
+Failed to place order. Please try again., Échec de la commande. Veuillez réessayer.

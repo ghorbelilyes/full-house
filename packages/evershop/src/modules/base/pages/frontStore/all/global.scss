@@ -11,7 +11,8 @@
 
   body {
     font-size: 100%;
-    color: #3a3a3a;
+    color: var(--foreground);
+    background-color: var(--background);
     input[type='email'],
     input[type='password'],
     input[type='tel'],

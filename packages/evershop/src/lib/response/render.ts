@@ -64,7 +64,9 @@ function renderDevelopment(
   const classes = route.isAdmin
     ? `admin ${route.id}`
     : `frontStore ${route.id}`;
-  const language = getConfig('shop.language', 'en');
+  const configLanguage = getConfig('shop.language', 'en');
+  const cookieLanguage = request.cookies?.evershop_language;
+  const language = cookieLanguage && ['en', 'fr'].includes(cookieLanguage) ? cookieLanguage : configLanguage;
   if (!route) {
     // In testing mode, we do not have devMiddleware
     response.send(`
@@ -90,6 +92,19 @@ function renderDevelopment(
             <!doctype html><html lang="${langCode}">
                 <head>
                   <script>var eContext = ${safeContextValue}</script>
+                  <script>
+                    (function() {
+                      try {
+                        var stored = localStorage.getItem('evershop_theme');
+                        var theme = stored || 'system';
+                        var resolved = theme;
+                        if (theme === 'system') {
+                          resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                        }
+                        document.documentElement.setAttribute('data-theme', resolved);
+                      } catch(e) {}
+                    })();
+                  </script>
                 </head>
                 <body class="${classes}">
                 <div id="app"></div>
@@ -100,7 +115,9 @@ function renderDevelopment(
 }
 
 function renderProduction(request, response) {
-  const language = getConfig('shop.language', 'en');
+  const configLanguage = getConfig('shop.language', 'en');
+  const cookieLanguage = request.cookies?.evershop_language;
+  const language = cookieLanguage && ['en', 'fr'].includes(cookieLanguage) ? cookieLanguage : configLanguage;
   const route = request.currentRoute;
   const langCode = route.isAdmin === true ? 'en' : language;
   const serverIndexPath = path.resolve(

@@ -1,0 +1,16 @@
+"""
+Represents a supported language
+"""
+type SupportedLanguage {
+  code: String!
+  label: String!
+}
+
+extend type Query {
+  """Current active language code"""
+  currentLanguage: String!
+  """JSON string of translation key-value pairs"""
+  translations: String
+  """List of supported languages"""
+  supportedLanguages: [SupportedLanguage]!
+}

@@ -2,6 +2,7 @@ Login, Connexion
 Logout, Déconnexion
 Email, Email
 Password, Mot de passe
+Password is required, Le mot de passe est requis
 Forgot your password?, Mot de passe oublié ?
 Create an account, Créer un compte
 Register, S'inscrire
@@ -30,3 +31,15 @@ Shipping Address, Adresse de livraison
 Create A New Account, Créer un nouveau compte
 Contact, Contact
 Customer information, Informations client
+Address Book, Carnet d'adresses
+Recent Orders, Commandes récentes
+Welcome Back!, Bon retour !
+Please sign in to your account, Veuillez vous connecter à votre compte
+Invalid email or password, Email ou mot de passe invalide
+Please enter your email to receive a reset link, Veuillez entrer votre email pour recevoir un lien de réinitialisation
+Reset Your Password, Réinitialiser votre mot de passe
+Reset password, Réinitialiser le mot de passe
+Reset your password, Réinitialiser votre mot de passe
+Enter your new password, Entrez votre nouveau mot de passe
+UPDATE PASSWORD, METTRE À JOUR LE MOT DE PASSE
+Your password has been updated successfully., Votre mot de passe a été mis à jour avec succès.

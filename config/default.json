@@ -1,0 +1,48 @@
+{
+  "shop": {
+    "language": "en",
+    "timezone": "Africa/Tunis",
+    "currency": "USD",
+    "weightUnit": "kg",
+    "homeUrl": "http://localhost:3000"
+  },
+  "system": {
+    "file_storage": "local",
+    "extensions": [
+      {
+        "name": "languageSwitcher",
+        "resolve": "extensions/languageSwitcher",
+        "enabled": true,
+        "priority": 10
+      },
+      {
+        "name": "darkMode",
+        "resolve": "extensions/darkMode",
+        "enabled": true,
+        "priority": 11
+      }
+    ],
+    "session": {
+      "maxAge": 86400000,
+      "resave": false,
+      "saveUninitialized": false
+    }
+  },
+  "catalog": {
+    "collectionPageSize": 20,
+    "showOutOfStockProduct": false
+  },
+  "checkout": {
+    "showShippingNote": true
+  },
+  "pricing": {
+    "rounding": "round",
+    "precision": 2,
+    "tax": {
+      "rounding": "round",
+      "precision": 2,
+      "round_level": "total",
+      "price_including_tax": true
+    }
+  }
+}
