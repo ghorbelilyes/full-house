@@ -87,11 +87,15 @@ function renderDevelopment(
     isScriptContext: true
   });
   const langCode = request.currentRoute?.isAdmin ? 'en' : language;
+  const translations = get(request, 'locals.context.translations', {});
+  const translationsScript = Object.keys(translations).length > 0
+    ? `window.__translations__=${jsesc(translations, { json: true, isScriptContext: true })};`
+    : '';
   const scriptPath = route.isAdmin ? '/backend/admin-main.js' : '/main.js';
   response.send(`
             <!doctype html><html lang="${langCode}">
                 <head>
-                  <script>var eContext = ${safeContextValue}</script>
+                  <script>var eContext = ${safeContextValue};${translationsScript}</script>
                   <script>
                     (function() {
                       try {
@@ -145,10 +149,14 @@ function renderProduction(request, response) {
     }
   }
   const contextValue = buildContextData(request, response);
+  const translations = get(request, 'locals.context.translations', {});
   const safeContextValue = jsesc(contextValue, {
     json: true,
     isScriptContext: true
   });
+  const translationsScript = Object.keys(translations).length > 0
+    ? `window.__translations__=${jsesc(translations, { json: true, isScriptContext: true })};`
+    : '';
   import(pathToFileURL(serverIndexPath).toString())
     .then((module) => {
       const source = processPreloadImages(
@@ -156,7 +164,7 @@ function renderProduction(request, response) {
           request.currentRoute,
           assets.js,
           cssList,
-          safeContextValue,
+          `${safeContextValue};${translationsScript}`,
           langCode
         )
       );
