@@ -20,6 +20,12 @@
         "resolve": "extensions/darkMode",
         "enabled": true,
         "priority": 11
+      },
+      {
+        "name": "dashboardAnalytics",
+        "resolve": "extensions/dashboardAnalytics",
+        "enabled": true,
+        "priority": 12
       }
     ],
     "session": {
