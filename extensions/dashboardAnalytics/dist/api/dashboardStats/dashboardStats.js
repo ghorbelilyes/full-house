@@ -1,4 +1,4 @@
-import { pool } from '@evershop/evershop/lib/postgres/connection.js';
+import { pool } from '@evershop/evershop/lib/postgres';
 async function query(sql, params = []) {
     const client = await pool.connect();
     try {
