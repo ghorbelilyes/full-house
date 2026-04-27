@@ -1,9 +1,12 @@
 import { pool } from '@evershop/evershop/lib/postgres';
-async function query(sql, params = []) {
+async function safeQuery(sql, params = []) {
     const client = await pool.connect();
     try {
         const result = await client.query(sql, params);
         return result.rows;
+    }
+    catch (err) {
+        return null;
     }
     finally {
         client.release();
@@ -12,7 +15,7 @@ async function query(sql, params = []) {
 export default async function dashboardStats(request, response) {
     try {
         // ── 1. Product Performance: top sellers vs slow movers ──
-        const productPerformance = await query(`
+        const productPerformance = await safeQuery(`
       SELECT
         p.product_id,
         pd.name,
@@ -30,7 +33,7 @@ export default async function dashboardStats(request, response) {
         SELECT
           oi.product_id,
           SUM(oi.qty) AS total_sold,
-          SUM(oi.total) AS total_revenue,
+          SUM(oi.line_total_incl_tax) AS total_revenue,
           COUNT(DISTINCT oi.order_item_order_id) AS order_count
         FROM order_item oi
         GROUP BY oi.product_id
@@ -40,7 +43,8 @@ export default async function dashboardStats(request, response) {
       LIMIT 20
     `);
         // ── 2. Category Revenue Breakdown ──
-        const categoryRevenue = await query(`
+        // Uses product.category_id (set in Version-1.0.2 migration)
+        const categoryRevenue = await safeQuery(`
       SELECT
         cd.name AS category_name,
         COUNT(DISTINCT p.product_id) AS product_count,
@@ -48,10 +52,9 @@ export default async function dashboardStats(request, response) {
         COALESCE(SUM(sales.total_sold), 0) AS total_sold
       FROM category c
       JOIN category_description cd ON cd.category_description_category_id = c.category_id
-      JOIN product_category pc ON pc.category_id = c.category_id
-      JOIN product p ON p.product_id = pc.product_id AND p.status = true
+      JOIN product p ON p.category_id = c.category_id AND p.status = true
       LEFT JOIN (
-        SELECT product_id, SUM(total) AS total_revenue, SUM(qty) AS total_sold
+        SELECT product_id, SUM(line_total_incl_tax) AS total_revenue, SUM(qty) AS total_sold
         FROM order_item GROUP BY product_id
       ) sales ON sales.product_id = p.product_id
       GROUP BY c.category_id, cd.name
@@ -59,7 +62,7 @@ export default async function dashboardStats(request, response) {
       LIMIT 10
     `);
         // ── 3. Low Stock Alerts (products with stock <= 5 that manage stock) ──
-        const lowStock = await query(`
+        const lowStock = await safeQuery(`
       SELECT
         p.product_id,
         pd.name,
@@ -78,7 +81,7 @@ export default async function dashboardStats(request, response) {
       LIMIT 15
     `);
         // ── 4. Inventory Distribution (stock levels) ──
-        const inventoryDistribution = await query(`
+        const inventoryDistribution = await safeQuery(`
       SELECT
         CASE
           WHEN pi2.qty = 0 THEN 'Out of Stock'
@@ -102,7 +105,7 @@ export default async function dashboardStats(request, response) {
         END
     `);
         // ── 5. Order Status Overview ──
-        const orderStatuses = await query(`
+        const orderStatuses = await safeQuery(`
       SELECT
         COALESCE(payment_status, 'unknown') AS status,
         COUNT(*) AS count,
@@ -112,7 +115,7 @@ export default async function dashboardStats(request, response) {
       ORDER BY count DESC
     `);
         // ── 6. Revenue Trend (last 12 months) ──
-        const revenueTrend = await query(`
+        const revenueTrend = await safeQuery(`
       SELECT
         TO_CHAR(created_at, 'YYYY-MM') AS month,
         COUNT(*) AS orders,
@@ -124,7 +127,7 @@ export default async function dashboardStats(request, response) {
       ORDER BY month ASC
     `);
         // ── 7. Summary KPIs ──
-        const kpis = await query(`
+        const kpis = await safeQuery(`
       SELECT
         (SELECT COUNT(*) FROM product WHERE status = true AND variant_group_id IS NULL) AS total_products,
         (SELECT COUNT(*) FROM "order") AS total_orders,
@@ -139,7 +142,7 @@ export default async function dashboardStats(request, response) {
         (SELECT COALESCE(SUM(grand_total), 0) FROM "order" WHERE created_at >= NOW() - INTERVAL '30 days') AS revenue_last_30d
     `);
         // ── 8. Never-sold products (hard to sell / need attention) ──
-        const neverSold = await query(`
+        const neverSold = await safeQuery(`
       SELECT
         p.product_id,
         pd.name,
@@ -158,7 +161,7 @@ export default async function dashboardStats(request, response) {
       LIMIT 10
     `);
         // ── 9. Collection / Featured products performance ──
-        const collectionPerformance = await query(`
+        const collectionPerformance = await safeQuery(`
       SELECT
         col.code AS collection_code,
         col.name AS collection_name,
@@ -169,22 +172,22 @@ export default async function dashboardStats(request, response) {
       JOIN product_collection pc2 ON pc2.collection_id = col.collection_id
       JOIN product p ON p.product_id = pc2.product_id AND p.status = true
       LEFT JOIN (
-        SELECT product_id, SUM(qty) AS total_sold, SUM(total) AS total_revenue
+        SELECT product_id, SUM(qty) AS total_sold, SUM(line_total_incl_tax) AS total_revenue
         FROM order_item GROUP BY product_id
       ) sales ON sales.product_id = p.product_id
       GROUP BY col.collection_id, col.code, col.name
       ORDER BY total_revenue DESC
     `);
         response.json({
-            kpis: kpis[0] || {},
-            productPerformance,
-            categoryRevenue,
-            lowStock,
-            inventoryDistribution,
-            orderStatuses,
-            revenueTrend,
-            neverSold,
-            collectionPerformance
+            kpis: (kpis && kpis[0]) || {},
+            productPerformance: productPerformance || [],
+            categoryRevenue: categoryRevenue || [],
+            lowStock: lowStock || [],
+            inventoryDistribution: inventoryDistribution || [],
+            orderStatuses: orderStatuses || [],
+            revenueTrend: revenueTrend || [],
+            neverSold: neverSold || [],
+            collectionPerformance: collectionPerformance || []
         });
     }
     catch (err) {
