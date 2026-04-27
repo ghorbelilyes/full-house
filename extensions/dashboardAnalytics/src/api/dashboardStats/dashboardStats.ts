@@ -1,12 +1,10 @@
 import { pool } from '@evershop/evershop/lib/postgres';
 
-async function safeQuery(sql, params = []) {
+async function query(sql, params = []) {
   const client = await pool.connect();
   try {
     const result = await client.query(sql, params);
     return result.rows;
-  } catch (err) {
-    return null;
   } finally {
     client.release();
   }
@@ -15,7 +13,7 @@ async function safeQuery(sql, params = []) {
 export default async function dashboardStats(request, response) {
   try {
     // ── 1. Product Performance: top sellers vs slow movers ──
-    const productPerformance = await safeQuery(`
+    const productPerformance = await query(`
       SELECT
         p.product_id,
         pd.name,
@@ -33,19 +31,18 @@ export default async function dashboardStats(request, response) {
         SELECT
           oi.product_id,
           SUM(oi.qty) AS total_sold,
-          SUM(oi.line_total_incl_tax) AS total_revenue,
+          SUM(oi.line_total) AS total_revenue,
           COUNT(DISTINCT oi.order_item_order_id) AS order_count
         FROM order_item oi
         GROUP BY oi.product_id
       ) sales ON sales.product_id = p.product_id
-      WHERE p.status = true AND p.variant_group_id IS NULL
+      WHERE p.status = true 
       ORDER BY total_revenue DESC
       LIMIT 20
     `);
 
     // ── 2. Category Revenue Breakdown ──
-    // Uses product.category_id (set in Version-1.0.2 migration)
-    const categoryRevenue = await safeQuery(`
+    const categoryRevenue = await query(`
       SELECT
         cd.name AS category_name,
         COUNT(DISTINCT p.product_id) AS product_count,
@@ -53,9 +50,10 @@ export default async function dashboardStats(request, response) {
         COALESCE(SUM(sales.total_sold), 0) AS total_sold
       FROM category c
       JOIN category_description cd ON cd.category_description_category_id = c.category_id
-      JOIN product p ON p.category_id = c.category_id AND p.status = true
+      JOIN product_category pc ON pc.category_id = c.category_id
+      JOIN product p ON p.product_id = pc.product_id AND p.status = true
       LEFT JOIN (
-        SELECT product_id, SUM(line_total_incl_tax) AS total_revenue, SUM(qty) AS total_sold
+        SELECT product_id, SUM(line_total) AS total_revenue, SUM(qty) AS total_sold
         FROM order_item GROUP BY product_id
       ) sales ON sales.product_id = p.product_id
       GROUP BY c.category_id, cd.name
@@ -64,7 +62,7 @@ export default async function dashboardStats(request, response) {
     `);
 
     // ── 3. Low Stock Alerts (products with stock <= 5 that manage stock) ──
-    const lowStock = await safeQuery(`
+    const lowStock = await query(`
       SELECT
         p.product_id,
         pd.name,
@@ -78,13 +76,13 @@ export default async function dashboardStats(request, response) {
       WHERE pi2.manage_stock = true
         AND pi2.qty <= 5
         AND p.status = true
-        AND p.variant_group_id IS NULL
+        
       ORDER BY pi2.qty ASC
       LIMIT 15
     `);
 
     // ── 4. Inventory Distribution (stock levels) ──
-    const inventoryDistribution = await safeQuery(`
+    const inventoryDistribution = await query(`
       SELECT
         CASE
           WHEN pi2.qty = 0 THEN 'Out of Stock'
@@ -96,7 +94,7 @@ export default async function dashboardStats(request, response) {
         COUNT(*) AS product_count
       FROM product p
       JOIN product_inventory pi2 ON pi2.product_inventory_product_id = p.product_id
-      WHERE p.status = true AND p.variant_group_id IS NULL
+      WHERE p.status = true 
       GROUP BY stock_level
       ORDER BY
         CASE stock_level
@@ -109,7 +107,7 @@ export default async function dashboardStats(request, response) {
     `);
 
     // ── 5. Order Status Overview ──
-    const orderStatuses = await safeQuery(`
+    const orderStatuses = await query(`
       SELECT
         COALESCE(payment_status, 'unknown') AS status,
         COUNT(*) AS count,
@@ -120,7 +118,7 @@ export default async function dashboardStats(request, response) {
     `);
 
     // ── 6. Revenue Trend (last 12 months) ──
-    const revenueTrend = await safeQuery(`
+    const revenueTrend = await query(`
       SELECT
         TO_CHAR(created_at, 'YYYY-MM') AS month,
         COUNT(*) AS orders,
@@ -133,15 +131,15 @@ export default async function dashboardStats(request, response) {
     `);
 
     // ── 7. Summary KPIs ──
-    const kpis = await safeQuery(`
+    const kpis = await query(`
       SELECT
-        (SELECT COUNT(*) FROM product WHERE status = true AND variant_group_id IS NULL) AS total_products,
+        (SELECT COUNT(*) FROM product WHERE status = true ) AS total_products,
         (SELECT COUNT(*) FROM "order") AS total_orders,
         (SELECT COALESCE(SUM(grand_total), 0) FROM "order") AS total_revenue,
         (SELECT COALESCE(AVG(grand_total), 0) FROM "order") AS avg_order_value,
         (SELECT COUNT(*) FROM product p
          JOIN product_inventory pi2 ON pi2.product_inventory_product_id = p.product_id
-         WHERE p.status = true AND p.variant_group_id IS NULL AND pi2.qty = 0 AND pi2.manage_stock = true
+         WHERE p.status = true  AND pi2.qty = 0 AND pi2.manage_stock = true
         ) AS out_of_stock_count,
         (SELECT COUNT(*) FROM category) AS total_categories,
         (SELECT COUNT(*) FROM "order" WHERE created_at >= NOW() - INTERVAL '30 days') AS orders_last_30d,
@@ -149,7 +147,7 @@ export default async function dashboardStats(request, response) {
     `);
 
     // ── 8. Never-sold products (hard to sell / need attention) ──
-    const neverSold = await safeQuery(`
+    const neverSold = await query(`
       SELECT
         p.product_id,
         pd.name,
@@ -162,14 +160,14 @@ export default async function dashboardStats(request, response) {
       LEFT JOIN product_inventory pi2 ON pi2.product_inventory_product_id = p.product_id
       LEFT JOIN order_item oi ON oi.product_id = p.product_id
       WHERE p.status = true
-        AND p.variant_group_id IS NULL
+        
         AND oi.order_item_id IS NULL
       ORDER BY p.created_at ASC
       LIMIT 10
     `);
 
     // ── 9. Collection / Featured products performance ──
-    const collectionPerformance = await safeQuery(`
+    const collectionPerformance = await query(`
       SELECT
         col.code AS collection_code,
         col.name AS collection_name,
@@ -180,7 +178,7 @@ export default async function dashboardStats(request, response) {
       JOIN product_collection pc2 ON pc2.collection_id = col.collection_id
       JOIN product p ON p.product_id = pc2.product_id AND p.status = true
       LEFT JOIN (
-        SELECT product_id, SUM(qty) AS total_sold, SUM(line_total_incl_tax) AS total_revenue
+        SELECT product_id, SUM(qty) AS total_sold, SUM(line_total) AS total_revenue
         FROM order_item GROUP BY product_id
       ) sales ON sales.product_id = p.product_id
       GROUP BY col.collection_id, col.code, col.name
@@ -188,15 +186,15 @@ export default async function dashboardStats(request, response) {
     `);
 
     response.json({
-      kpis: (kpis && kpis[0]) || {},
-      productPerformance: productPerformance || [],
-      categoryRevenue: categoryRevenue || [],
-      lowStock: lowStock || [],
-      inventoryDistribution: inventoryDistribution || [],
-      orderStatuses: orderStatuses || [],
-      revenueTrend: revenueTrend || [],
-      neverSold: neverSold || [],
-      collectionPerformance: collectionPerformance || []
+      kpis: kpis[0] || {},
+      productPerformance,
+      categoryRevenue,
+      lowStock,
+      inventoryDistribution,
+      orderStatuses,
+      revenueTrend,
+      neverSold,
+      collectionPerformance
     });
   } catch (err) {
     response.status(500).json({ error: { message: err.message } });
