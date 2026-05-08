@@ -38,7 +38,7 @@ export default function TaxSettingMenu({ taxSettingUrl }: TaxSettingMenuProps) {
                 isActive && 'text-primary'
               )}
             >
-              Tax Setting
+              Paramètres de Taxe
             </a>
           </div>
         </ItemTitle>

@@ -32,7 +32,7 @@ export default function ProductNewForm({
       if (result.error) {
         toast.error(result.error.message);
       } else {
-        toast.success('Product created successfully');
+        toast.success('Produit créé avec succès');
         const editUrl = result.data.links.find(
           (link) => link.rel === 'edit'
         ).href;

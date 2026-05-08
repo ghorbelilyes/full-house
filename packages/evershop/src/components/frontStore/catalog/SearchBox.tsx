@@ -35,6 +35,13 @@ const PRODUCT_FRAGMENT = `
         text
       }
     }
+    promotion {
+      promotionType
+      promotionValue
+      promotionLabel
+      isActive
+      discountPercent
+    }
     image {
       url
       alt

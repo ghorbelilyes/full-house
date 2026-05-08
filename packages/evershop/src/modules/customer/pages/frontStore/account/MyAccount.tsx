@@ -7,21 +7,29 @@ import React from 'react';
 
 export default function MyAccount() {
   return (
-    <div>
-      <h1 className="text-center">{_('My Account')}</h1>
-      <div className="page-width mt-7 grid grid-cols-1 md:grid-cols-3 gap-7">
-        <div className="col-span-1 md:col-span-2">
-          <OrderHistory title={_('Recent Orders')} />
-        </div>
-        <div className="col-span-1">
-          <AccountInfo title={_('Account Information')} showLogout />
-        </div>
-      </div>
-      <div className="page-width mt-7">
+    <main className="mx-auto max-w-7xl px-6 py-8">
+      {/* Page title */}
+      <header className="mb-10 text-center">
+        <h1 className="text-4xl font-extrabold tracking-tight text-slate-950 dark:text-white">
+          {_('My Account')}
+        </h1>
+        <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+          {_('Manage your orders, personal information and addresses.')}
+        </p>
+      </header>
+
+      {/* Top dashboard: orders + account info */}
+      <section className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px]">
+        <OrderHistory title={_('Recent Orders')} />
+        <AccountInfo title={_('Account Information')} showLogout />
+      </section>
+
+      {/* Address book */}
+      <section className="mt-10">
         <MyAddresses title={_('Address Book')} />
         <Area id="accountPageAddressBook" noOuter />
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

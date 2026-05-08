@@ -7,7 +7,7 @@ export default function CmsMenuGroup({ cmsPageGrid, widgetGrid }) {
   return (
     <NavigationItemGroup
       id="cmsMenuGroup"
-      name="CMS"
+      name="Contenu"
       items={[
         {
           Icon: Book,

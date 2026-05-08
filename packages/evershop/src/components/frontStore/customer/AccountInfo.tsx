@@ -16,12 +16,23 @@ export default function AccountInfo({ title, showLogout }: AccountInfoProps) {
   const { customer: account } = useCustomer();
   const { logout } = useCustomerDispatch();
   return (
-    <div className="account__details divide-y">
-      <div className="flex justify-between items-center border-border">
-        {title && <h2>{title}</h2>}
+    <aside className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      {/* Header */}
+      <div className="mb-6 flex items-start justify-between border-b border-slate-200 pb-5 dark:border-slate-700">
+        <div>
+          {title && (
+            <h2 className="text-2xl font-extrabold leading-tight text-slate-950 dark:text-white">
+              {title}
+            </h2>
+          )}
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            {_('Your personal details.')}
+          </p>
+        </div>
+
         {showLogout && (
           <a
-            className="text-interactive"
+            className="rounded-xl bg-slate-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
             href="#"
             onClick={async (e) => {
               e.preventDefault();
@@ -37,18 +48,27 @@ export default function AccountInfo({ title, showLogout }: AccountInfoProps) {
           </a>
         )}
       </div>
-      <div className="grid grid-cols-1 gap-2 py-5">
+
+      {/* Details */}
+      <div className="space-y-4">
         <Area
           id="accountDetails"
           coreComponents={[
             {
               component: {
                 default: (
-                  <div className="account__details__name flex gap-2 py-2">
-                    <div>
-                      <User width={20} height={20} />
+                  <div className="flex items-center gap-4 rounded-2xl bg-slate-50 p-4 dark:bg-slate-700/50">
+                    <div className="flex size-11 items-center justify-center rounded-full bg-white ring-1 ring-slate-200 dark:bg-slate-600 dark:ring-slate-500">
+                      <User className="size-5 text-slate-700 dark:text-slate-300" />
                     </div>
-                    <div>{account?.fullName}</div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        {_('Name')}
+                      </p>
+                      <p className="font-semibold text-slate-950 dark:text-white">
+                        {account?.fullName}
+                      </p>
+                    </div>
                   </div>
                 )
               },
@@ -57,11 +77,18 @@ export default function AccountInfo({ title, showLogout }: AccountInfoProps) {
             {
               component: {
                 default: () => (
-                  <div className="account__details__email flex gap-2 py-2">
-                    <div>
-                      <Mail width={20} height={20} />
+                  <div className="flex items-center gap-4 rounded-2xl bg-slate-50 p-4 dark:bg-slate-700/50">
+                    <div className="flex size-11 items-center justify-center rounded-full bg-white ring-1 ring-slate-200 dark:bg-slate-600 dark:ring-slate-500">
+                      <Mail className="size-5 text-slate-700 dark:text-slate-300" />
                     </div>
-                    <div>{account?.email}</div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        {_('Email')}
+                      </p>
+                      <p className="font-semibold text-slate-950 dark:text-white">
+                        {account?.email}
+                      </p>
+                    </div>
                   </div>
                 )
               },
@@ -70,6 +97,6 @@ export default function AccountInfo({ title, showLogout }: AccountInfoProps) {
           ]}
         />
       </div>
-    </div>
+    </aside>
   );
 }

@@ -28,10 +28,11 @@ export const DefaultProductFilterRender: React.FC<{
 }> = ({
   renderProps,
   className = '',
-  title = _('Filter Products'),
+  title = _('Product Filters'),
   showFilterSummary = true
 }) => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(true);
 
   const {
     currentFilters,
@@ -159,43 +160,76 @@ export const DefaultProductFilterRender: React.FC<{
       </Sheet>
 
       <div className={`hidden md:block product__filters ${className}`}>
-        <div className="product__filters__header flex items-center justify-between mb-4">
-          {title && (
-            <h3 className="font-bold text-lg flex items-center">{title}</h3>
-          )}
-
-          {activeFilterCount > 0 && (
-            <button
-              onClick={clearAllFilters}
-              disabled={isLoading}
-              className="text-sm hover:text-destructive transition-colors disabled:opacity-50"
+        {/* Collapsible filter header */}
+        <button
+          type="button"
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
+          className="group mb-1 flex w-full items-center justify-between rounded-xl px-1 py-2 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/40"
+        >
+          <span className="text-sm font-bold uppercase tracking-wide text-slate-900 dark:text-white">
+            {title}
+          </span>
+          <div className="flex items-center gap-2">
+            {activeFilterCount > 0 && (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-slate-900 px-1.5 text-[10px] font-bold text-white dark:bg-white dark:text-slate-900">
+                {activeFilterCount}
+              </span>
+            )}
+            <svg
+              className={`h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300 ${
+                isFilterOpen ? '' : '-rotate-90'
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
             >
-              {_('Clear All')}
-            </button>
-          )}
-        </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </button>
 
-        {showFilterSummary && (
-          <DefaultProductFilterSummary
-            availableAttributes={availableAttributes}
-            currentFilters={currentFilters}
-            priceRange={priceRange}
-            categories={categories}
-          />
+        {isFilterOpen && (
+          <div className="mt-1">
+            {activeFilterCount > 0 && (
+              <div className="mb-3 flex items-center justify-end">
+                <button
+                  onClick={clearAllFilters}
+                  disabled={isLoading}
+                  className="text-xs text-slate-500 transition-colors hover:text-orange-500 disabled:opacity-50 dark:text-slate-400 dark:hover:text-orange-400"
+                >
+                  {_('Clear All')}
+                </button>
+              </div>
+            )}
+
+            {showFilterSummary && (
+              <DefaultProductFilterSummary
+                availableAttributes={availableAttributes}
+                currentFilters={currentFilters}
+                priceRange={priceRange}
+                categories={categories}
+              />
+            )}
+
+            <div className={isLoading ? 'opacity-75 pointer-events-none' : ''}>
+              <Area
+                id="productFilter"
+                noOuter
+                coreComponents={defaultComponents}
+                availableAttributes={availableAttributes}
+                priceRange={priceRange}
+                currentFilters={currentFilters}
+                categories={categories}
+                setting={setting}
+              />
+            </div>
+          </div>
         )}
-
-        <div className={isLoading ? 'opacity-75 pointer-events-none' : ''}>
-          <Area
-            id="productFilter"
-            noOuter
-            coreComponents={defaultComponents}
-            availableAttributes={availableAttributes}
-            priceRange={priceRange}
-            currentFilters={currentFilters}
-            categories={categories}
-            setting={setting}
-          />
-        </div>
       </div>
     </ProductFilterDispatch.Provider>
   );

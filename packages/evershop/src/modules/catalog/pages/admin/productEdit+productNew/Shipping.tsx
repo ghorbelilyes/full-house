@@ -41,17 +41,17 @@ export default function Shipping({ product, setting }: ShippingProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Shipping</CardTitle>
+        <CardTitle>Expédition</CardTitle>
         <CardDescription>
-          Manage the shipping settings of the product.
+          Gérer les paramètres d'expédition du produit.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <CheckboxField
           name="no_shipping_required"
-          label="No shipping required?"
+          label="Aucune expédition requise ?"
           defaultValue={shipping.noShippingRequired === true}
-          helperText="Select this option if the product is a digital product or service that does not require shipping."
+          helperText="Sélectionnez cette option si le produit est un produit numérique ou un service qui ne nécessite pas d'expédition."
           wrapperClassName="mb-0"
         />
       </CardContent>
@@ -59,25 +59,25 @@ export default function Shipping({ product, setting }: ShippingProps) {
         {!noShippingRequired && (
           <NumberField
             name="weight"
-            placeholder="Enter weight"
-            label={`Weight`}
+            placeholder="Entrez le poids"
+            label={`Poids`}
             defaultValue={shipping.weight?.value}
             unit={setting?.weightUnit}
             required
             validation={{
               min: {
                 value: 0,
-                message: 'Weight must be a positive number'
+                message: 'Le poids doit être un nombre positif'
               }
             }}
-            helperText={'Weight must be a positive number'}
+            helperText={'Le poids doit être un nombre positif'}
           />
         )}
         {noShippingRequired && (
           <NumberField
             name="weight_no_shipping"
-            placeholder="Enter weight"
-            label={`Weight`}
+            placeholder="Entrez le poids"
+            label={`Poids`}
             defaultValue={shipping.weight?.value}
             unit={setting?.weightUnit}
             disabled

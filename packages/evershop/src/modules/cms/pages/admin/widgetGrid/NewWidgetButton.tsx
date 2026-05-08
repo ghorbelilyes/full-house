@@ -41,7 +41,7 @@ const WidgetTypes: React.FC<{
                 window.location.href = type.createWidgetUrl;
               }}
             >
-              Choose
+              Choisir
             </Button>
           </ItemActions>
         </Item>
@@ -58,11 +58,11 @@ export default function NewWidgetButton({ widgetTypes }: NewWidgetButtonProps) {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button>New Widget</Button>
+        <Button>Nouveau Widget</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New Widget</DialogTitle>
+          <DialogTitle>Nouveau Widget</DialogTitle>
         </DialogHeader>
         <WidgetTypes types={widgetTypes} />
       </DialogContent>

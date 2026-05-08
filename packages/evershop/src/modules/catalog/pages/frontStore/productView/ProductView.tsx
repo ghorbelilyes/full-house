@@ -88,6 +88,27 @@ query Query {
           text
         }
       }
+      promotion {
+        promotionType
+        promotionValue
+        promotionLabel
+        isActive
+        discountPercent
+        startDate
+        endDate
+        savedAmount {
+          value
+          text
+        }
+        originalPrice {
+          value
+          text
+        }
+        finalPrice {
+          value
+          text
+        }
+      }
       inventory {
         isInStock
       }

@@ -9,8 +9,8 @@ export function Status({ status }: StatusProps) {
   return (
     <TableCell>
       <div>
-        {status === 0 && <Badge variant="destructive">Inactive</Badge>}
-        {status === 1 && <Badge variant="success">Active</Badge>}
+        {status === 0 && <Badge variant="destructive">Inactif</Badge>}
+        {status === 1 && <Badge variant="success">Actif</Badge>}
       </div>
     </TableCell>
   );

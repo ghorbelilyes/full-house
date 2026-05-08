@@ -39,7 +39,7 @@ export default function ShippingSettingMenu({
                 isActive && 'text-primary'
               )}
             >
-              Shipping Setting
+              Paramètres d'Expédition
             </a>
           </div>
         </ItemTitle>

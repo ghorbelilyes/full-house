@@ -31,7 +31,7 @@ const FormButton: React.FC<{
         }}
         isLoading={isSubmitting}
       >
-        Save
+        Enregistrer
       </Button>
     </div>
   );
@@ -64,7 +64,7 @@ export default function ProductEditForm({
       if (result.error) {
         toast.error(result.error.message);
       } else {
-        toast.success('Product updated successfully');
+        toast.success('Produit mis à jour avec succès');
         form.setValue('product_id', result.data.uuid);
       }
     } catch (error) {

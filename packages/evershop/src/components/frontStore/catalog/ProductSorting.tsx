@@ -230,13 +230,13 @@ export function ProductSorting({
   );
 
   return (
-    <div className="flex justify-between items-center border-b border-border pb-2 mb-8">
-      <div>
+    <div className="mb-8 flex items-center justify-between border-b border-slate-200 pb-5">
+      <p className="text-sm font-medium text-slate-600">
         {_('${count} Products', {
           count: count.toString()
         })}
-      </div>
-      <div className={cn(`product-sorting flex gap-2 items-center`, className)}>
+      </p>
+      <div className={cn(`product-sorting flex gap-3 items-center`, className)}>
         {containerContent}
       </div>
     </div>

@@ -4,7 +4,7 @@ import React from 'react';
 
 function Name() {
   return (
-    <h1 className="page-name text-center mt-6 mb-4">404 Page Not Found</h1>
+    <h1 className="page-name text-center mt-6 mb-4">404 Page Non Trouvée</h1>
   );
 }
 
@@ -14,14 +14,14 @@ interface ContentProps {
 function Content({ dashboardUrl }: ContentProps) {
   return (
     <div className="page-content">
-      <div className="text-center">The page you requested does not exist.</div>
+      <div className="text-center">La page que vous avez demandée n'existe pas.</div>
       <div className="mt-5 text-center">
         <Button
-          title="Back To Dashboard"
+          title="Retour au Tableau de Bord"
           onClick={() => (window.location.href = dashboardUrl)}
           variant={'default'}
         >
-          Back To Dashboard
+          Retour au Tableau de Bord
         </Button>
       </div>
     </div>

@@ -1212,6 +1212,9 @@ export const useCartState = (): CartState => {
   return context;
 };
 
+export const useOptionalCartState = (): CartState | undefined =>
+  useContext(CartStateContext);
+
 export const useCartDispatch = (): CartDispatch => {
   const context = useContext(CartDispatchContext);
   if (!context) {

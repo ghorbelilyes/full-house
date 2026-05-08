@@ -3,7 +3,7 @@ SHOP BY, Acheter par
 Sort By, Trier par
 There is no product to display, Aucun produit à afficher
 ${count} products, ${count} produits
-Search results for "${keyword}", Résultats de recherche pour "${keyword}"
+"Search results for ""${keyword}""","Résultats de recherche pour « ${keyword} »"
 Search results for: ${keyword}, Résultats de recherche pour : ${keyword}
 Product not found, Produit non trouvé
 Product name is required, Le nom du produit est requis
@@ -29,9 +29,13 @@ SOLD OUT, ÉPUISÉ
 Contact for pricing, Contactez-nous pour le prix
 Product is out of stock, Le produit est en rupture de stock
 ${count} Products, ${count} produits
-No categories found for "${term}", Aucune catégorie trouvée pour "${term}"
-No options found for "${code}", Aucune option trouvée pour "${code}"
+No categories found for "${term}", Aucune catégorie trouvée pour « ${term} »
+No options found for "${code}", Aucune option trouvée pour « ${code} »
 Price: ${value}, Prix : ${value}
 SKU ${sku}, SKU ${sku}
 SKU: ${sku}, SKU : ${sku}
 Show all ${count} options, Afficher les ${count} options
+Collapse, Réduire
+Expand, Développer
+Subcategories, Sous-catégories
+Clear, Effacer

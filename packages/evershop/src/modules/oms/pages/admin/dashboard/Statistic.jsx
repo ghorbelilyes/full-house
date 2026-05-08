@@ -47,11 +47,11 @@ export default function SaleStatistic({ api }) {
 
   if (fetching) {
     return (
-      <Card title="Sale Statistics">
+      <Card title="Statistiques des Ventes">
         <CardHeader>
-          <CardTitle>Sale Statistics</CardTitle>
+          <CardTitle>Statistiques des Ventes</CardTitle>
           <CardDescription>
-            Overview of sales data over selected periods
+            Aperçu des données de ventes sur les périodes sélectionnées
           </CardDescription>
         </CardHeader>
         <div className="skeleton-wrapper-statistic">
@@ -63,31 +63,31 @@ export default function SaleStatistic({ api }) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Sale Statistics</CardTitle>
+          <CardTitle>Statistiques des Ventes</CardTitle>
           <CardDescription>
-            Overview of sales data over selected periods
+            Aperçu des données de ventes sur les périodes sélectionnées
           </CardDescription>
           <CardAction>
             <ButtonGroup>
               <Button onClick={() => setPeriod('daily')} variant={'outline'}>
                 {period === 'daily' ? (
-                  <span className="text-primary">Daily</span>
+                  <span className="text-primary">Jour</span>
                 ) : (
-                  'Daily'
+                  'Jour'
                 )}
               </Button>
               <Button onClick={() => setPeriod('weekly')} variant={'outline'}>
                 {period === 'weekly' ? (
-                  <span className="text-primary">Weekly</span>
+                  <span className="text-primary">Semaine</span>
                 ) : (
-                  'Weekly'
+                  'Semaine'
                 )}
               </Button>
               <Button onClick={() => setPeriod('monthly')} variant={'outline'}>
                 {period === 'monthly' ? (
-                  <span className="text-primary">Monthly</span>
+                  <span className="text-primary">Mois</span>
                 ) : (
-                  'Monthly'
+                  'Mois'
                 )}
               </Button>
             </ButtonGroup>

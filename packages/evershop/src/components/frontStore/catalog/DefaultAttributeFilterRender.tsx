@@ -108,40 +108,46 @@ export const DefaultAttributeFilterRender: React.FC<{
         return (
           <div
             key={attribute.attributeCode}
-            className="attribute__filter__section border-b border-border pb-2 mb-2"
+            className="attribute__filter__section border-b border-slate-200 pb-3 mb-3 dark:border-slate-700"
           >
-            <div className="filter__header flex items-center justify-between mb-3">
+            <div className="filter__header flex items-center justify-between mb-2">
               <button
                 onClick={() => toggleCollapse(attribute.attributeCode)}
-                className="flex items-center justify-between text-left flex-1 hover:text-primary transition-colors"
+                className="group flex flex-1 items-center justify-between rounded-lg px-1 py-1.5 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/40"
               >
-                <span className="font-medium">{attribute.attributeName}</span>
-                <svg
-                  className={`w-4 h-4 transition-transform ${
-                    isCollapsed ? 'rotate-180' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-200">{attribute.attributeName}</span>
+                <div className="flex items-center gap-1.5">
+                  {selectedCount > 0 && (
+                    <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-slate-200 px-1 text-[10px] font-bold text-slate-700 dark:bg-slate-600 dark:text-slate-200">
+                      {selectedCount}
+                    </span>
+                  )}
+                  <svg
+                    className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300 ${
+                      isCollapsed ? '-rotate-90' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
               </button>
 
               {selectedCount > 0 && (
-                <Button
-                  variant={'link'}
+                <button
                   onClick={() => clearAttributeFilter(attribute.attributeCode)}
-                  className="hover:text-destructive text-sm transition-colors"
-                  title="Clear all"
+                  className="ml-2 text-xs text-slate-400 transition-colors hover:text-orange-500 dark:text-slate-500 dark:hover:text-orange-400"
+                  title={_('Clear')}
                 >
                   ✕
-                </Button>
+                </button>
               )}
             </div>
 

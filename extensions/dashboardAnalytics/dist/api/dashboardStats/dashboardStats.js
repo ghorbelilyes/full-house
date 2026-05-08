@@ -4,12 +4,10 @@ async function q(sql) {
     try {
         const result = await client.query(sql);
         return result.rows;
-    }
-    catch (err) {
+    } catch (err) {
         console.error('SQL ERROR:', err.message, '\nQuery:', sql.substring(0, 100));
         return null;
-    }
-    finally {
+    } finally{
         client.release();
     }
 }
@@ -151,7 +149,7 @@ export default async function dashboardStats(request, response) {
       ORDER BY total_revenue DESC
     `);
         response.json({
-            kpis: (kpis && kpis[0]) || {},
+            kpis: kpis && kpis[0] || {},
             productPerformance: productPerformance || [],
             categoryRevenue: categoryRevenue || [],
             lowStock: lowStock || [],
@@ -161,9 +159,11 @@ export default async function dashboardStats(request, response) {
             neverSold: neverSold || [],
             collectionPerformance: collectionPerformance || []
         });
-    }
-    catch (err) {
-        response.status(500).json({ error: { message: err.message } });
+    } catch (err) {
+        response.status(500).json({
+            error: {
+                message: err.message
+            }
+        });
     }
 }
-//# sourceMappingURL=dashboardStats.js.map

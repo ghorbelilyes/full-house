@@ -11,7 +11,10 @@ const DefaultVariantOptionItem: React.FC<VariantOptionItemProps> = ({
   isSelected,
   onSelect
 }) => {
-  const isDisabled = option.available === false;
+  // A selected option must never be disabled so the user can always toggle it
+  // off (deselect).  Only mark an option as disabled when it is both
+  // unavailable AND not currently selected.
+  const isDisabled = option.available === false && !isSelected;
 
   return (
     <li

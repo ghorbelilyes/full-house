@@ -17,8 +17,8 @@ export default function AttributeEditPageHeading({
       backUrl={backUrl}
       heading={
         attribute
-          ? `Editing ${attribute.attributeName}`
-          : 'Create a new attribute'
+          ? `Modification de ${attribute.attributeName}`
+          : 'Créer un nouvel attribut'
       }
     />
   );

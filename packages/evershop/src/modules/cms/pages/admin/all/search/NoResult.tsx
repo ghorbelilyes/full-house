@@ -12,7 +12,7 @@ export function NoResult({ keyword = '', resourseLinks = [] }: NoResultProps) {
   return (
     <div className="items-center text-center">
       <h3 className="text-xl font-semibold text-muted-foreground">
-        No results for &quot;
+        Aucun résultat pour &quot;
         {keyword}
         &quot;
       </h3>

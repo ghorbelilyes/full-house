@@ -40,7 +40,7 @@ export default function StoreSettingMenu({
                 isActive && 'text-primary'
               )}
             >
-              Store Setting
+              Paramètres de la Boutique
             </a>
           </div>
         </ItemTitle>

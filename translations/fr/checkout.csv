@@ -147,3 +147,9 @@ No coupon to remove, Aucun coupon à supprimer
 Discount(${coupon}), Remise (${coupon})
 Inclusive of tax ${totalTaxAmount}, Taxes incluses ${totalTaxAmount}
 Shipping (${method}), Expédition (${method})
+Decrease quantity, Diminuer la quantité
+Increase quantity, Augmenter la quantité
+Remove item, Supprimer l'article
+Continue Shopping, Continuer les achats
+Oui, Oui
+Non, Non

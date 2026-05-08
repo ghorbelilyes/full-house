@@ -60,6 +60,7 @@ export default function CheckoutPage({
                 items={items}
                 loading={loading}
                 showPriceIncludingTax={showPriceIncludingTax}
+                editable={false}
               />
             )}
           </CartItems>

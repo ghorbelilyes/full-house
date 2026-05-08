@@ -20,7 +20,7 @@ const Dot = ({ variant }) => {
   } else if (variant === 'success') {
     bgColor = 'bg-green-400';
   } else if (variant === 'critical') {
-    bgColor = 'bg-red-400';
+    bgColor = 'bg-orange-400';
   }
   return <span className={`w-3 h-3 rounded-full ${bgColor} inline-block`} />;
 };
@@ -35,10 +35,10 @@ export default function LifetimeSale({ api }) {
   const { orders, total, completed_percentage, cancelled_percentage } = data;
 
   const chartData = [
-    { name: 'Completed', value: completed_percentage },
-    { name: 'Cancelled', value: cancelled_percentage },
+    { name: 'Termin00e9es', value: completed_percentage },
+    { name: 'Annul00e9es', value: cancelled_percentage },
     {
-      name: 'Others',
+      name: 'Autres',
       value: 100 - completed_percentage - cancelled_percentage
     }
   ];
@@ -64,9 +64,9 @@ export default function LifetimeSale({ api }) {
 
   if (fetching) {
     return (
-      <Card title="Lifetime Sales">
+      <Card title="Ventes Totales">
         <CardHeader>
-          <CardTitle>Lifetime Sales</CardTitle>
+          <CardTitle>Ventes Totales</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="skeleton-wrapper-lifetime">
@@ -85,9 +85,9 @@ export default function LifetimeSale({ api }) {
     );
   } else {
     return (
-      <Card title="Lifetime Sales">
+      <Card title="Ventes Totales">
         <CardHeader>
-          <CardTitle>Lifetime Sales</CardTitle>
+          <CardTitle>Ventes Totales</CardTitle>
           <CardDescription>
             Overview of total sales and order status over the lifetime of your
           </CardDescription>

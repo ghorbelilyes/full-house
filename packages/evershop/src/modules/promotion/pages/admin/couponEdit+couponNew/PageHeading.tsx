@@ -13,7 +13,7 @@ export default function CouponEditPageHeading({
   return (
     <PageHeading
       backUrl={backUrl}
-      heading={coupon ? `Editing ${coupon.coupon}` : 'Create a new coupon'}
+      heading={coupon ? `Modification de ${coupon.coupon}` : 'Créer un nouveau coupon'}
     />
   );
 }

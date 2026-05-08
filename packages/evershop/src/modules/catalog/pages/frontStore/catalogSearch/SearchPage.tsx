@@ -63,6 +63,13 @@ export const fragments = `
         text
       }
     }
+    promotion {
+      promotionType
+      promotionValue
+      promotionLabel
+      isActive
+      discountPercent
+    }
     inventory {
       isInStock
     }

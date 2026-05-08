@@ -24,15 +24,16 @@ export default function CollectionProducts({
     return null;
   }
   return (
-    <div className="pt-7 collection__products__widget">
+    <div className="py-10 collection__products__widget">
       <div className="page-width">
-        <h3 className="text-center uppercase h5 tracking-widest">
+        <h3 className="text-center text-3xl font-extrabold tracking-tight text-slate-800 mb-2">
           {collection?.name}
         </h3>
-        <div className="flex justify-center">
+        <div className="mx-auto mb-1 h-1 w-16 rounded-full bg-orange-500" />
+        <div className="flex justify-center mb-8">
           {collection?.description && <Editor rows={collection?.description} />}
         </div>
-        <div className="mt-3">
+        <div>
           <ProductList
             products={collection?.products?.items}
             gridColumns={countPerRow}
@@ -75,6 +76,13 @@ export const fragments = `
         value
         text
       }
+    }
+    promotion {
+      promotionType
+      promotionValue
+      promotionLabel
+      isActive
+      discountPercent
     }
     inventory {
       isInStock

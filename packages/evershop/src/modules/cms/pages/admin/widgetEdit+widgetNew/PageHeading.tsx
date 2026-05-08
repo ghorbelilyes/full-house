@@ -14,7 +14,7 @@ export default function WidgetEditPageHeading({
   return (
     <PageHeading
       backUrl={backUrl}
-      heading={widget ? `Editing widget ${widget.name}` : 'Create a new widget'}
+      heading={widget ? `Modification du widget ${widget.name}` : 'Créer un nouveau widget'}
     />
   );
 }

@@ -31,14 +31,14 @@ import {
 } from 'recharts';
 
 const COLORS = [
-  '#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6',
+  '#6366f1', '#22c55e', '#f59e0b', '#f97316', '#8b5cf6',
   '#06b6d4', '#ec4899', '#14b8a6', '#f97316', '#64748b'
 ];
 
 const STATUS_COLORS: Record<string, string> = {
   paid: '#22c55e',
   pending: '#f59e0b',
-  canceled: '#ef4444',
+  canceled: '#f97316',
   refunded: '#8b5cf6',
   unknown: '#94a3b8'
 };
@@ -150,7 +150,7 @@ export default function DashboardAnalytics({ statsApi }: { statsApi: string }) {
     return (
       <Card>
         <CardContent className="py-8 text-center">
-          <p className="text-red-500">Failed to load analytics: {error}</p>
+          <p className="text-orange-500">Failed to load analytics: {error}</p>
         </CardContent>
       </Card>
     );
@@ -454,7 +454,7 @@ export default function DashboardAnalytics({ statsApi }: { statsApi: string }) {
                     <Tooltip content={<CustomTooltip />} />
                     <Bar dataKey="count" name="Products" radius={[0, 4, 4, 0]}>
                       {invChartData.map((_: any, idx: number) => {
-                        const stockColors = ['#ef4444', '#f97316', '#f59e0b', '#22c55e', '#06b6d4'];
+                        const stockColors = ['#f97316', '#f97316', '#f59e0b', '#22c55e', '#06b6d4'];
                         return <Cell key={idx} fill={stockColors[idx] || COLORS[idx]} />;
                       })}
                     </Bar>
@@ -547,7 +547,7 @@ export default function DashboardAnalytics({ statsApi }: { statsApi: string }) {
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                             p.stock_qty === 0
-                              ? 'bg-red-100 text-red-800'
+                              ? 'bg-orange-100 text-orange-800'
                               : 'bg-yellow-100 text-yellow-800'
                           }`}
                         >
@@ -653,7 +653,7 @@ export default function DashboardAnalytics({ statsApi }: { statsApi: string }) {
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                           (p.stock_qty || 0) === 0
-                            ? 'bg-red-100 text-red-800'
+                            ? 'bg-orange-100 text-orange-800'
                             : (p.stock_qty || 0) <= 5
                               ? 'bg-yellow-100 text-yellow-800'
                               : 'bg-green-100 text-green-800'

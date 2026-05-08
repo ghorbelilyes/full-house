@@ -14,6 +14,93 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+const PromoBadgeInline: React.CSSProperties = {
+  display: 'inline-block',
+  background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+  color: '#ffffff',
+  fontWeight: 700,
+  fontSize: '0.75rem',
+  padding: '4px 10px',
+  borderRadius: '4px',
+  boxShadow: '0 2px 6px rgba(220, 38, 38, 0.3)',
+  letterSpacing: '0.02em',
+  textTransform: 'uppercase' as const,
+  marginLeft: '8px',
+  verticalAlign: 'middle'
+};
+
+function ProductPriceDisplay() {
+  const { price, promotion } = useProduct() as any;
+  const hasPromo =
+    price.special &&
+    price.special.value < price.regular.value;
+
+  if (!hasPromo) {
+    return (
+      <div className="product__single__price text-2xl font-bold">
+        {price.regular.text}
+      </div>
+    );
+  }
+
+  const savedAmount = (price.regular.value - price.special.value).toFixed(2);
+  const discountPercent = Math.round(
+    ((price.regular.value - price.special.value) / price.regular.value) * 100
+  );
+
+  const promoLabel =
+    promotion?.promotionLabel || `-${discountPercent}%`;
+
+  return (
+    <div className="product__single__price__wrapper">
+      <div className="flex items-center gap-3 flex-wrap">
+        <span
+          className="text-3xl font-bold"
+          style={{ color: '#dc2626' }}
+        >
+          {price.special.text}
+        </span>
+        <span
+          className="text-lg"
+          style={{
+            textDecoration: 'line-through',
+            color: '#9ca3af'
+          }}
+        >
+          {price.regular.text}
+        </span>
+        <span style={PromoBadgeInline}>
+          {promoLabel}
+        </span>
+      </div>
+      <div
+        className="mt-2 text-sm font-medium px-3 py-1.5 rounded-md inline-flex items-center gap-1"
+        style={{
+          background: '#fef2f2',
+          color: '#dc2626',
+          border: '1px solid #fecaca'
+        }}
+      >
+        🎉 {_('You save')} {savedAmount} ({discountPercent}%)
+      </div>
+
+      {/* Promotion end date countdown */}
+      {promotion?.endDate && (
+        <div
+          className="mt-2 text-xs px-3 py-1 rounded inline-flex items-center gap-1"
+          style={{
+            background: '#fffbeb',
+            color: '#92400e',
+            border: '1px solid #fde68a'
+          }}
+        >
+          ⏰ {_('Offer ends')}: {new Date(promotion.endDate).toLocaleDateString()}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function ProductSingleForm() {
   const {
     price,
@@ -29,11 +116,7 @@ export function ProductSingleForm() {
         coreComponents={[
           {
             component: {
-              default: (
-                <div className="product__single__price text-2xl">
-                  {price.regular.text}
-                </div>
-              )
+              default: <ProductPriceDisplay />
             },
             sortOrder: 5,
             id: 'price'

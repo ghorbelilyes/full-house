@@ -53,7 +53,7 @@ export default async function registerDefaultCategoryCollectionFilters() {
       key: 'parent',
       operation: ['eq'],
       callback: (query, operation, value, currentFilters) => {
-        if (value === null) {
+        if (value === null || value === 'null') {
           query.andWhere('category.parent_id', 'IS NULL');
         } else {
           query.andWhere('category.parent_id', OPERATION_MAP[operation], value);

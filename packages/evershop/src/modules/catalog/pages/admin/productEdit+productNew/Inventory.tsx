@@ -29,18 +29,18 @@ export default function Inventory({ product }: InventoryProps) {
   return (
     <Card className="bg-popover">
       <CardHeader>
-        <CardTitle>Inventory</CardTitle>
+        <CardTitle>Inventaire</CardTitle>
         <CardDescription>
-          Manage the inventory settings of the product.
+          Gérer les paramètres d'inventaire du produit.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <RadioGroupField
           name="manage_stock"
-          label="Manage Stock"
+          label="Gérer le Stock"
           options={[
-            { value: 1, label: 'Yes' },
-            { value: 0, label: 'No' }
+            { value: 1, label: 'Oui' },
+            { value: 0, label: 'Non' }
           ]}
           defaultValue={inventory.manageStock === 0 ? 0 : 1}
           required
@@ -49,10 +49,10 @@ export default function Inventory({ product }: InventoryProps) {
       <CardContent className="border-t border-t-border pt-6">
         <RadioGroupField
           name="stock_availability"
-          label="Stock Availability"
+          label="Disponibilité en Stock"
           options={[
-            { value: 1, label: 'In Stock' },
-            { value: 0, label: 'Out of Stock' }
+            { value: 1, label: 'En Stock' },
+            { value: 0, label: 'Rupture de Stock' }
           ]}
           defaultValue={inventory.stockAvailability === 0 ? 0 : 1}
           required
@@ -62,8 +62,8 @@ export default function Inventory({ product }: InventoryProps) {
         <NumberField
           name="qty"
           defaultValue={inventory.qty}
-          placeholder="Quantity"
-          label="Quantity"
+          placeholder="Quantité"
+          label="Quantité"
           required
         />
       </CardContent>
