@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{{documentTitle}} — {{documentNumber}}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 11px;
+      color: #1a1a2e;
+      line-height: 1.5;
+      background: #fff;
+    }
+
+    .document {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    /* ─── Header ─── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #e48125;
+      margin-bottom: 24px;
+    }
+
+    .company-info {
+      flex: 1;
+    }
+
+    .company-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #e48125;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .company-details {
+      font-size: 10px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .document-badge {
+      text-align: right;
+    }
+
+    .document-type {
+      display: inline-block;
+      background: #e48125;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .document-meta {
+      font-size: 10px;
+      color: #6b7280;
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    .document-meta strong {
+      color: #1a1a2e;
+      font-weight: 600;
+    }
+
+    /* ─── Addresses ─── */
+    .addresses {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .address-block {
+      flex: 1;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px;
+      background: #fafafa;
+    }
+
+    .address-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #e48125;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .address-content {
+      font-size: 10.5px;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    /* ─── Order Info Bar ─── */
+    .order-info-bar {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .info-cell {
+      flex: 1;
+      padding: 10px 14px;
+      text-align: center;
+      border-right: 1px solid #e5e7eb;
+      background: #fff;
+    }
+
+    .info-cell:last-child { border-right: none; }
+
+    .info-cell-label {
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+
+    .info-cell-value {
+      font-size: 11px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+
+    /* ─── Items Table ─── */
+    .items-section {
+      margin-bottom: 24px;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .items-table thead th {
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    .items-table thead th.col-num { width: 40px; text-align: center; }
+    .items-table thead th.col-qty { width: 60px; text-align: center; }
+    .items-table thead th.col-price { width: 110px; text-align: right; }
+    .items-table thead th.col-total { width: 120px; text-align: right; }
+
+    .items-table td {
+      padding: 10px 12px;
+      font-size: 10.5px;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: top;
+    }
+
+    .row-even { background: #fff; }
+    .row-odd { background: #fafafa; }
+
+    .col-num { text-align: center; color: #9ca3af; font-weight: 500; }
+    .col-qty { text-align: center; font-weight: 600; }
+    .col-price { text-align: right; }
+    .col-total { text-align: right; font-weight: 600; }
+
+    .item-name {
+      font-weight: 500;
+      color: #1a1a2e;
+    }
+
+    .item-sku {
+      font-size: 9px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    .variant-options {
+      margin-top: 3px;
+    }
+
+    .variant-tag {
+      display: inline-block;
+      font-size: 9px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-right: 4px;
+      color: #555;
+    }
+
+    /* ─── Totals ─── */
+    .totals-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+    }
+
+    .totals-table {
+      width: 280px;
+      border-collapse: collapse;
+    }
+
+    .totals-table tr td {
+      padding: 6px 12px;
+      font-size: 10.5px;
+    }
+
+    .totals-table tr td:first-child {
+      text-align: left;
+      color: #6b7280;
+    }
+
+    .totals-table tr td:last-child {
+      text-align: right;
+      font-weight: 500;
+      color: #1a1a2e;
+    }
+
+    .totals-table .discount td {
+      color: #dc2626;
+    }
+
+    .totals-table .grand-total td {
+      font-size: 14px;
+      font-weight: 800;
+      padding-top: 10px;
+      border-top: 2px solid #e48125;
+    }
+
+    .totals-table .grand-total td:last-child {
+      color: #e48125;
+    }
+
+    /* ─── Notes ─── */
+    .notes-section {
+      background: #fffbf0;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+
+    .notes-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #d97706;
+      margin-bottom: 4px;
+    }
+
+    .notes-content {
+      font-size: 10px;
+      color: #92400e;
+      line-height: 1.6;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      text-align: center;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 9px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    /* ─── Delivery-specific: signature area ─── */
+    .signature-area {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+      margin-bottom: 24px;
+    }
+
+    .signature-block {
+      flex: 1;
+      border-top: 1px solid #d1d5db;
+      padding-top: 8px;
+      text-align: center;
+    }
+
+    .signature-label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6b7280;
+      margin-bottom: 50px;
+    }
+
+    @media print {
+      body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      .document { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="document">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="company-info">
+      <div class="company-name">{{companyName}}</div>
+      <div class="company-details">
+        {{#if companyAddress}}{{companyAddress}}<br>{{/if}}
+        {{#if companyPhone}}Tél : {{companyPhone}}<br>{{/if}}
+        {{#if companyEmail}}Email : {{companyEmail}}<br>{{/if}}
+        {{#if companyTaxId}}MF : {{companyTaxId}}<br>{{/if}}
+        {{#if companyRc}}RC : {{companyRc}}{{/if}}
+      </div>
+    </div>
+    <div class="document-badge">
+      <div class="document-type">{{documentTitle}}</div>
+      <div class="document-meta">
+        <strong>N° :</strong> {{documentNumber}}<br>
+        <strong>Date :</strong> {{documentDate}}<br>
+        <strong>Commande :</strong> #{{orderNumber}}
+      </div>
+    </div>
+  </div>
+
+  <!-- Addresses -->
+  <div class="addresses">
+    <div class="address-block">
+      <div class="address-label">Adresse de livraison</div>
+      <div class="address-content">{{shippingAddressHtml}}</div>
+    </div>
+    <div class="address-block">
+      <div class="address-label">Adresse de facturation</div>
+      <div class="address-content">{{billingAddressHtml}}</div>
+    </div>
+  </div>
+
+  <!-- Order Info Bar -->
+  <div class="order-info-bar">
+    <div class="info-cell">
+      <div class="info-cell-label">Commande</div>
+      <div class="info-cell-value">#{{orderNumber}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Date</div>
+      <div class="info-cell-value">{{orderDateShort}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Paiement</div>
+      <div class="info-cell-value">{{paymentMethod}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Livraison</div>
+      <div class="info-cell-value">{{shippingMethod}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Articles</div>
+      <div class="info-cell-value">{{totalQty}}</div>
+    </div>
+  </div>
+
+  <!-- Items -->
+  <div class="items-section">
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th>Désignation</th>
+          <th class="col-qty">Qté</th>
+          <th class="col-price">Prix unitaire</th>
+          <th class="col-total">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{itemsRowsHtml}}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Totals -->
+  <div class="totals-section">
+    <table class="totals-table">
+      <tr>
+        <td>Sous-total</td>
+        <td>{{subTotal}}</td>
+      </tr>
+      {{#if hasDiscount}}
+      <tr class="discount">
+        <td>Remise</td>
+        <td>-{{discount}}</td>
+      </tr>
+      {{/if}}
+      <tr>
+        <td>Livraison</td>
+        <td>{{shippingFee}}</td>
+      </tr>
+      <tr>
+        <td>TVA</td>
+        <td>{{taxAmount}}</td>
+      </tr>
+      <tr class="grand-total">
+        <td>Total TTC</td>
+        <td>{{grandTotal}}</td>
+      </tr>
+    </table>
+  </div>
+
+  {{#if shippingNote}}
+  <div class="notes-section">
+    <div class="notes-label">Notes</div>
+    <div class="notes-content">{{shippingNote}}</div>
+  </div>
+  {{/if}}
+
+  <!-- Footer -->
+  <div class="footer">
+    {{companyName}} — {{documentTitle}} {{documentNumber}}<br>
+    Document généré le {{documentDate}}
+  </div>
+
+</div>
+</body>
+</html>

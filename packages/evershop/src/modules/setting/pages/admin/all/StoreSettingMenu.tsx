@@ -45,7 +45,7 @@ export default function StoreSettingMenu({
           </div>
         </ItemTitle>
         <ItemDescription>
-          <div>Configure your store information</div>
+          <div>Configurez les informations de votre boutique</div>
         </ItemDescription>
       </ItemContent>
       <ItemActions>

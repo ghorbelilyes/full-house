@@ -68,7 +68,7 @@ const Groups: React.FC<{ groups: Group[]; createGroupApi: string }> = ({
 
   const createGroup = () => {
     if (!newGroup.current?.value) {
-      setCreateGroupError('Group name is required');
+      setCreateGroupError('Le nom du groupe est requis');
       return;
     }
     fetch(createGroupApi, {
@@ -102,7 +102,7 @@ const Groups: React.FC<{ groups: Group[]; createGroupApi: string }> = ({
 
   return (
     <div>
-      <div className="mb-2">Select groups the attribute belongs to</div>
+      <div className="mb-2">Sélectionner les groupes auxquels l'attribut appartient</div>
       <div className="grid gap-5 grid-cols-2">
         <div>
           <Controller
@@ -133,7 +133,7 @@ const Groups: React.FC<{ groups: Group[]; createGroupApi: string }> = ({
               <InputGroup className="max-w-xs">
                 <InputGroupInput
                   type="text"
-                  placeholder="Create a new group"
+                  placeholder="Créer un nouveau groupe"
                   ref={newGroup}
                 />
                 <InputGroupAddon align="inline-end">
@@ -200,8 +200,8 @@ const Options: React.FC<{
             <div className="flex-1">
               <InputField
                 name={`options.${index}.option_text`}
-                placeholder="Option text"
-                validation={{ required: 'Option text is required' }}
+                placeholder="Texte de l'option"
+                validation={{ required: "Le texte de l'option est requis" }}
               />
               <InputField type="hidden" name={`options.${index}.option_id`} />
             </div>
@@ -214,7 +214,7 @@ const Options: React.FC<{
                 }}
                 variant={'destructive'}
               >
-                Remove
+                Supprimer
               </Button>
             </div>
           </div>
@@ -222,7 +222,7 @@ const Options: React.FC<{
       })}
       <div className="mt-2">
         <Button type="button" onClick={addOption} variant={'outline'}>
-          Add option
+          Ajouter une option
         </Button>
       </div>
     </div>
@@ -256,30 +256,30 @@ export default function General({ attribute, createGroupApi }: GeneralProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>General</CardTitle>
+        <CardTitle>Général</CardTitle>
         <CardDescription>
-          Manage the general information of the attribute.
+          Gérer les informations générales de l'attribut.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
           <InputField
             name="attribute_name"
-            label="Name"
-            placeholder="Enter attribute name"
+            label="Nom"
+            placeholder="Entrer le nom de l'attribut"
             required
             defaultValue={attribute?.attributeName}
-            validation={{ required: 'Attribute name is required' }}
+            validation={{ required: "Le nom de l'attribut est requis" }}
           />
 
           <InputField
             name="attribute_code"
             label="Code"
-            placeholder="Enter attribute code"
+            placeholder="Entrer le code de l'attribut"
             required
             defaultValue={attribute?.attributeCode}
-            validation={{ required: 'Attribute code is required' }}
-            helperText="Attribute code is used in API and must be unique"
+            validation={{ required: "Le code de l'attribut est requis" }}
+            helperText="Le code de l'attribut est utilisé dans l'API et doit être unique"
           />
 
           <div>
@@ -287,27 +287,27 @@ export default function General({ attribute, createGroupApi }: GeneralProps) {
               <RadioGroupField
                 name="type"
                 options={[
-                  { label: 'Text', value: 'text' },
-                  { label: 'Select', value: 'select' },
-                  { label: 'Multiselect', value: 'multiselect' },
-                  { label: 'Textarea', value: 'textarea' }
+                  { label: 'Texte', value: 'text' },
+                  { label: 'Sélection', value: 'select' },
+                  { label: 'Sélection multiple', value: 'multiselect' },
+                  { label: 'Zone de texte', value: 'textarea' }
                 ]}
                 label="Type"
                 defaultValue={attribute?.type}
                 required
                 disabled={!!attribute?.attributeId}
-                validation={{ required: 'Type is required' }}
+                validation={{ required: 'Le type est requis' }}
               />
             </div>
           </div>
         </div>
       </CardContent>
       {['select', 'multiselect'].includes(type) && (
-        <CardContent title="Attribute options">
+        <CardContent title="Options de l'attribut">
           <Options originOptions={get(attribute, 'options', [])} />
         </CardContent>
       )}
-      <CardContent title="Attribute Group">
+      <CardContent title="Groupe d'attributs">
         <Groups
           groups={get(attribute, 'groups.items', [])}
           createGroupApi={createGroupApi}

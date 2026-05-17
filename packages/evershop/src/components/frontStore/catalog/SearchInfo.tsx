@@ -4,7 +4,15 @@ import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import React from 'react';
 
 export function SearchInfo() {
-  const { keyword } = useSearch();
+  const { keyword, products } = useSearch();
+  const isPromotionPage = products.currentFilters.some(
+    (filter) => filter.key === 'promo'
+  );
+  const heading = keyword
+    ? _('Search results for "${keyword}"', { keyword })
+    : isPromotionPage
+    ? _('Promotions')
+    : _('Shop');
 
   return (
     <>
@@ -12,9 +20,7 @@ export function SearchInfo() {
       <div className="page-width">
         <div className="mb-2 md:mb-5">
           <div className="text-left ">
-            <h1 className="search-name mt-6">
-              {_('Search results for "${keyword}"', { keyword })}
-            </h1>
+            <h1 className="search-name mt-6">{heading}</h1>
           </div>
         </div>
       </div>

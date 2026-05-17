@@ -1,6 +1,7 @@
 import {
   commit,
   del,
+  execute,
   insert,
   insertOnUpdate,
   PoolClient,
@@ -44,6 +45,24 @@ function validateProductDataBeforeUpdate(data: ProductData): ProductData {
 async function updateProductInventory(inventoryData: ProductInventoryData, productId: number, connection: PoolClient): Promise<void> {
   // Save the product inventory
   try {
+    // Set session variables so the DB trigger can log proper context
+    await execute(
+      connection,
+      `SELECT set_config('app.inventory_action_type', 'admin_edit', true)`
+    );
+    await execute(
+      connection,
+      `SELECT set_config('app.inventory_reason', 'Modification via formulaire admin', true)`
+    );
+    await execute(
+      connection,
+      `SELECT set_config('app.inventory_ref_type', 'admin_product_edit', true)`
+    );
+    await execute(
+      connection,
+      `SELECT set_config('app.inventory_admin_user', 'admin', true)`
+    );
+
     // Update product inventory
     await update('product_inventory')
       .given(inventoryData)

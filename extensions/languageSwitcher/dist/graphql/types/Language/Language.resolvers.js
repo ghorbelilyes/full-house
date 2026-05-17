@@ -1,18 +1,23 @@
 export default {
     Query: {
-        currentLanguage: (root, args, context) => {
+        currentLanguage: (root, args, context)=>{
             return context.currentLanguage || 'en';
         },
-        translations: (root, args, context) => {
+        translations: (root, args, context)=>{
             const translations = context.translations || {};
             return JSON.stringify(translations);
         },
-        supportedLanguages: () => {
+        supportedLanguages: ()=>{
             return [
-                { code: 'en', label: 'EN' },
-                { code: 'fr', label: 'FR' }
+                {
+                    code: 'en',
+                    label: 'EN'
+                },
+                {
+                    code: 'fr',
+                    label: 'FR'
+                }
             ];
         }
     }
 };
-//# sourceMappingURL=Language.resolvers.js.map

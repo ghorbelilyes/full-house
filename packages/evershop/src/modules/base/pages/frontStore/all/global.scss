@@ -13,6 +13,7 @@
     font-size: 100%;
     color: var(--foreground);
     background-color: var(--background);
+    overflow-x: hidden;
     input[type='email'],
     input[type='password'],
     input[type='tel'],

@@ -7,7 +7,43 @@ import {
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import React from 'react';
 
+/** Map a badge variant (from config/GraphQL) to Tailwind classes */
+const badgeStyles: Record<string, string> = {
+  success:
+    'bg-emerald-50 text-emerald-700 ring-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:ring-emerald-800',
+  warning:
+    'bg-amber-50 text-amber-700 ring-amber-100 dark:bg-amber-900/30 dark:text-amber-400 dark:ring-amber-800',
+  destructive:
+    'bg-red-50 text-red-700 ring-red-100 dark:bg-red-900/30 dark:text-red-400 dark:ring-red-800',
+  default:
+    'bg-sky-50 text-sky-700 ring-sky-100 dark:bg-sky-900/30 dark:text-sky-400 dark:ring-sky-800'
+};
+
+function statusBadgeClass(badge?: string): string {
+  return badgeStyles[badge || 'default'] || badgeStyles.default;
+}
+
+/** Format an ISO / yyyy-MM-dd date into a readable French string */
+function formatDate(raw?: string): string {
+  if (!raw) return '';
+  try {
+    const d = new Date(raw);
+    if (isNaN(d.getTime())) return raw;
+    return d.toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch {
+    return raw;
+  }
+}
+
 const OrderDetail: React.FC<{ order: Order }> = ({ order }) => {
+  const statusName = order.status?.name || _('Unknown');
+  const statusBadge = order.status?.badge;
+  const dateLabel = formatDate(order.createdAt?.value) || order.createdAt?.text;
+
   return (
     <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/50">
       {/* Order header */}
@@ -19,15 +55,17 @@ const OrderDetail: React.FC<{ order: Order }> = ({ order }) => {
           <h3 className="mt-1 text-lg font-extrabold text-slate-950 dark:text-white">
             #{order.orderNumber}
           </h3>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            {dateLabel}
+          </p>
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:ring-slate-600">
-            {order.createdAt.text}
-          </span>
-
-          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700 ring-1 ring-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:ring-emerald-800">
-            {_('Paid')}
+          {/* Order status */}
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-bold ring-1 ${statusBadgeClass(statusBadge)}`}
+          >
+            {statusName}
           </span>
 
           <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-bold text-white dark:bg-white dark:text-slate-950">

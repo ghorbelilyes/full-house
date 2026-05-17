@@ -16,10 +16,10 @@ export default function Logo({
   }
 }: LogoProps) {
   return (
-    <div className="logo md:ml-0 flex justify-center items-center">
+    <div className="logo">
       {src && (
         <a href="/" className="logo-icon">
-          <img src={src} alt={alt} width={width} height={height} />
+          <img src={src} alt={alt} />
         </a>
       )}
       {!src && (
@@ -52,7 +52,7 @@ export default function Logo({
 }
 
 export const layout = {
-  areaId: 'headerMiddleCenter',
+  areaId: 'headerBrand',
   sortOrder: 10
 };
 

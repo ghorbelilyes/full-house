@@ -1,0 +1,4 @@
+extend type Product {
+  trustBadgesAdmin: [ProductTrustBadge]!
+  specBadgesAdmin: [ProductSpecBadge]!
+}

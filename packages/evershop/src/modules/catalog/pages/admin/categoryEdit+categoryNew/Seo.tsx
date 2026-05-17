@@ -24,16 +24,16 @@ export default function Seo({ category }: CategorySeoProps) {
         default: (
           <InputField
             name="url_key"
-            label="URL key"
-            placeholder="Enter URL key"
+            label="Clé URL"
+            placeholder="Entrer la clé URL"
             defaultValue={category?.urlKey || ''}
             required
             validation={{
-              required: 'URL key is required',
+              required: 'La clé URL est requise',
               pattern: {
                 value: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
                 message:
-                  'URL key must be lowercase and can only contain alphanumeric characters and hyphens'
+                  'La clé URL doit être en minuscules et ne peut contenir que des caractères alphanumériques et des tirets'
               }
             }}
           />
@@ -46,12 +46,12 @@ export default function Seo({ category }: CategorySeoProps) {
         default: (
           <InputField
             name="meta_title"
-            label="Meta title"
-            placeholder="Enter Meta title"
+            label="Titre méta"
+            placeholder="Entrer le titre méta"
             defaultValue={category?.metaTitle || ''}
             required
             validation={{
-              required: 'Meta title is required'
+              required: 'Le titre méta est requis'
             }}
           />
         )
@@ -63,12 +63,12 @@ export default function Seo({ category }: CategorySeoProps) {
         default: (
           <TextareaField
             name="meta_description"
-            label="Meta description"
-            placeholder="Enter Meta description"
+            label="Description méta"
+            placeholder="Entrer la description méta"
             defaultValue={category?.metaDescription || ''}
             required
             validation={{
-              required: 'Meta description is required'
+              required: 'La description méta est requise'
             }}
           />
         )
@@ -80,9 +80,9 @@ export default function Seo({ category }: CategorySeoProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Search engine optimize</CardTitle>
+        <CardTitle>Référencement (SEO)</CardTitle>
         <CardDescription>
-          Manage the SEO settings of the category.
+          Gérer les paramètres SEO de la catégorie.
         </CardDescription>
       </CardHeader>
       <CardContent>

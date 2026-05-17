@@ -62,7 +62,7 @@ function Rate({ rate, getTaxClasses }: RateProps) {
         </td>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Tax Rate</DialogTitle>
+            <DialogTitle>Modifier le taux de taxe</DialogTitle>
           </DialogHeader>
           <RateForm
             saveRateApi={rate.updateApi}

@@ -1,0 +1,11 @@
+type HeaderBarMessage {
+  icon: String
+  text: String!
+  linkText: String
+  linkUrl: String
+}
+
+extend type Setting {
+  headerBarEnabled: Boolean
+  headerBarMessages: [HeaderBarMessage]
+}

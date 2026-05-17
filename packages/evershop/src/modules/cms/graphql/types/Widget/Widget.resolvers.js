@@ -103,22 +103,18 @@ export default {
         return { menus: [] };
       }
 
-      for (const menu of menus) {
-        if (menu.type === 'category') {
-          categories.push(menu.uuid);
-        }
-        if (menu.type === 'page') {
-          pages.push(menu.uuid);
-        }
-        menu.children.forEach((child) => {
-          if (child.type === 'category') {
-            categories.push(child.uuid);
+      // Recursively collect all category/page UUIDs at any depth
+      const collectUuids = (items) => {
+        for (const item of items) {
+          if (item.type === 'category') categories.push(item.uuid);
+          if (item.type === 'page') pages.push(item.uuid);
+          if (item.children && item.children.length > 0) {
+            collectUuids(item.children);
           }
-          if (child.type === 'page') {
-            pages.push(child.uuid);
-          }
-        });
-      }
+        }
+      };
+      collectUuids(menus);
+
       let urls = [];
       if (categories.length > 0) {
         const rewrites = await select()
@@ -143,24 +139,19 @@ export default {
           }))
         );
       }
-      const items = menus.map((menu) => {
-        const url = urls.find((u) => u.uuid === menu.uuid);
+
+      // Recursively map items with resolved URLs
+      const mapItem = (item) => {
+        const found = urls.find((u) => u.uuid === item.uuid);
         return {
-          ...menu,
+          ...item,
           id: uniqid(),
-
-          url: url ? url.url : menu.type === 'custom' ? menu.url : null,
-          children: menu.children.map((child) => {
-            const url = urls.find((u) => u.uuid === child.uuid);
-            return {
-              ...child,
-              id: uniqid(),
-
-              url: url ? url.url : child.type === 'custom' ? child.url : null
-            };
-          })
+          url: found ? found.url : item.type === 'custom' ? item.url : null,
+          children: (item.children || []).map(mapItem)
         };
-      });
+      };
+
+      const items = menus.map(mapItem);
       return { menus: items, isMain, className: settings?.className };
     }
   },

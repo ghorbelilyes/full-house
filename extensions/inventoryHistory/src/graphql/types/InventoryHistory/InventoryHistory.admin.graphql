@@ -1,0 +1,22 @@
+"""
+A single inventory movement record
+"""
+type InventoryHistoryEntry {
+  historyId: Int!
+  uuid: String!
+  productId: Int!
+  actionType: String!
+  actionLabel: String!
+  qtyBefore: Int!
+  qtyChange: Int!
+  qtyAfter: Int!
+  reason: String
+  referenceType: String
+  referenceId: String
+  adminUser: String
+  createdAt: String!
+}
+
+extend type Inventory {
+  history: [InventoryHistoryEntry!]!
+}

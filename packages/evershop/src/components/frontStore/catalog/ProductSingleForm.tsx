@@ -43,7 +43,7 @@ function ProductPriceDisplay() {
     );
   }
 
-  const savedAmount = (price.regular.value - price.special.value).toFixed(2);
+  const savedAmount = parseFloat((price.regular.value - price.special.value).toFixed(2));
   const discountPercent = Math.round(
     ((price.regular.value - price.special.value) / price.regular.value) * 100
   );
@@ -81,22 +81,9 @@ function ProductPriceDisplay() {
           border: '1px solid #fecaca'
         }}
       >
-        🎉 {_('You save')} {savedAmount} ({discountPercent}%)
+        🎉 {_('You save')} {savedAmount} DT ({discountPercent}%)
       </div>
 
-      {/* Promotion end date countdown */}
-      {promotion?.endDate && (
-        <div
-          className="mt-2 text-xs px-3 py-1 rounded inline-flex items-center gap-1"
-          style={{
-            background: '#fffbeb',
-            color: '#92400e',
-            border: '1px solid #fde68a'
-          }}
-        >
-          ⏰ {_('Offer ends')}: {new Date(promotion.endDate).toLocaleDateString()}
-        </div>
-      )}
     </div>
   );
 }

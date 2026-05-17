@@ -33,15 +33,15 @@ export default function PaypalPayment({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Paypal Payment</CardTitle>
+        <CardTitle>Paiement PayPal</CardTitle>
         <CardDescription>
-          Configure your Paypal payment gateway settings
+          Configurer les paramètres de la passerelle de paiement PayPal
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Enable?</h4>
+            <h4>Activer ?</h4>
           </div>
           <div className="col-span-2">
             <ToggleField
@@ -56,12 +56,12 @@ export default function PaypalPayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Dislay Name</h4>
+            <h4>Nom affiché</h4>
           </div>
           <div className="col-span-2">
             <InputField
               name="paypalDisplayName"
-              placeholder="Display Name"
+              placeholder="Nom affiché"
               defaultValue={paypalDisplayName}
             />
           </div>
@@ -70,12 +70,12 @@ export default function PaypalPayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Client ID</h4>
+            <h4>Identifiant client</h4>
           </div>
           <div className="col-span-2">
             <InputField
               name="paypalClientId"
-              placeholder="Client ID"
+              placeholder="Identifiant client"
               defaultValue={paypalClientId}
             />
           </div>
@@ -84,12 +84,12 @@ export default function PaypalPayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Client Secret</h4>
+            <h4>Clé secrète client</h4>
           </div>
           <div className="col-span-2">
             <InputField
               name="paypalClientSecret"
-              placeholder="Secret Key"
+              placeholder="Clé secrète"
               defaultValue={paypalClientSecret}
             />
           </div>
@@ -98,7 +98,7 @@ export default function PaypalPayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Environment</h4>
+            <h4>Environnement</h4>
           </div>
           <div className="col-span-2">
             <RadioGroupField
@@ -121,14 +121,14 @@ export default function PaypalPayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Payment mode</h4>
+            <h4>Mode de paiement</h4>
           </div>
           <div className="col-span-2">
             <RadioGroupField
               name="paypalPaymentIntent"
               defaultValue={paypalPaymentIntent}
               options={[
-                { label: 'Authorize only', value: 'AUTHORIZE' },
+                { label: 'Autorisation uniquement', value: 'AUTHORIZE' },
                 { label: 'Capture', value: 'CAPTURE' }
               ]}
             />

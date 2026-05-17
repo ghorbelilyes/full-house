@@ -282,6 +282,7 @@ export interface CartState {
 // Action type for cart operations
 type CartAction =
   | { type: 'SET_CART'; payload: Partial<CartData> }
+  | { type: 'UPDATE_CART_FIELDS'; payload: Partial<CartData> }
   | {
       type: 'SET_SPECIFIC_LOADING';
       payload: {
@@ -313,6 +314,7 @@ interface CartDispatch {
   applyCoupon: (couponCode: string) => Promise<void>;
   removeCoupon: () => Promise<void>;
   clearError: () => void;
+  clearShippingMethod: () => void;
   isShippingRequired: () => boolean;
   isReadyForCheckout: () => boolean;
   getErrors: () => CartError[];
@@ -348,6 +350,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           fetchingShippingMethods: false
         };
         draft.loading = false;
+        break;
+
+      case 'UPDATE_CART_FIELDS':
+        if (draft.data) {
+          Object.assign(draft.data, action.payload);
+        }
         break;
 
       case 'SET_SPECIFIC_LOADING':
@@ -741,6 +749,34 @@ export const CartProvider = ({
   const clearError = useCallback(() => {
     dispatch({ type: 'CLEAR_ERROR' });
   }, []);
+
+  // Clear shipping method from local cart state (used when province changes)
+  const clearShippingMethod = useCallback(() => {
+    if (!state.data) return;
+    // Calculate new grand total by subtracting old shipping fee
+    const oldShippingFee = state.data.shippingFeeInclTax?.value || 0;
+    const newGrandTotalValue = (state.data.grandTotal?.value || 0) - oldShippingFee;
+    const currency = state.data.grandTotal?.text?.replace(/[\d,.\s]/g, '').trim() || 'DT';
+    const formatPrice = (val: number) => {
+      const formatted = val.toFixed(3).replace('.', ',');
+      return `${formatted}\u00a0${currency}`;
+    };
+
+    dispatch({
+      type: 'UPDATE_CART_FIELDS',
+      payload: {
+        shippingMethod: undefined,
+        shippingMethodName: undefined,
+        shippingFeeExclTax: { value: 0, text: '' },
+        shippingFeeInclTax: { value: 0, text: '' },
+        shippingTaxAmount: { value: 0, text: '' },
+        grandTotal: {
+          value: newGrandTotalValue,
+          text: formatPrice(newGrandTotalValue)
+        }
+      }
+    });
+  }, [state.data]);
 
   // Add payment method
   const addPaymentMethod = useCallback(
@@ -1187,6 +1223,7 @@ export const CartProvider = ({
     applyCoupon,
     removeCoupon,
     clearError,
+    clearShippingMethod,
     isShippingRequired,
     isReadyForCheckout,
     getErrors,

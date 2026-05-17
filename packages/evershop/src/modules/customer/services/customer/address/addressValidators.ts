@@ -80,12 +80,9 @@ const initialValidators: Validator<Address>[] = [
      * @param {Address} address
      * @returns {boolean}
      */
-    func: (address: Address) => {
-      if (!address.postcode || address.postcode.trim() === '') {
-        return false;
-      } else {
-        return true;
-      }
+    func: (_address: Address) => {
+      // Postcode is optional for Tunisia
+      return true;
     },
     errorMessage: 'Postcode is required'
   }

@@ -1,5 +1,4 @@
 import { SearchBox as Search } from '@components/frontStore/catalog/SearchBox.js';
-import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import React from 'react';
 
 interface SearchBoxProps {
@@ -12,7 +11,7 @@ export default function SearchBox({ searchPageUrl }: SearchBoxProps) {
 }
 
 export const layout = {
-  areaId: 'headerMiddleRight',
+  areaId: 'headerSearch',
   sortOrder: 5
 };
 

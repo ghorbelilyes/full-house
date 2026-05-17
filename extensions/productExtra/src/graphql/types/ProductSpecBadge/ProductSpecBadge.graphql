@@ -1,0 +1,13 @@
+type ProductSpecBadge {
+  specBadgeId: Int!
+  productId: Int!
+  icon: String
+  value: String!
+  label: String!
+  badgeSize: String!
+  sortOrder: Int!
+}
+
+extend type Product {
+  specBadges: [ProductSpecBadge]!
+}

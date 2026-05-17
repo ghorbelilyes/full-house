@@ -57,6 +57,24 @@ async function reStockAfterCancel(orderID: number, connection: PoolClient) {
     .where('order_item_order_id', '=', orderID)
     .execute(connection, false);
 
+  // Set session variables for inventory history trigger
+  await execute(
+    connection,
+    `SELECT set_config('app.inventory_action_type', 'order_canceled', true)`
+  );
+  await execute(
+    connection,
+    `SELECT set_config('app.inventory_reason', 'Remise en stock suite à annulation de commande', true)`
+  );
+  await execute(
+    connection,
+    `SELECT set_config('app.inventory_ref_type', 'order_cancellation', true)`
+  );
+  await execute(
+    connection,
+    `SELECT set_config('app.inventory_ref_id', '${orderID}', true)`
+  );
+
   await Promise.all(
     orderItems.map(async (orderItem) => {
       await execute(

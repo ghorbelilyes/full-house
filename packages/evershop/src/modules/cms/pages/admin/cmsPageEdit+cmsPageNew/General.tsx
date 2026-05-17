@@ -24,9 +24,9 @@ export default function General({ page }: CmsPageGeneralProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>General Information</CardTitle>
+        <CardTitle>Informations générales</CardTitle>
         <CardDescription>
-          Provide the basic information for the CMS page.
+          Fournir les informations de base de la page CMS.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -35,30 +35,30 @@ export default function General({ page }: CmsPageGeneralProps) {
             <InputField
               id="cms_page_name"
               name="name"
-              label="Page Name"
-              placeholder="Enter page name"
+              label="Nom de la page"
+              placeholder="Entrer le nom de la page"
               defaultValue={page?.name}
               required
-              validation={{ required: 'Page name is required' }}
-              helperText="This is the name of the CMS page that will be displayed in the admin panel."
+              validation={{ required: 'Le nom de la page est requis' }}
+              helperText="C'est le nom de la page CMS qui sera affiché dans le panneau d'administration."
             />
           </div>
           <div className="space-y-2">
             <RadioGroupField
               name="status"
-              label="Status"
+              label="Statut"
               options={[
-                { value: 1, label: 'Enabled' },
-                { value: 0, label: 'Disabled' }
+                { value: 1, label: 'Activé' },
+                { value: 0, label: 'Désactivé' }
               ]}
               defaultValue={page?.status}
               required
-              helperText="Enable this page to make it visible on the frontend."
+              helperText="Activer cette page pour la rendre visible sur le site."
             />
           </div>
           <div>
             <label htmlFor="content" className="block mb-2 font-medium">
-              Content
+              Contenu
             </label>
             <Editor name="content" value={page?.content || []} />
           </div>

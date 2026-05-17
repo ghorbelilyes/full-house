@@ -19,6 +19,8 @@ export default async (
   )
     ? (request.query.f as 'jpeg' | 'png' | 'webp' | 'avif')
     : 'webp';
+  // fit=cover → crop/resize to fill exact dimensions (used by slideshow)
+  const fit = request.query.fit === 'cover' ? 'cover' : undefined;
 
   if (
     !src ||
@@ -30,7 +32,7 @@ export default async (
   }
 
   try {
-    const result = await imageProcessor(src, width, quality, format, height);
+    const result = await imageProcessor(src, width, quality, format, height, false, fit);
     response.setHeader('Content-Type', result.metadata.contentType);
     response.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     // Send only the buffer data, not the entire result object

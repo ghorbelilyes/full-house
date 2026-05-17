@@ -147,7 +147,7 @@ export default () => {
       scripts: [],
       bases: []
     },
-    copyRight: `© 2022 Evershop. All Rights Reserved.`
+    copyRight: `© 2025 Full House. Tous droits réservés.`
   };
   config.util.setModuleDefaults('themeConfig', defaultThemeConfig);
 

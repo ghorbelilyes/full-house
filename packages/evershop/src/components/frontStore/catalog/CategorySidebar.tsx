@@ -3,10 +3,20 @@ import { useCategory } from '@components/frontStore/catalog/CategoryContext.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 
 interface SidebarCategory {
-  categoryId: number;
+  categoryId?: number | null;
   name: string;
   url: string;
   children?: SidebarCategory[];
+}
+
+function hasActiveCategory(category: SidebarCategory, categoryId: number) {
+  if (category.categoryId === categoryId) {
+    return true;
+  }
+
+  return (category.children || []).some((child) =>
+    hasActiveCategory(child, categoryId)
+  );
 }
 
 /* ─── Single branch (recursive) ─────────────────────────────── */
@@ -21,15 +31,9 @@ function CategoryBranch({
 }) {
   const hasChildren = category.children && category.children.length > 0;
   const isCurrent = category.categoryId === currentCategoryId;
-
-  const isChildActive = hasChildren
-    ? category.children!.some(
-        (c) =>
-          c.categoryId === currentCategoryId ||
-          (c.children &&
-            c.children.some((gc) => gc.categoryId === currentCategoryId))
-      )
-    : false;
+  const isChildActive = (category.children || []).some((child) =>
+    hasActiveCategory(child, currentCategoryId)
+  );
 
   const [expanded, setExpanded] = useState(isCurrent || isChildActive);
 
@@ -82,16 +86,14 @@ function CategoryBranch({
       {/* Children */}
       {hasChildren && expanded && (
         <ul className="ml-3 mt-0.5 space-y-0.5 border-l-2 border-orange-200 pl-2">
-          {[...category.children!]
-            .sort((a, b) => a.name.localeCompare(b.name, 'fr'))
-            .map((child) => (
-              <CategoryBranch
-                key={child.categoryId}
-                category={child}
-                currentCategoryId={currentCategoryId}
-                level={level + 1}
-              />
-            ))}
+          {category.children!.map((child) => (
+            <CategoryBranch
+              key={child.categoryId || child.url || child.name}
+              category={child}
+              currentCategoryId={currentCategoryId}
+              level={level + 1}
+            />
+          ))}
         </ul>
       )}
     </li>
@@ -100,9 +102,13 @@ function CategoryBranch({
 
 /* ─── Sidebar wrapper ───────────────────────────────────────── */
 export function CategorySidebar({
-  categoryTree
+  categoryTree,
+  showHeader = true,
+  showSeparator = true
 }: {
   categoryTree: SidebarCategory[];
+  showHeader?: boolean;
+  showSeparator?: boolean;
 }) {
   const currentCategory = useCategory();
   const [isOpen, setIsOpen] = useState(true);
@@ -114,37 +120,39 @@ export function CategorySidebar({
   return (
     <div>
       {/* Collapsible header */}
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="group mb-1 flex w-full items-center justify-between rounded-xl px-1 py-2 text-left transition-colors hover:bg-orange-50"
-      >
-        <span className="text-sm font-bold uppercase tracking-wide text-slate-800">
-          {_('Categories')}
-        </span>
-        <svg
-          className={`h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300 ${
-            isOpen ? '' : '-rotate-90'
-          }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
+      {showHeader && (
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="group mb-1 flex w-full items-center justify-between rounded-xl px-1 py-2 text-left transition-colors hover:bg-orange-50"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
+          <span className="text-sm font-bold uppercase tracking-wide text-slate-800">
+            {_('Categories')}
+          </span>
+          <svg
+            className={`h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300 ${
+              isOpen ? '' : '-rotate-90'
+            }`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+      )}
 
       {/* Tree */}
       {isOpen && (
         <ul className="mt-1 space-y-0.5">
           {categoryTree.map((cat) => (
             <CategoryBranch
-              key={cat.categoryId}
+              key={cat.categoryId || cat.url || cat.name}
               category={cat}
               currentCategoryId={currentCategory.categoryId}
             />
@@ -153,7 +161,7 @@ export function CategorySidebar({
       )}
 
       {/* Separator */}
-      <hr className="mt-5 border-slate-200" />
+      {showSeparator && <hr className="mt-5 border-slate-200" />}
     </div>
   );
 }

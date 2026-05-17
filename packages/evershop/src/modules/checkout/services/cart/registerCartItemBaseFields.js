@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { buildUrl } from '../../../../lib/router/buildUrl.js';
 import { getConfig } from '../../../../lib/util/getConfig.js';
 import { calculateTaxAmount } from '../../../../modules/tax/services/calculateTaxAmount.js';
+import { getAllowNegativeStock } from '../../../../modules/setting/services/setting.js';
 import { toPrice } from '../toPrice.js';
 
 export function registerCartItemBaseFields(fields) {
@@ -254,9 +255,10 @@ export function registerCartItemBaseFields(fields) {
           const qty =
             triggeredField === 'qty' ? requestedValue : this.getData('qty');
           const product = await this.getProduct();
-          if (product.manage_stock === true && product.qty < 1) {
+          const allowNegative = await getAllowNegativeStock();
+          if (!allowNegative && product.manage_stock === true && product.qty < 1) {
             this.setError('qty', 'This item is out of stock');
-          } else if (product.manage_stock === true && product.qty < qty) {
+          } else if (!allowNegative && product.manage_stock === true && product.qty < qty) {
             this.setError('qty', 'We do not have enough stock');
           }
 

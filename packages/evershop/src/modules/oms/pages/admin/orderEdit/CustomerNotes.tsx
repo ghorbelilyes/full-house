@@ -18,7 +18,7 @@ export default function CustomerNotes({
   return (
     <Card className="bg-popover">
       <CardHeader>
-        <CardTitle>Customer notes</CardTitle>
+        <CardTitle>Notes du client</CardTitle>
       </CardHeader>
       <CardContent>
         <Area
@@ -30,7 +30,7 @@ export default function CustomerNotes({
                   <div>
                     {shippingNote || (
                       <span className="text-muted-foreground">
-                        No notes from customer
+                        Aucune note du client
                       </span>
                     )}
                   </div>

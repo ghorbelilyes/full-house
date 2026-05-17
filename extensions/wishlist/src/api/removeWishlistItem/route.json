@@ -1,0 +1,5 @@
+{
+  "methods": ["DELETE"],
+  "path": "/wishlist/mine/items/:product_id",
+  "access": "public"
+}

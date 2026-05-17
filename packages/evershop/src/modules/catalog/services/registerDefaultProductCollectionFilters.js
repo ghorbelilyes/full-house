@@ -15,7 +15,7 @@ export default async function registerDefaultProductCollectionFilters() {
         const descKey = `keyword_desc_${uniqid()}`;
         where.addRaw(
           'AND',
-          `(product_description.name ILIKE :${nameKey} OR product_description.description ILIKE :${descKey})`,
+          `(unaccent(product_description.name) ILIKE unaccent(:${nameKey}) OR unaccent(product_description.description) ILIKE unaccent(:${descKey}))`,
           {
             [nameKey]: `%${value}%`,
             [descKey]: `%${value}%`

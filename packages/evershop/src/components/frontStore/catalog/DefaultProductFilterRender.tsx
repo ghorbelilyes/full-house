@@ -89,10 +89,10 @@ export const DefaultProductFilterRender: React.FC<{
     <ProductFilterDispatch.Provider value={contextValue}>
       <button
         onClick={() => setIsMobileFilterOpen(true)}
-        className="md:hidden w-full flex items-center justify-center space-x-2 py-3 px-4 border border-border rounded-md bg-background hover:bg-muted transition-colors"
+        className="lg:hidden flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all active:scale-[0.98] hover:border-orange-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-orange-500"
       >
         <svg
-          className="w-5 h-5"
+          className="h-[18px] w-[18px] flex-shrink-0 text-orange-500"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -104,13 +104,18 @@ export const DefaultProductFilterRender: React.FC<{
             d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.586a1 1 0 01-.293.707l-2 2A1 1 0 0111 21v-6.586a1 1 0 00-.293-.707L4.293 7.293A1 1 0 014 6.586V4z"
           />
         </svg>
-        <span>{_('Filters')}</span>
+        <span className="flex-1 text-left">{_('Filters')}</span>
+        {activeFilterCount > 0 && (
+          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-500 px-1.5 text-[10px] font-bold text-white">
+            {activeFilterCount}
+          </span>
+        )}
       </button>
 
       <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
         <SheetContent
           side="bottom"
-          className="md:hidden max-h-[85vh] border-border"
+          className="lg:hidden max-h-[85vh] border-border"
         >
           <SheetHeader>
             <SheetTitle>{_('Filters')}</SheetTitle>
@@ -159,7 +164,7 @@ export const DefaultProductFilterRender: React.FC<{
         </SheetContent>
       </Sheet>
 
-      <div className={`hidden md:block product__filters ${className}`}>
+      <div className={`hidden lg:block product__filters ${className}`}>
         {/* Collapsible filter header */}
         <button
           type="button"

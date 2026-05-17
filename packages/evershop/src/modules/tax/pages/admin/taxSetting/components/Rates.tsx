@@ -60,7 +60,7 @@ export function Rates({ getTaxClasses, rates, addRateApi }: RatesProps) {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add Tax Rate</DialogTitle>
+              <DialogTitle>Ajouter un taux de taxe</DialogTitle>
             </DialogHeader>
             <RateForm
               saveRateApi={addRateApi}

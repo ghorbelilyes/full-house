@@ -25,7 +25,7 @@ export async function refreshSetting(): Promise<void> {
 }
 
 export async function getStoreName(
-  defaultValue: string = 'Evershop'
+  defaultValue: string = 'Full House'
 ): Promise<string> {
   return await getSetting('storeName', defaultValue);
 }
@@ -60,4 +60,9 @@ export function getStoreAddress(): Promise<string | null> {
 
 export function getStorePostalCode(): Promise<string | null> {
   return getSetting('storePostalCode', null);
+}
+
+export async function getAllowNegativeStock(): Promise<boolean> {
+  const val = await getSetting<string>('allowNegativeStock', '0');
+  return val === '1' || val === 'true';
 }

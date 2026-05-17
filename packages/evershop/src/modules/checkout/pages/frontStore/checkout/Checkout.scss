@@ -38,3 +38,118 @@
 .checkout-breadcrumb {
   font-size: 12px;
 }
+
+/* ── Saved-address custom dropdown ──────────────────────── */
+.saved-address-selector {
+  position: relative;
+  width: 100%;
+}
+
+.saved-address-selector__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 2px solid var(--primary, #f97316);
+  border-radius: 0.5rem;
+  background: var(--background, #ffffff);
+  font-size: 0.875rem;
+  color: var(--foreground, #1f2937);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.saved-address-selector__trigger:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.saved-address-selector__value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved-address-selector__chevron {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+  color: var(--muted-foreground, #6b7280);
+}
+
+.saved-address-selector__chevron--open {
+  transform: rotate(180deg);
+}
+
+.saved-address-selector__dropdown {
+  position: relative;
+  width: 100%;
+  margin-top: 4px;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 0.5rem;
+  background: var(--card, #ffffff);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 220px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.saved-address-selector__option {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.875rem;
+  color: var(--foreground, #1f2937);
+  cursor: pointer;
+  transition: background 0.12s;
+  border-bottom: 1px solid var(--border, #f3f4f6);
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.saved-address-selector__option:last-child {
+  border-bottom: none;
+}
+
+.saved-address-selector__option:hover {
+  background: var(--accent, #fff7ed);
+}
+
+.saved-address-selector__option--selected {
+  background: var(--primary, #f97316);
+  color: var(--primary-foreground, #ffffff);
+  font-weight: 600;
+}
+
+.saved-address-selector__option--selected:hover {
+  background: var(--primary, #f97316);
+  opacity: 0.9;
+}
+
+/* ── Responsive checkout ──────────────────────────────── */
+@media (max-width: 768px) {
+  .saved-address-selector__trigger {
+    min-height: 44px;
+    font-size: 0.8125rem;
+    padding: 10px 12px;
+  }
+
+  .saved-address-selector__dropdown {
+    max-height: 200px;
+  }
+
+  .saved-address-selector__option {
+    padding: 12px 14px;
+    font-size: 0.8125rem;
+    min-height: 44px;
+  }
+}

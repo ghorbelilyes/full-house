@@ -37,8 +37,8 @@ async function install() {
   // eslint-disable-next-line no-console
   console.log(
     kleur.green(
-      boxen('Welcome to EverShop - The open-source e-commerce platform', {
-        title: 'EverShop',
+      boxen('Bienvenue sur Full House', {
+        title: 'Full House',
         titleAlignment: 'center',
         padding: 1,
         margin: 1,
@@ -65,8 +65,8 @@ async function install() {
     {
       type: 'input',
       name: 'databaseName',
-      message: 'Postgres Database Name (evershop)',
-      initial: process.env.DB_NAME || 'evershop',
+      message: 'Postgres Database Name (fullhouse)',
+      initial: process.env.DB_NAME || 'fullhouse',
       skip: !!process.env.DB_NAME
     },
     {
@@ -192,7 +192,7 @@ async function install() {
 
   /* Start installation */
   const messages = [];
-  messages.push(`\n\n${kleur.green('EverShop is being installed ☕ ☕ ☕')}`);
+  messages.push(`\n\n${kleur.green('Full House est en cours d\'installation ☕ ☕ ☕')}`);
   messages.push('Creating .env file');
   const spinner = ora({
     text: kleur.green(messages.join('\n')),
@@ -249,7 +249,7 @@ DB_SSLMODE="${sslMode}"
     await insertOnUpdate('admin_user', ['email'])
       .given({
         status: 1,
-        email: adminUser?.email || 'admin@evershop.io',
+        email: adminUser?.email || 'admin@fullhouse.tn',
         password: passwordHash,
         full_name: adminUser?.fullName || 'Admin'
       })
@@ -276,7 +276,7 @@ DB_SSLMODE="${sslMode}"
         'Installation completed!. Run `npm run build` and `npm run start` to launch your store'
       ),
       {
-        title: 'EverShop',
+        title: 'Full House',
         titleAlignment: 'center',
         padding: 1,
         margin: 1,

@@ -140,13 +140,13 @@ export default function Products({
     <Dialog>
       <Card>
         <CardHeader>
-          <CardTitle>Products</CardTitle>
+          <CardTitle>Produits</CardTitle>
           <CardDescription>
-            Manage the products assigned to this collection.
+            Gérer les produits assignés à cette collection.
           </CardDescription>
           <CardAction>
             <DialogTrigger>
-              <Button variant="link">Add Products</Button>
+              <Button variant="link">Ajouter des produits</Button>
             </DialogTrigger>
           </CardAction>
         </CardHeader>
@@ -162,7 +162,7 @@ export default function Products({
               <Input
                 type="text"
                 value={keyword}
-                placeholder="Search products"
+                placeholder="Rechercher des produits"
                 onChange={(e) => {
                   setLoading(true);
                   setKeyword(e.target.value);
@@ -172,11 +172,11 @@ export default function Products({
             {data && !loading && (
               <>
                 {data.collection.products.items.length === 0 && (
-                  <div>No product to display.</div>
+                  <div>Aucun produit à afficher.</div>
                 )}
                 <div className="flex justify-between">
                   <div>
-                    <i>{data.collection.products.total} items</i>
+                    <i>{data.collection.products.total} éléments</i>
                   </div>
                   <div>
                     {data.collection.products.total > 10 && (
@@ -262,7 +262,7 @@ export default function Products({
                           }}
                           isLoading={removing.includes(p.uuid)}
                         >
-                          Remove
+                          Supprimer
                         </Button>
                       </div>
                     </div>
@@ -276,9 +276,9 @@ export default function Products({
       </Card>
       <DialogContent className="sm:max-w-[90vw] lg:max-w-200">
         <DialogHeader>
-          <DialogTitle>Add Products</DialogTitle>
+          <DialogTitle>Ajouter des produits</DialogTitle>
           <DialogDescription>
-            Select products to add to this collection.
+            Sélectionner les produits à ajouter à cette collection.
           </DialogDescription>
         </DialogHeader>
         {data && (

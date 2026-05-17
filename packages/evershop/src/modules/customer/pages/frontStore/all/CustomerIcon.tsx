@@ -1,4 +1,3 @@
-import { CircleUser } from 'lucide-react';
 import React from 'react';
 
 interface UserIconProps {
@@ -17,16 +16,20 @@ export default function UserIcon({
   loginUrl
 }: UserIconProps) {
   return (
-    <div className="self-center customer-icon">
-      <a href={customer ? accountUrl : loginUrl}>
-        <CircleUser className="w-5 h-5 text-foreground hover:text-primary" />
-      </a>
-    </div>
+    <a
+      href={customer ? accountUrl : loginUrl}
+      className="header-action-item"
+    >
+      <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21a8 8 0 0 1 16 0" />
+      </svg>
+    </a>
   );
 }
 
 export const layout = {
-  areaId: 'headerMiddleRight',
+  areaId: 'headerActions',
   sortOrder: 10
 };
 

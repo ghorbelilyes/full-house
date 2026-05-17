@@ -160,10 +160,6 @@ const Guest: React.FC<{
         defaultValue={email}
         name="contact.email"
         label={_('Email')}
-        required
-        validation={{
-          required: _('Email is required')
-        }}
         placeholder={_('Enter your email')}
       />
 

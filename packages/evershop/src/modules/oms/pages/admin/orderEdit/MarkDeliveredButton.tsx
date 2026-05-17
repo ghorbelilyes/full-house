@@ -51,7 +51,7 @@ export default function MarkDeliveredButton({
           }
         }}
       >
-        Mark Delivered
+        Marquer comme livré
       </Button>
     );
   }

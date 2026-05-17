@@ -11,7 +11,6 @@ export const ProductSingleDescription = () => {
     <>
       <Area id="productDescriptionBefore" noOuter />
       <div className="product__single__description mt-8">
-        <h3>{_('Product Description')}</h3>
         <Editor rows={description} />
       </div>
       <Area id="productDescriptionAfter" noOuter />

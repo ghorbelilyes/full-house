@@ -227,14 +227,12 @@ export const Media: React.FC<MediaProps> = ({
                 key={index}
                 className="product-image"
                 onClick={() => openModal(index)}
-                style={{ width: imageSize.width, height: imageSize.height }}
               >
                 <Image
                   src={image.url}
                   alt={image.alt || 'Product image'}
                   width={imageSize.width}
                   height={imageSize.height}
-                  objectFit="scale-down"
                 />
               </div>
             ))}

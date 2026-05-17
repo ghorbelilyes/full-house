@@ -21,7 +21,7 @@ export default function PaymentSetting({
             id="paymentSettingForm"
             method="POST"
             action={saveSettingApi}
-            successMessage="Payment setting saved"
+            successMessage="Paramètres de paiement enregistrés"
           >
             <Area id="paymentSetting" className="grid gap-5" />
           </Form>

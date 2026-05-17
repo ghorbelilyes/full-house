@@ -21,20 +21,20 @@ export default function General({ attribute }: GeneralProps) {
   return (
     <Card className="bg-popover">
       <CardHeader>
-        <CardTitle>Setting</CardTitle>
-        <CardDescription>Manage the setting of the attribute.</CardDescription>
+        <CardTitle>Paramètres</CardTitle>
+        <CardDescription>Gérer les paramètres de l'attribut.</CardDescription>
       </CardHeader>
       <CardContent>
         <RadioGroupField
           name="is_required"
-          label="Is Required?"
+          label="Requis ?"
           options={[
-            { value: 0, label: 'No' },
-            { value: 1, label: 'Yes' }
+            { value: 0, label: 'Non' },
+            { value: 1, label: 'Oui' }
           ]}
           required
           validation={{
-            required: 'This field is required'
+            required: 'Ce champ est requis'
           }}
           defaultValue={attribute?.isRequired === 0 ? 0 : 1}
         />
@@ -42,14 +42,14 @@ export default function General({ attribute }: GeneralProps) {
       <CardContent className="pt-6 border-t border-border">
         <RadioGroupField
           name="is_filterable"
-          label="Is Filterable?"
+          label="Filtrable ?"
           options={[
-            { value: 0, label: 'No' },
-            { value: 1, label: 'Yes' }
+            { value: 0, label: 'Non' },
+            { value: 1, label: 'Oui' }
           ]}
           required
           validation={{
-            required: 'This field is required'
+            required: 'Ce champ est requis'
           }}
           defaultValue={attribute?.isFilterable === 1 ? 1 : 0}
         />
@@ -57,14 +57,14 @@ export default function General({ attribute }: GeneralProps) {
       <CardContent className="pt-6 border-t border-border">
         <RadioGroupField
           name="display_on_frontend"
-          label="Display on Frontend?"
+          label="Afficher sur le site ?"
           options={[
-            { value: 0, label: 'No' },
-            { value: 1, label: 'Yes' }
+            { value: 0, label: 'Non' },
+            { value: 1, label: 'Oui' }
           ]}
           required
           validation={{
-            required: 'This field is required'
+            required: 'Ce champ est requis'
           }}
           defaultValue={attribute?.displayOnFrontend === 1 ? 1 : 0}
         />
@@ -72,14 +72,14 @@ export default function General({ attribute }: GeneralProps) {
       <CardContent className="pt-6 border-t border-border">
         <NumberField
           name="sort_order"
-          label="Sort Order"
-          placeholder="Sort order"
+          label="Ordre de tri"
+          placeholder="Ordre de tri"
           required
           validation={{
-            required: 'Sort order is required',
+            required: "L'ordre de tri est requis",
             min: {
               value: 0,
-              message: 'Sort order must be a positive number'
+              message: "L'ordre de tri doit être un nombre positif"
             }
           }}
           defaultValue={attribute?.sortOrder}

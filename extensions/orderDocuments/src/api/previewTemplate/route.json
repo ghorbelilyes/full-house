@@ -1,0 +1,5 @@
+{
+  "methods": ["POST"],
+  "path": "/document-templates/preview",
+  "access": "private"
+}

@@ -8,6 +8,7 @@ import {
   CustomerProvider,
   Customer
 } from '@components/frontStore/customer/CustomerContext.js';
+import { WishlistProvider } from '@components/frontStore/wishlist/WishlistContext.js';
 import { Footer } from '@components/frontStore/Footer.js';
 import { Header } from '@components/frontStore/Header.js';
 import React from 'react';
@@ -22,6 +23,8 @@ interface BaseProps {
   loginApi: string;
   logoutApi: string;
   registerApi: string;
+  wishlistProductIds: number[];
+  wishlistToggleApi: string;
 }
 export default function Base({
   myCart,
@@ -30,7 +33,9 @@ export default function Base({
   addMineCartItemApi,
   loginApi,
   logoutApi,
-  registerApi
+  registerApi,
+  wishlistProductIds,
+  wishlistToggleApi
 }: BaseProps) {
   return (
     <CustomerProvider
@@ -44,12 +49,17 @@ export default function Base({
         query={`${query}\n${fragments}`}
         addMineCartItemApi={addMineCartItemApi}
       >
-        <LoadingBar />
-        <Header />
-        <main className="content">
-          <Area id="content" noOuter />
-        </main>
-        <Footer copyRight={themeConfig.copyRight} />
+        <WishlistProvider
+          initialProductIds={wishlistProductIds || []}
+          toggleApi={wishlistToggleApi || ''}
+        >
+          <LoadingBar />
+          <Header />
+          <main className="content">
+            <Area id="content" noOuter />
+          </main>
+          <Footer copyRight={themeConfig.copyRight} />
+        </WishlistProvider>
       </CartProvider>
     </CustomerProvider>
   );
@@ -157,6 +167,8 @@ export const query = `
     loginApi: url(routeId: "customerLoginJson")
     registerApi: url(routeId: "createCustomer")
     logoutApi: url(routeId: "customerLogoutJson")
+    wishlistProductIds
+    wishlistToggleApi: url(routeId: "toggleWishlistItem")
   }
 `;
 

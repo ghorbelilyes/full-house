@@ -4,6 +4,7 @@ import { buildUrl } from '../../../../../../lib/router/buildUrl.js';
 import { camelCase } from '../../../../../../lib/util/camelCase.js';
 import { getConfig } from '../../../../../../lib/util/getConfig.js';
 import { getProductsBaseQuery } from '../../../../services/getProductsBaseQuery.js';
+import { getAllowNegativeStock } from '../../../../../../modules/setting/services/setting.js';
 
 export default {
   Product: {
@@ -56,18 +57,21 @@ export default {
           );
 
         if (!user && getConfig('catalog.showOutOfStockProduct') === false) {
-          query
-            .andWhere('product_inventory.manage_stock', '=', false)
-            .addNode(
-              node('OR')
-                .addLeaf('AND', 'product_inventory.qty', '>', 0)
-                .addLeaf(
-                  'AND',
-                  'product_inventory.stock_availability',
-                  '=',
-                  true
-                )
-            );
+          const allowNegative = await getAllowNegativeStock();
+          if (!allowNegative) {
+            query
+              .andWhere('product_inventory.manage_stock', '=', false)
+              .addNode(
+                node('OR')
+                  .addLeaf('AND', 'product_inventory.qty', '>', 0)
+                  .addLeaf(
+                    'AND',
+                    'product_inventory.stock_availability',
+                    '=',
+                    true
+                  )
+              );
+          }
         }
 
         query.andWhere('variant_group_id', '=', variantGroupId);

@@ -45,7 +45,7 @@ export default function PaymentSettingMenu({
           </div>
         </ItemTitle>
         <ItemDescription>
-          <div>Configure the available payment methods</div>
+          <div>Configurez les méthodes de paiement disponibles</div>
         </ItemDescription>
       </ItemContent>
       <ItemActions>

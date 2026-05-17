@@ -43,18 +43,18 @@ export default function AddTrackingButton({
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger>
             <Button
-              title="Edit Tracking Info"
+              title="Modifier le suivi"
               variant="outline"
               onClick={() => {
                 setDialogOpen(true);
               }}
             >
-              Edit Tracking Info
+              Modifier le suivi
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Tracking Info</DialogTitle>
+              <DialogTitle>Modifier le suivi</DialogTitle>
             </DialogHeader>
             <Form
               form={form}
@@ -71,24 +71,24 @@ export default function AddTrackingButton({
                   <InputField
                     type="text"
                     name="tracking_number"
-                    label="Tracking number"
-                    placeholder="Tracking number"
+                    label="Numéro de suivi"
+                    placeholder="Numéro de suivi"
                     defaultValue={shipment.trackingNumber || ''}
                     required
                     validation={{
-                      required: 'Tracking number is required'
+                      required: 'Le numéro de suivi est requis'
                     }}
                   />
                 </div>
                 <div>
                   <SelectField
                     name="carrier"
-                    label="Carrier"
+                    label="Transporteur"
                     defaultValue={shipment.carrier || ''}
                     required
                     options={carriers}
                     validation={{
-                      required: 'Carrier is required'
+                      required: 'Le transporteur est requis'
                     }}
                   />
                 </div>
@@ -100,17 +100,17 @@ export default function AddTrackingButton({
             <DialogFooter>
               <DialogClose>
                 <Button
-                  title="Cancel"
+                  title="Annuler"
                   variant="outline"
                   onClick={() => {
                     setDialogOpen(false);
                   }}
                 >
-                  Cancel
+                  Annuler
                 </Button>
               </DialogClose>
               <Button
-                title="Save"
+                title="Enregistrer"
                 variant="default"
                 isLoading={form.formState.isSubmitting}
                 onClick={async () => {
@@ -123,7 +123,7 @@ export default function AddTrackingButton({
                   );
                 }}
               >
-                Save
+                Enregistrer
               </Button>
             </DialogFooter>
           </DialogContent>
