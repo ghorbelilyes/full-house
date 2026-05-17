@@ -60,18 +60,18 @@ function Actions({ widgets = [], selectedIds = [] }) {
 
   const actions = [
     {
-      name: 'Disable',
+      name: 'Désactiver',
       onAction: () => {
         openAlert({
-          heading: `Disable ${selectedIds.length} widgets`,
-          content: 'Are you sure?',
+          heading: `Désactiver ${selectedIds.length} widgets`,
+          content: 'Êtes-vous sûr ?',
           primaryAction: {
-            title: 'Cancel',
+            title: 'Annuler',
             onAction: closeAlert,
             variant: 'secondary'
           },
           secondaryAction: {
-            title: 'Disable',
+            title: 'Désactiver',
             onAction: async () => {
               await updatePages(0);
             },
@@ -81,18 +81,18 @@ function Actions({ widgets = [], selectedIds = [] }) {
       }
     },
     {
-      name: 'Enable',
+      name: 'Activer',
       onAction: () => {
         openAlert({
-          heading: `Enable ${selectedIds.length} widgets`,
-          content: 'Are you sure?',
+          heading: `Activer ${selectedIds.length} widgets`,
+          content: 'Êtes-vous sûr ?',
           primaryAction: {
-            title: 'Cancel',
+            title: 'Annuler',
             onAction: closeAlert,
             variant: 'secondary'
           },
           secondaryAction: {
-            title: 'Enable',
+            title: 'Activer',
             onAction: async () => {
               await updatePages(1);
             },
@@ -102,18 +102,18 @@ function Actions({ widgets = [], selectedIds = [] }) {
       }
     },
     {
-      name: 'Delete',
+      name: 'Supprimer',
       onAction: () => {
         openAlert({
-          heading: `Delete ${selectedIds.length} widgets`,
-          content: <div>Can&apos;t be undone</div>,
+          heading: `Supprimer ${selectedIds.length} widgets`,
+          content: <div>Action irréversible</div>,
           primaryAction: {
-            title: 'Cancel',
+            title: 'Annuler',
             onAction: closeAlert,
             variant: 'secondary'
           },
           secondaryAction: {
-            title: 'Delete',
+            title: 'Supprimer',
             onAction: async () => {
               await deletePages();
             },
@@ -189,7 +189,7 @@ export default function WidgetGrid({
                   default: () => (
                     <InputField
                       name="name"
-                      placeholder="Search"
+                      placeholder="Rechercher"
                       defaultValue={
                         currentFilters.find((f) => f.key === 'name')?.value
                       }
@@ -226,7 +226,7 @@ export default function WidgetGrid({
               window.location.href = url.href;
             }}
           >
-            Clear Filters
+            Effacer les filtres
           </Button>
         </CardAction>
       </CardHeader>
@@ -256,7 +256,7 @@ export default function WidgetGrid({
                     component: {
                       default: () => (
                         <SortableHeader
-                          title="Name"
+                          title="Nom"
                           name="name"
                           currentFilters={currentFilters}
                         />
@@ -280,7 +280,7 @@ export default function WidgetGrid({
                     component: {
                       default: () => (
                         <SortableHeader
-                          title="Status"
+                          title="Statut"
                           name="status"
                           currentFilters={currentFilters}
                         />
@@ -352,7 +352,7 @@ export default function WidgetGrid({
         </Table>
         {items.length === 0 && (
           <div className="flex w-full justify-center mt-2">
-            There is no widget to display
+            Aucun widget à afficher
           </div>
         )}
         <GridPagination total={total} limit={limit} page={page} />

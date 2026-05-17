@@ -19,12 +19,12 @@ export function CategoryProducts() {
         <ProductList
           products={products.items}
           layout="grid"
-          gridColumns={3}
+          gridColumns={4}
           showAddToCart={true}
         />
-        <span className="product-count italic block mt-5">
+        <p className="mt-8 text-center text-sm text-slate-500">
           {_('${count} products', { count: products.total.toString() })}
-        </span>
+        </p>
       </div>
       <Area id="categoryProductsAfter" className="category__products__after" />
     </>

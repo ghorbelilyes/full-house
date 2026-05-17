@@ -32,8 +32,8 @@ export default function Image({ category }: ImageProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Category Image</CardTitle>
-        <CardDescription>Upload an image for the category.</CardDescription>
+        <CardTitle>Image de la catégorie</CardTitle>
+        <CardDescription>Télécharger une image pour la catégorie.</CardDescription>
       </CardHeader>
       <CardContent>
         <ImageUploader
@@ -67,7 +67,7 @@ export const query = `
   query Query {
     category(id: getContextValue("categoryId", null)) {
       image {
-        id: uuid
+        uuid
         url
       }
     }

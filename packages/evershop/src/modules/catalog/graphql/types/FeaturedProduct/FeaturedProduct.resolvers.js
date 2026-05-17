@@ -1,6 +1,7 @@
 import { node, select } from '@evershop/postgres-query-builder';
 import { camelCase } from '../../../../../lib/util/camelCase.js';
 import { getConfig } from '../../../../../lib/util/getConfig.js';
+import { getAllowNegativeStock } from '../../../../../modules/setting/services/setting.js';
 
 export default {
   Query: {
@@ -34,13 +35,16 @@ export default {
       query.where('product.status', '=', 1);
       query.andWhere('product.visibility', '=', 1);
       if (getConfig('catalog.showOutOfStockProduct', false) === false) {
-        query
-          .andWhere('product_inventory.manage_stock', '=', false)
-          .addNode(
-            node('OR')
-              .addLeaf('AND', 'product_inventory.qty', '>', 0)
-              .addLeaf('AND', 'product_inventory.stock_availability', '=', true)
-          );
+        const allowNegative = await getAllowNegativeStock();
+        if (!allowNegative) {
+          query
+            .andWhere('product_inventory.manage_stock', '=', false)
+            .addNode(
+              node('OR')
+                .addLeaf('AND', 'product_inventory.qty', '>', 0)
+                .addLeaf('AND', 'product_inventory.stock_availability', '=', true)
+            );
+        }
       }
       query.groupBy(
         'product.product_id',

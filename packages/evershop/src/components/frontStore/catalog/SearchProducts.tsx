@@ -14,7 +14,7 @@ export function SearchProducts() {
         <ProductList
           products={products.items}
           layout="grid"
-          gridColumns={3}
+          gridColumns={4}
           showAddToCart={true}
         />
         <span className="product-count italic block mt-5">

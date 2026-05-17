@@ -20,50 +20,50 @@ export default function Status({ category }: CategoryStatusProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Status</CardTitle>
+        <CardTitle>Statut</CardTitle>
         <CardDescription>
-          Manage the status settings of the category.
+          Gérer les paramètres de statut de la catégorie.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <RadioGroupField
           name="status"
-          label="Status"
+          label="Statut"
           options={[
-            { label: 'Disabled', value: 0 },
-            { label: 'Enabled', value: 1 }
+            { label: 'Désactivé', value: 0 },
+            { label: 'Activé', value: 1 }
           ]}
           defaultValue={category?.status === 0 ? 0 : 1}
           validation={{
-            required: 'This field is required'
+            required: 'Ce champ est requis'
           }}
         />
       </CardContent>
       <CardContent className="pt-6 border-t border-border">
         <RadioGroupField
           name="include_in_nav"
-          label="Include in Store Menu?"
+          label="Inclure dans le menu du site ?"
           options={[
-            { label: 'No', value: 0 },
-            { label: 'Yes', value: 1 }
+            { label: 'Non', value: 0 },
+            { label: 'Oui', value: 1 }
           ]}
           defaultValue={category?.includeInNav === 0 ? 0 : 1}
           validation={{
-            required: 'This field is required'
+            required: 'Ce champ est requis'
           }}
         />
       </CardContent>
       <CardContent className="pt-6 border-t border-border">
         <RadioGroupField
           name="show_products"
-          label="Show products?"
+          label="Afficher les produits ?"
           options={[
-            { label: 'No', value: 0 },
-            { label: 'Yes', value: 1 }
+            { label: 'Non', value: 0 },
+            { label: 'Oui', value: 1 }
           ]}
           defaultValue={category?.showProducts === 0 ? 0 : 1}
           validation={{
-            required: 'This field is required'
+            required: 'Ce champ est requis'
           }}
         />
       </CardContent>

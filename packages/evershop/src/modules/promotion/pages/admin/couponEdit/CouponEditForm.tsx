@@ -23,9 +23,9 @@ export default function CouponEditForm({
       <div className="grid grid-cols-1 gap-5">
         <Card>
           <CardHeader>
-            <CardTitle>General Information</CardTitle>
+            <CardTitle>Informations générales</CardTitle>
             <CardDescription>
-              The general information about the coupon.
+              Les informations générales du coupon.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -34,9 +34,9 @@ export default function CouponEditForm({
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Discount Type</CardTitle>
+            <CardTitle>Type de réduction</CardTitle>
             <CardDescription>
-              The type of discount applied by the coupon.
+              Le type de réduction appliqué par le coupon.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -47,10 +47,10 @@ export default function CouponEditForm({
           <div className="col-span-2 grid grid-cols-1 gap-5 auto-rows-max">
             <Card>
               <CardHeader>
-                <CardTitle>Order conditions</CardTitle>
+                <CardTitle>Conditions de commande</CardTitle>
                 <CardDescription>
-                  The conditions related to the order for the coupon to be
-                  applied.
+                  Les conditions liées à la commande pour que le coupon soit
+                  appliqué.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -61,10 +61,10 @@ export default function CouponEditForm({
           <div className="col-span-1 grid grid-cols-1 gap-5 auto-rows-max">
             <Card>
               <CardHeader>
-                <CardTitle>Customer conditions</CardTitle>
+                <CardTitle>Conditions client</CardTitle>
                 <CardDescription>
-                  The conditions related to the customer for the coupon to be
-                  applied.
+                  Les conditions liées au client pour que le coupon soit
+                  appliqué.
                 </CardDescription>
               </CardHeader>
               <CardContent>

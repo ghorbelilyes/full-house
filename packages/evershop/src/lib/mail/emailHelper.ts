@@ -265,7 +265,7 @@ async function prepareData(data: EmailData): Promise<EmailData> {
   const addressPostalCode = await getSetting('storePostalCode', '');
   const storeInformation = {
     logo,
-    storeName: await getSetting('storeName', 'Evershop'),
+    storeName: await getSetting('storeName', 'Full House'),
     storeEmail: await getSetting('storeEmail', ''),
     storeDescription: await getSetting('storeDescription', ''),
     phone: await getSetting('storePhoneNumber', ''),

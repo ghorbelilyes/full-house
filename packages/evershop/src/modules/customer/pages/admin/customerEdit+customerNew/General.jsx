@@ -7,7 +7,7 @@ import React from 'react';
 function FullName({ fullName }) {
   return (
     <CardContent>
-      <CardTitle className="mb-2">Full Name</CardTitle>
+      <CardTitle className="mb-2">Nom complet</CardTitle>
       <div>
         <span>{fullName}</span>
       </div>
@@ -22,9 +22,9 @@ FullName.propTypes = {
 function Group({ group }) {
   return (
     <CardContent className="pt-3 border-t border-border">
-      <CardTitle className="mb-2">Group</CardTitle>
+      <CardTitle className="mb-2">Groupe</CardTitle>
       <div>
-        <span>{group?.groupName || 'Default'}</span>
+        <span>{group?.groupName || 'Par défaut'}</span>
       </div>
     </CardContent>
   );
@@ -39,7 +39,7 @@ Group.propTypes = {
 function Email({ email }) {
   return (
     <CardContent className="pt-3 border-t border-border">
-      <CardTitle className="mb-2">Email</CardTitle>
+      <CardTitle className="mb-2">E-mail</CardTitle>
       <div>
         <span>{email}</span>
       </div>
@@ -54,9 +54,9 @@ Email.propTypes = {
 function Status({ status }) {
   return (
     <CardContent className="pt-3 border-t border-border">
-      <CardTitle className="mb-2">Status</CardTitle>
+      <CardTitle className="mb-2">Statut</CardTitle>
       <div>
-        <span>{parseInt(status, 10) === 1 ? 'Enabled' : 'Disabled'}</span>
+        <span>{parseInt(status, 10) === 1 ? 'Activé' : 'Désactivé'}</span>
       </div>
     </CardContent>
   );

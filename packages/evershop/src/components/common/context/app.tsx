@@ -21,28 +21,31 @@ export function AppProvider({ value, children }: AppProviderProps) {
   const [data, setData] = React.useState<AppStateContextValue>(value);
   const [fetching, setFetching] = React.useState<boolean>(false);
 
-  const fetchPageData = async (url: string | URL): Promise<void> => {
-    setFetching(true);
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const dataResponse = await response.json();
-      // Update the entire context using immer
-      setData(
-        produce(data, (draft) => {
-          Object.assign(draft, dataResponse.eContext);
-          return draft;
-        })
-      );
-    } catch (error) {
-    } finally {
-      setFetching(false);
-    }
-  };
+  const fetchPageData = React.useCallback(
+    async (url: string | URL): Promise<void> => {
+      setFetching(true);
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const dataResponse = await response.json();
+        // Use functional updater to avoid stale closure over `data`
+        setData((prev) =>
+          produce(prev, (draft) => {
+            Object.assign(draft, dataResponse.eContext);
+            return draft;
+          })
+        );
+      } catch (error) {
+      } finally {
+        setFetching(false);
+      }
+    },
+    []
+  );
 
   React.useEffect(() => {
     window.onpopstate = async () => {

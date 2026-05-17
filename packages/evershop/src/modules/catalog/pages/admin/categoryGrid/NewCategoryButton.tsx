@@ -9,7 +9,7 @@ export default function NewCategoryButton({
 }: NewCategoryButtonProps) {
   return (
     <Button onClick={() => (window.location.href = newCateoryUrl)}>
-      New Category
+      Nouvelle Catégorie
     </Button>
   );
 }

@@ -133,8 +133,8 @@ const Country: React.FC<{
       <SelectField
         defaultValue={selectedCountry}
         name={fieldName}
-        label="Country"
-        placeholder="Country"
+        label="Pays"
+        placeholder="Pays"
         onChange={onChange}
         required
         options={data.countries.map((c) => ({ value: c.code, label: c.name }))}
@@ -150,8 +150,8 @@ const StorePhoneNumber: React.FC<{ storePhoneNumber: string }> = ({
     <div>
       <TelField
         name="storePhoneNumber"
-        label="Store Phone Number"
-        placeholder="Store Phone Number"
+        label="Téléphone de la boutique"
+        placeholder="Téléphone de la boutique"
         defaultValue={storePhoneNumber}
       />
     </div>
@@ -163,8 +163,8 @@ const StoreEmail: React.FC<{ storeEmail: string }> = ({ storeEmail }) => {
     <div>
       <EmailField
         name="storeEmail"
-        label="Store Email"
-        placeholder="Store Email"
+        label="E-mail de la boutique"
+        placeholder="E-mail de la boutique"
         defaultValue={storeEmail}
       />
     </div>
@@ -219,9 +219,9 @@ export default function StoreSetting({
           <Form method="POST" id="storeSetting" action={saveSettingApi}>
             <Card>
               <CardHeader>
-                <CardTitle>Store Settings</CardTitle>
+                <CardTitle>Paramètres de la boutique</CardTitle>
                 <CardDescription>
-                  Configure your store information
+                  Configurez les informations de votre boutique
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -234,9 +234,9 @@ export default function StoreSetting({
                         default: (
                           <InputField
                             name="storeName"
-                            label="Store Name"
+                            label="Nom de la boutique"
                             required
-                            placeholder="Store Name"
+                            placeholder="Nom de la boutique"
                             defaultValue={storeName}
                           />
                         )
@@ -248,8 +248,8 @@ export default function StoreSetting({
                         default: (
                           <TextareaField
                             name="storeDescription"
-                            label="Store Description"
-                            placeholder="Store Description"
+                            label="Description de la boutique"
+                            placeholder="Description de la boutique"
                             defaultValue={storeDescription}
                             required
                           />
@@ -261,7 +261,7 @@ export default function StoreSetting({
                 />
               </CardContent>
               <CardContent className="pt-3 border-t border-border">
-                <CardTitle>Contact Information</CardTitle>
+                <CardTitle>Coordonnées</CardTitle>
                 <Area
                   id="storeContactSetting"
                   coreComponents={[
@@ -288,7 +288,7 @@ export default function StoreSetting({
                 />
               </CardContent>
               <CardContent className="pt-3 border-t border-border">
-                <CardTitle>Address</CardTitle>
+                <CardTitle>Adresse</CardTitle>
                 <div className="space-y-3">
                   <Country
                     selectedCountry={storeCountry}
@@ -296,18 +296,18 @@ export default function StoreSetting({
                   />
                   <InputField
                     name="storeAddress"
-                    label="Address"
+                    label="Adresse"
                     defaultValue={storeAddress}
-                    placeholder="Store Address"
+                    placeholder="Adresse de la boutique"
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-5 mt-5">
                   <div>
                     <InputField
                       name="storeCity"
-                      label="City"
+                      label="Ville"
                       defaultValue={storeCity}
-                      placeholder="City"
+                      placeholder="Ville"
                     />
                   </div>
                   <Province
@@ -317,9 +317,9 @@ export default function StoreSetting({
                   <div>
                     <InputField
                       name="storePostalCode"
-                      label="Postal Code"
+                      label="Code postal"
                       defaultValue={storePostalCode}
-                      placeholder="Postal Code"
+                      placeholder="Code postal"
                     />
                   </div>
                 </div>

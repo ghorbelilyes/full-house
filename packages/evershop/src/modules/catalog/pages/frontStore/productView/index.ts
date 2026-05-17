@@ -5,6 +5,7 @@ import { getBaseUrl } from '../../../../../lib/util/getBaseUrl.js';
 import { getConfig } from '../../../../../lib/util/getConfig.js';
 import { setPageMetaInfo } from '../../../../cms/services/pageMetaInfo.js';
 import { setContextValue } from '../../../../graphql/services/contextHelper.js';
+import { getAllowNegativeStock } from '../../../../setting/services/setting.js';
 
 export default async (request, response, next) => {
   let currentProduct;
@@ -81,18 +82,21 @@ export default async (request, response, next) => {
             .and('p.status', '=', 1);
 
           if (getConfig('catalog.showOutOfStockProduct') === false) {
-            vsQuery
-              .andWhere('product_inventory.manage_stock', '=', false)
-              .addNode(
-                node('OR')
-                  .addLeaf('AND', 'product_inventory.qty', '>', 0)
-                  .addLeaf(
-                    'AND',
-                    'product_inventory.stock_availability',
-                    '=',
-                    true
-                  )
-              );
+            const allowNegative = await getAllowNegativeStock();
+            if (!allowNegative) {
+              vsQuery
+                .andWhere('product_inventory.manage_stock', '=', false)
+                .addNode(
+                  node('OR')
+                    .addLeaf('AND', 'product_inventory.qty', '>', 0)
+                    .addLeaf(
+                      'AND',
+                      'product_inventory.stock_availability',
+                      '=',
+                      true
+                    )
+                );
+            }
           }
           vsQuery
             .andWhere(

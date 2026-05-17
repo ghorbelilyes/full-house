@@ -33,15 +33,15 @@ export default function StripePayment({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Stripe Payment</CardTitle>
+        <CardTitle>Paiement Stripe</CardTitle>
         <CardDescription>
-          Configure your Stripe payment gateway settings
+          Configurer les paramètres de la passerelle de paiement Stripe
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Enable?</h4>
+            <h4>Activer ?</h4>
           </div>
           <div className="col-span-2">
             <ToggleField
@@ -56,12 +56,12 @@ export default function StripePayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Dislay Name</h4>
+            <h4>Nom affiché</h4>
           </div>
           <div className="col-span-2">
             <InputField
               name="stripeDisplayName"
-              placeholder="Display Name"
+              placeholder="Nom affiché"
               defaultValue={stripeDisplayName || ''}
             />
           </div>
@@ -70,12 +70,12 @@ export default function StripePayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Publishable Key</h4>
+            <h4>Clé publique</h4>
           </div>
           <div className="col-span-2">
             <InputField
               name="stripePublishableKey"
-              placeholder="Publishable Key"
+              placeholder="Clé publique"
               defaultValue={stripePublishableKey || ''}
             />
           </div>
@@ -84,12 +84,12 @@ export default function StripePayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Secret Key</h4>
+            <h4>Clé secrète</h4>
           </div>
           <div className="col-span-2">
             <InputField
               name="stripeSecretKey"
-              placeholder="Secret Key"
+              placeholder="Clé secrète"
               defaultValue={stripeSecretKey || ''}
             />
           </div>
@@ -98,14 +98,14 @@ export default function StripePayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Webhook Secret Key</h4>
+            <h4>Clé secrète du Webhook</h4>
           </div>
           <div className="col-span-2">
             <InputField
               name="stripeEndpointSecret"
-              placeholder="Secret Key"
+              placeholder="Clé secrète"
               defaultValue={stripeEndpointSecret || ''}
-              helperText="Your webhook url should be: https://yourdomain.com/api/stripe/webhook"
+              helperText="L'URL de votre webhook doit être : https://votredomaine.com/api/stripe/webhook"
             />
           </div>
         </div>
@@ -113,14 +113,14 @@ export default function StripePayment({
       <CardContent className="pt-4 border-t border-border">
         <div className="grid grid-cols-3 gap-5">
           <div className="col-span-1 items-center flex">
-            <h4>Payment mode</h4>
+            <h4>Mode de paiement</h4>
           </div>
           <div className="col-span-2">
             <RadioGroupField
               name="stripePaymentMode"
               defaultValue={stripePaymentMode}
               options={[
-                { label: 'Authorize only', value: 'authorizeOnly' },
+                { label: 'Autorisation uniquement', value: 'authorizeOnly' },
                 { label: 'Capture', value: 'capture' }
               ]}
             />

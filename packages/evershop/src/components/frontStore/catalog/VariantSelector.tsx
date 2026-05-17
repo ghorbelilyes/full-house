@@ -10,7 +10,7 @@ import {
   AttributeOption
 } from '@components/frontStore/catalog/ProductContext.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 interface SelectedOption {
@@ -24,100 +24,116 @@ interface ProcessedAttribute extends VariantAttribute {
   options: (AttributeOption & { available: boolean })[];
 }
 
+/**
+ * Parse selected options from the current URL query params.
+ * Accepts either a full URL string or a URLSearchParams-style source.
+ */
+const getSelectedOptionsFromUrl = (
+  attributes: VariantAttribute[],
+  currentUrl: string
+): SelectedOption[] => {
+  const url = new URL(currentUrl);
+  const selected: SelectedOption[] = [];
+
+  for (const attribute of attributes) {
+    const paramValue = url.searchParams.get(attribute.attributeCode);
+    if (paramValue) {
+      const optionId = parseInt(paramValue, 10);
+      if (!Number.isNaN(optionId)) {
+        const optionExists = attribute.options.some(
+          (o) => o.optionId === optionId
+        );
+        if (optionExists) {
+          selected.push({ attributeCode: attribute.attributeCode, optionId });
+        }
+      }
+    }
+  }
+
+  return selected;
+};
+
+/**
+ * Check if at least one variant exists whose attributes are a superset of the
+ * given terms.  A variant matches when ALL terms are found among its
+ * attributes.
+ */
+const variantExists = (
+  vs: VariantGroup,
+  terms: SelectedOption[]
+): boolean => {
+  if (terms.length === 0) return true;
+  return vs.items.some((item) =>
+    terms.every((term) =>
+      item.attributes.some(
+        (attr) =>
+          attr.attributeCode === term.attributeCode &&
+          attr.optionId != null &&
+          parseInt(attr.optionId.toString(), 10) === term.optionId
+      )
+    )
+  );
+};
+
+/**
+ * Process attributes to determine:
+ * - Which option is selected for each attribute (from URL params)
+ * - Which options are available (form valid combinations with current
+ *   selections across ALL other variant groups)
+ *
+ * The algorithm is scalable to any number of variant groups:
+ * for every option O in group G we build a candidate selection list that
+ * contains the current selection from every OTHER group plus O, then
+ * check whether any variant matches that full candidate list.
+ */
 const processAttributes = (
   vs: VariantGroup | undefined,
   attributes: VariantAttribute[],
   currentUrl: string
 ): ProcessedAttribute[] => {
-  if (!vs) return [];
+  if (!vs || attributes.length === 0) return [];
 
-  const selectedOptions: SelectedOption[] = [];
-  let newAttributes: ProcessedAttribute[];
+  // Get currently selected options from URL
+  const selectedOptions = getSelectedOptionsFromUrl(attributes, currentUrl);
 
-  newAttributes = attributes.map((attribute) => {
-    const url = new URL(currentUrl);
-    const params = new URLSearchParams(url.search).entries();
-    const check = Array.from(params).find(
-      ([key, value]) =>
-        key === attribute.attributeCode &&
-        attribute.options.find(
-          (option) => option.optionId === parseInt(value, 10)
-        )
+  // Build processed attributes with selection state
+  const processed: ProcessedAttribute[] = attributes.map((attribute) => {
+    const selected = selectedOptions.find(
+      (s) => s.attributeCode === attribute.attributeCode
     );
 
-    if (check) {
-      const terms = [
-        ...selectedOptions,
-        { attributeCode: check[0], optionId: parseInt(check[1], 10) }
-      ];
-      const variant = vs.items.find((item) =>
-        terms.every((attr) =>
-          item.attributes.find(
-            (term) =>
-              term.attributeCode === attr.attributeCode &&
-              parseInt(term.optionId.toString(), 10) ===
-                parseInt(attr.optionId.toString(), 10)
-          )
-        )
-      );
+    // Selections from every OTHER group
+    const otherSelections = selectedOptions.filter(
+      (s) => s.attributeCode !== attribute.attributeCode
+    );
 
-      if (variant) {
-        selectedOptions.push({
-          attributeCode: check[0],
-          optionId: parseInt(check[1], 10)
-        });
-        return {
-          ...attribute,
-          selected: true,
-          selectedOption: parseInt(check[1], 10)
-        } as ProcessedAttribute;
-      } else {
-        return {
-          ...attribute,
-          selected: false,
-          selectedOption: null
-        } as ProcessedAttribute;
-      }
-    } else {
-      return {
-        ...attribute,
-        selected: false,
-        selectedOption: null
-      } as ProcessedAttribute;
-    }
-  });
-
-  newAttributes = newAttributes.map((attribute) => {
     const options = attribute.options.map((option) => {
-      const terms = selectedOptions
-        .filter(
-          (selected) => selected.attributeCode !== attribute.attributeCode
-        )
-        .concat({
+      // Build candidate terms: other-group selections + this candidate option
+      const terms: SelectedOption[] = [
+        ...otherSelections,
+        {
           attributeCode: attribute.attributeCode,
           optionId: option.optionId
-        });
+        }
+      ];
 
-      const variant = vs.items.find((item) =>
-        terms.every((attr) =>
-          item.attributes.find(
-            (term) =>
-              term.attributeCode === attr.attributeCode &&
-              term.optionId === attr.optionId
-          )
-        )
-      );
+      const available = variantExists(vs, terms);
 
       return {
         ...option,
-        available: !!variant
+        available
       };
     });
 
-    return { ...attribute, options };
+    return {
+      ...attribute,
+      selected: !!selected,
+      selectedOption: selected ? selected.optionId : null,
+      options
+    };
   });
 
-  return newAttributes;
+  return processed;
 };
 
 export interface VariantOptionItemProps {
@@ -157,45 +173,50 @@ export function VariantSelector({
   } = useFormContext();
   const AppContextDispatch = useAppDispatch();
 
-  const initialAttributes = useMemo(
+  // Recompute processed attributes whenever the variant group data OR the
+  // current URL (which carries the selected-option query params) changes.
+  const computedAttributes = useMemo(
     () => processAttributes(vs, vs?.variantAttributes || [], currentProductUrl),
     [vs, currentProductUrl]
   );
 
   const [attributes, setAttributes] =
-    React.useState<ProcessedAttribute[]>(initialAttributes);
-  const attributeRef = React.useRef<ProcessedAttribute[]>(initialAttributes);
+    React.useState<ProcessedAttribute[]>(computedAttributes);
+  const attributeRef = React.useRef<ProcessedAttribute[]>(computedAttributes);
 
-  const validate = () => {
+  const validate = useCallback(() => {
     return !attributeRef.current.find((a) => a.selected !== true);
-  };
+  }, []);
 
+  // Synchronise state whenever computed values change (variant data, URL, or
+  // product switch).
   useEffect(() => {
-    const handleProductChange = () => {
-      const newAttributes = processAttributes(
-        vs,
-        vs?.variantAttributes || [],
-        currentProductUrl
-      );
-      setAttributes(newAttributes);
-      attributeRef.current = newAttributes;
-    };
+    setAttributes(computedAttributes);
+    attributeRef.current = computedAttributes;
+  }, [computedAttributes]);
 
-    handleProductChange();
-  }, [vs, productId]);
+  const handleOptionClick = useCallback(
+    async (attributeCode: string, optionId: number): Promise<void> => {
+      const url = new URL(window.location.href);
 
-  const handleOptionClick = async (
-    attributeCode: string,
-    optionId: number
-  ): Promise<void> => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('ajax', 'true');
-    url.searchParams.set(attributeCode, optionId.toString());
-    await AppContextDispatch.fetchPageData(url);
-    url.searchParams.delete('ajax');
+      // Toggle behavior: if clicking the already selected option, deselect it
+      const currentValue = url.searchParams.get(attributeCode);
+      if (currentValue && parseInt(currentValue, 10) === optionId) {
+        // Deselect: remove this param
+        url.searchParams.delete(attributeCode);
+      } else {
+        // Select: set the param
+        url.searchParams.set(attributeCode, optionId.toString());
+      }
 
-    history.pushState(null, '', url);
-  };
+      url.searchParams.set('ajax', 'true');
+      await AppContextDispatch.fetchPageData(url);
+      url.searchParams.delete('ajax');
+
+      history.pushState(null, '', url);
+    },
+    [AppContextDispatch]
+  );
 
   if (!vs || attributes.length === 0) {
     return null;
@@ -204,6 +225,8 @@ export function VariantSelector({
   return (
     <div className="variant variant__container grid grid-cols-1 gap-2 mt-5">
       {attributes.map((attribute) => {
+        // Deduplicate options by optionId, keeping only those linked to a
+        // real product (productId is truthy).
         const options = attribute.options.filter(
           (v, j, s) =>
             s.findIndex((o) => o.optionId === v.optionId) === j && v.productId

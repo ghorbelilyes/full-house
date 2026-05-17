@@ -10,7 +10,7 @@ export default function CatalogMenuGroup({ couponGrid }: CouponMenuGroupProps) {
   return (
     <NavigationItemGroup
       id="couponMenuGroup"
-      name="Promotion"
+      name="Promotions"
       items={[
         {
           Icon: GiftIcon,

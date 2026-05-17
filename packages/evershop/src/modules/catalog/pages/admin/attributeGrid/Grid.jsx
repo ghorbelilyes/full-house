@@ -63,18 +63,18 @@ function Actions({ attributes = [], selectedIds = [] }) {
 
   const actions = [
     {
-      name: 'Delete',
+      name: 'Supprimer',
       onAction: () => {
         openAlert({
-          heading: `Delete ${selectedIds.length} attributes`,
-          content: <div>Can&apos;t be undone</div>,
+          heading: `Supprimer ${selectedIds.length} attributs`,
+          content: <div>Action irréversible</div>,
           primaryAction: {
-            title: 'Cancel',
+            title: 'Annuler',
             onAction: closeAlert,
             variant: 'secondary'
           },
           secondaryAction: {
-            title: 'Delete',
+            title: 'Supprimer',
             onAction: async () => {
               await deleteAttributes();
             },
@@ -140,7 +140,7 @@ export default function AttributeGrid({
         <Form submitBtn={false} id="attributeGridFilter">
           <InputField
             name="name"
-            placeholder="Search"
+            placeholder="Rechercher"
             defaultValue={currentFilters.find((f) => f.key === 'name')?.value}
             onKeyPress={(e) => {
               // If the user press enter, we should submit the form
@@ -169,7 +169,7 @@ export default function AttributeGrid({
               window.location.href = url.href;
             }}
           >
-            Clear Filters
+            Effacer les filtres
           </Button>
         </CardAction>
       </CardHeader>
@@ -198,7 +198,7 @@ export default function AttributeGrid({
                       default: () => (
                         <SortableHeader
                           name="name"
-                          title="Attribute Name"
+                          title="Nom de l'attribut"
                           currentFilters={currentFilters}
                         />
                       )
@@ -207,7 +207,7 @@ export default function AttributeGrid({
                   },
                   {
                     component: {
-                      default: () => <DummyColumnHeader title="Groups" />
+                      default: () => <DummyColumnHeader title="Groupes" />
                     },
                     sortOrder: 15
                   },
@@ -228,7 +228,7 @@ export default function AttributeGrid({
                       default: () => (
                         <SortableHeader
                           name="is_required"
-                          title="Is Required?"
+                          title="Obligatoire ?"
                           currentFilters={currentFilters}
                         />
                       )
@@ -240,7 +240,7 @@ export default function AttributeGrid({
                       default: () => (
                         <SortableHeader
                           name="is_filterable"
-                          title="Is Filterable?"
+                          title="Filtrable ?"
                           currentFilters={currentFilters}
                         />
                       )
@@ -314,7 +314,7 @@ export default function AttributeGrid({
                     {
                       component: {
                         default: () => (
-                          <TableCell>{a.isRequired ? 'Yes' : 'No'}</TableCell>
+                          <TableCell>{a.isRequired ? 'Oui' : 'Non'}</TableCell>
                         )
                       },
                       sortOrder: 25
@@ -322,7 +322,7 @@ export default function AttributeGrid({
                     {
                       component: {
                         default: () => (
-                          <TableCell>{a.isFilterable ? 'Yes' : 'No'}</TableCell>
+                          <TableCell>{a.isFilterable ? 'Oui' : 'Non'}</TableCell>
                         )
                       },
                       sortOrder: 30
@@ -335,7 +335,7 @@ export default function AttributeGrid({
         </Table>
         {attributes.length === 0 && (
           <div className="flex w-full justify-center mt-2">
-            There is no attribute to display
+            Aucun attribut à afficher
           </div>
         )}
         <GridPagination total={total} limit={limit} page={page} />

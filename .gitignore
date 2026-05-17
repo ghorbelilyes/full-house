@@ -3,6 +3,10 @@ node_modules
 dist
 !packages/create-evershop-app/sample/extensions/sample/dist
 !packages/create-evershop-app/sample/themes/sample/dist
+/packages/evershop/src/components/common/ui/*.d.ts
+/packages/evershop/src/components/common/ui/*.js.map
+/packages/evershop/src/components/common/ui/Card.js
+/packages/evershop/src/components/common/ui/Table.js
 /extensions/*
 !extensions/agegate
 !extensions/azure_file_storage
@@ -31,3 +35,20 @@ cypress
 mysqlToPostgres.js
 /docs
 extensions
+
+# Agent / task notes
+AGENTS.md
+*_agents.md
+TASKS.md
+backup-task.md
+tasks-img.md
+tasks2.md
+
+# Scratch / debug files
+debug.html
+new-ui.html
+profile-ui.html
+image.png
+image-1.png
+documention/
+run.sh

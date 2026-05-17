@@ -5,8 +5,14 @@ import { NameAndTelephone } from '@components/frontStore/customer/address/addres
 import { ProvinceAndPostcode } from '@components/frontStore/customer/address/addressForm/ProvinceAndPostcode.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import { CustomerAddressGraphql } from '@evershop/evershop/types/customerAddress';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
+
+// Hidden field registered with react-hook-form
+function HiddenCountryField({ name }: { name: string }) {
+  const { register } = useFormContext();
+  return <input type="hidden" {...register(name)} value="TN" />;
+}
 
 interface CustomerAddressFormProps {
   allowCountries: {
@@ -33,10 +39,15 @@ export function CustomerAddressForm({
     return fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
   };
 
-  const selectedCountry = watch(
-    getFieldName('country'),
-    address?.country?.code || ''
-  );
+  // Deep clone address to avoid Immer frozen object mutations
+  const safeAddress = address ? JSON.parse(JSON.stringify(address)) : {};
+
+  // Always use Tunisia
+  const selectedCountry = 'TN';
+
+  useEffect(() => {
+    setValue(getFieldName('country'), 'TN', { shouldDirty: true });
+  }, []);
   return (
     <Area
       id={areaId}
@@ -46,8 +57,8 @@ export function CustomerAddressForm({
           component: {
             default: (
               <NameAndTelephone
-                fullName={address?.fullName || ''}
-                telephone={address?.telephone || ''}
+                fullName={safeAddress?.fullName || ''}
+                telephone={safeAddress?.telephone || ''}
                 getFieldName={getFieldName}
               />
             )
@@ -61,7 +72,7 @@ export function CustomerAddressForm({
                 name={getFieldName('address_1')}
                 label={_('Address')}
                 placeholder={_('Address')}
-                defaultValue={address?.address1 || ''}
+                defaultValue={safeAddress?.address1 || ''}
                 required
                 validation={{
                   required: _('Address is required')
@@ -78,7 +89,7 @@ export function CustomerAddressForm({
                 name={getFieldName('address_2')}
                 label={_('Address 2')}
                 placeholder={_('Address 2')}
-                defaultValue={address?.address2 || ''}
+                defaultValue={safeAddress?.address2 || ''}
               />
             )
           },
@@ -93,7 +104,7 @@ export function CustomerAddressForm({
                 placeholder={_('City')}
                 required
                 validation={{ required: _('City is required') }}
-                defaultValue={address?.city || ''}
+                defaultValue={safeAddress?.city || ''}
               />
             )
           },
@@ -102,19 +113,7 @@ export function CustomerAddressForm({
         {
           component: {
             default: (
-              <SelectField
-                defaultValue={address?.country?.code || ''}
-                label={_('Country')}
-                name={getFieldName('country')}
-                placeholder={_('Country')}
-                onChange={(value) => {
-                  setValue(getFieldName('country'), value);
-                  setValue(getFieldName('province'), '');
-                }}
-                required
-                validation={{ required: _('Country is required') }}
-                options={allowCountries}
-              />
+              <HiddenCountryField name={getFieldName('country')} />
             )
           },
           sortOrder: 50
@@ -129,8 +128,8 @@ export function CustomerAddressForm({
                     (country) => country.value === selectedCountry
                   )?.provinces || []
                 }
-                province={address?.province || { code: '' }}
-                postcode={address?.postcode || ''}
+                province={safeAddress?.province || { code: '' }}
+                postcode={safeAddress?.postcode || ''}
                 getFieldName={getFieldName}
               />
             )

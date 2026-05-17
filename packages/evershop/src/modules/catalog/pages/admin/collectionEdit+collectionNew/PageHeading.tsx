@@ -17,7 +17,7 @@ export default function CollectionEditPageHeading({
       <PageHeading
         backUrl={backUrl}
         heading={
-          collection ? `Editing ${collection.name}` : 'Create a new collection'
+          collection ? `Modification de ${collection.name}` : 'Créer une nouvelle collection'
         }
       />
     </div>

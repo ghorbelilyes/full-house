@@ -27,16 +27,16 @@ export default function SEO({ product }: SEOProps) {
         default: (
           <InputField
             name="url_key"
-            label="URL Key"
-            placeholder="Enter URL Key"
+            label="Clé URL"
+            placeholder="Entrez la clé URL"
             required
             defaultValue={product?.urlKey}
             validation={{
-              required: 'URL Key is required',
+              required: 'La clé URL est requise',
               pattern: {
                 value: /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/,
                 message:
-                  'URL Key must be lowercase and can only contain letters, numbers, and hyphens'
+                  'La clé URL doit être en minuscules et ne peut contenir que des lettres, des chiffres et des tirets'
               }
             }}
           />
@@ -49,12 +49,12 @@ export default function SEO({ product }: SEOProps) {
         default: (
           <InputField
             name="meta_title"
-            label="Meta Title"
-            placeholder="Enter Meta Title"
+            label="Méta Titre"
+            placeholder="Entrez le méta titre"
             required
             defaultValue={product?.metaTitle}
             validation={{
-              required: 'Meta Title is required'
+              required: 'Le méta titre est requis'
             }}
           />
         )
@@ -78,8 +78,8 @@ export default function SEO({ product }: SEOProps) {
         default: (
           <TextareaField
             name="meta_description"
-            label="Meta Description"
-            placeholder="Enter Meta Description"
+            label="Méta Description"
+            placeholder="Entrez la méta description"
             defaultValue={product?.metaDescription || ''}
           />
         )
@@ -91,8 +91,8 @@ export default function SEO({ product }: SEOProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>SEO</CardTitle>
-        <CardDescription>Manage the SEO settings.</CardDescription>
+        <CardTitle>Référencement (SEO)</CardTitle>
+        <CardDescription>Gérer les paramètres SEO.</CardDescription>
       </CardHeader>
       <CardContent>
         <Area

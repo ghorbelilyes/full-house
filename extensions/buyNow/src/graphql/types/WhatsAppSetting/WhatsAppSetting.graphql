@@ -1,0 +1,5 @@
+extend type Setting {
+  whatsappEnabled: Boolean
+  whatsappNumber: String
+  whatsappMessageTemplate: String
+}

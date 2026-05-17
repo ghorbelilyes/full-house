@@ -1,0 +1,13 @@
+extend type Product {
+  promotionAdmin: ProductPromotionAdmin
+}
+
+type ProductPromotionAdmin {
+  productPromotionId: Int
+  promotionType: String
+  promotionValue: Float
+  promotionLabel: String
+  startDate: String
+  endDate: String
+  enabled: Boolean
+}

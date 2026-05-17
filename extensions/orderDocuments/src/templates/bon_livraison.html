@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{{documentTitle}} — {{documentNumber}}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 11px;
+      color: #1a1a2e;
+      line-height: 1.5;
+      background: #fff;
+    }
+
+    .document { max-width: 800px; margin: 0 auto; }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #059669;
+      margin-bottom: 24px;
+    }
+
+    .company-info { flex: 1; }
+
+    .company-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #059669;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .company-details { font-size: 10px; color: #6b7280; line-height: 1.6; }
+
+    .document-badge { text-align: right; }
+
+    .document-type {
+      display: inline-block;
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .document-meta {
+      font-size: 10px;
+      color: #6b7280;
+      text-align: right;
+      line-height: 1.8;
+    }
+    .document-meta strong { color: #1a1a2e; font-weight: 600; }
+
+    .addresses {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .address-block {
+      flex: 1;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px;
+      background: #fafafa;
+    }
+
+    .address-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #059669;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .address-content { font-size: 10.5px; line-height: 1.7; color: #374151; }
+
+    .order-info-bar {
+      display: flex;
+      margin-bottom: 24px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .info-cell {
+      flex: 1;
+      padding: 10px 14px;
+      text-align: center;
+      border-right: 1px solid #e5e7eb;
+    }
+    .info-cell:last-child { border-right: none; }
+
+    .info-cell-label {
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+    .info-cell-value { font-size: 11px; font-weight: 600; color: #1a1a2e; }
+
+    .items-section { margin-bottom: 24px; }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .items-table thead th {
+      background: #065f46;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 10px 12px;
+      text-align: left;
+    }
+    .items-table thead th.col-num { width: 40px; text-align: center; }
+    .items-table thead th.col-qty { width: 80px; text-align: center; }
+
+    .items-table td {
+      padding: 10px 12px;
+      font-size: 10.5px;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: top;
+    }
+
+    .row-even { background: #fff; }
+    .row-odd { background: #f0fdf4; }
+    .col-num { text-align: center; color: #9ca3af; font-weight: 500; }
+    .col-qty { text-align: center; font-weight: 600; }
+    .item-name { font-weight: 500; color: #1a1a2e; }
+    .item-sku { font-size: 9px; color: #9ca3af; margin-top: 2px; }
+    .variant-options { margin-top: 3px; }
+    .variant-tag {
+      display: inline-block;
+      font-size: 9px;
+      background: #d1fae5;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-right: 4px;
+      color: #065f46;
+    }
+
+    /* ─── Summary ─── */
+    .summary-bar {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .summary-item {
+      flex: 1;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .summary-number {
+      font-size: 22px;
+      font-weight: 800;
+      color: #059669;
+    }
+
+    .summary-label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .notes-section {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+    .notes-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #059669;
+      margin-bottom: 4px;
+    }
+    .notes-content { font-size: 10px; color: #065f46; line-height: 1.6; }
+
+    /* ─── Signature / Confirmation ─── */
+    .signature-section {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .signature-block {
+      flex: 1;
+      border: 1px dashed #d1d5db;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .signature-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .signature-space {
+      height: 60px;
+      border-bottom: 1px solid #d1d5db;
+      margin-bottom: 6px;
+    }
+
+    .signature-hint {
+      font-size: 8px;
+      color: #9ca3af;
+    }
+
+    .checklist-note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+
+    .checklist-note-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #d97706;
+      margin-bottom: 6px;
+    }
+
+    .checklist-note-content {
+      font-size: 9px;
+      color: #92400e;
+      line-height: 1.8;
+    }
+
+    .footer {
+      text-align: center;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 9px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    @media print {
+      body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="document">
+
+  <div class="header">
+    <div class="company-info">
+      <div class="company-name">{{companyName}}</div>
+      <div class="company-details">
+        {{#if companyAddress}}{{companyAddress}}<br>{{/if}}
+        {{#if companyPhone}}Tél : {{companyPhone}}<br>{{/if}}
+        {{#if companyEmail}}Email : {{companyEmail}}<br>{{/if}}
+      </div>
+    </div>
+    <div class="document-badge">
+      <div class="document-type">Bon de Livraison</div>
+      <div class="document-meta">
+        <strong>N° :</strong> {{documentNumber}}<br>
+        <strong>Date :</strong> {{documentDate}}<br>
+        <strong>Commande :</strong> #{{orderNumber}}
+      </div>
+    </div>
+  </div>
+
+  <div class="addresses">
+    <div class="address-block">
+      <div class="address-label">Expéditeur</div>
+      <div class="address-content">
+        <strong>{{companyName}}</strong><br>
+        {{#if companyAddress}}{{companyAddress}}<br>{{/if}}
+        {{#if companyPhone}}Tél : {{companyPhone}}{{/if}}
+      </div>
+    </div>
+    <div class="address-block">
+      <div class="address-label">Destinataire</div>
+      <div class="address-content">{{shippingAddressHtml}}</div>
+    </div>
+  </div>
+
+  <div class="order-info-bar">
+    <div class="info-cell">
+      <div class="info-cell-label">N° Commande</div>
+      <div class="info-cell-value">#{{orderNumber}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Date commande</div>
+      <div class="info-cell-value">{{orderDateShort}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Mode livraison</div>
+      <div class="info-cell-value">{{shippingMethod}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-cell-label">Statut</div>
+      <div class="info-cell-value">{{shipmentStatus}}</div>
+    </div>
+  </div>
+
+  <div class="items-section">
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th>Désignation</th>
+          <th class="col-qty">Quantité</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{itemsRowsHtml}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary-bar">
+    <div class="summary-item">
+      <div class="summary-number">{{itemCount}}</div>
+      <div class="summary-label">Lignes</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-number">{{totalQty}}</div>
+      <div class="summary-label">Articles totaux</div>
+    </div>
+  </div>
+
+  {{#if shippingNote}}
+  <div class="notes-section">
+    <div class="notes-label">Instructions de livraison</div>
+    <div class="notes-content">{{shippingNote}}</div>
+  </div>
+  {{/if}}
+
+  <div class="checklist-note">
+    <div class="checklist-note-label">Vérification à la réception</div>
+    <div class="checklist-note-content">
+      ☐ Nombre de colis conforme<br>
+      ☐ État des emballages vérifié<br>
+      ☐ Contenu conforme au bon de livraison<br>
+      ☐ Aucun produit endommagé
+    </div>
+  </div>
+
+  <div class="signature-section">
+    <div class="signature-block">
+      <div class="signature-label">Remis par</div>
+      <div class="signature-space"></div>
+      <div class="signature-hint">Nom, date et signature</div>
+    </div>
+    <div class="signature-block">
+      <div class="signature-label">Reçu par</div>
+      <div class="signature-space"></div>
+      <div class="signature-hint">Nom, date et signature</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    {{companyName}} — Bon de Livraison {{documentNumber}}<br>
+    Document généré le {{documentDate}}
+  </div>
+
+</div>
+</body>
+</html>

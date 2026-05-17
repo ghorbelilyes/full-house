@@ -152,8 +152,8 @@ export default function Attributes({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Attribute group</CardTitle>
-        <CardDescription>Manage the attributes.</CardDescription>
+        <CardTitle>Groupe d'attributs</CardTitle>
+        <CardDescription>Gérer les attributs.</CardDescription>
       </CardHeader>
       <CardContent>
         <div>
@@ -169,8 +169,8 @@ export default function Attributes({
                   {getGroup(items, product?.groupId).groupName}
                 </span>
                 <p className="text-muted-foreground italic">
-                  Can not change the attribute group of a product that is
-                  already in a variant group.
+                  Impossible de changer le groupe d'attributs d'un produit
+                  déjà dans un groupe de variantes.
                 </p>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function Attributes({
           {!product?.variantGroupId && (
             <SelectField
               name="group_id"
-              label="Attribute group"
+              label="Groupe d'attributs"
               options={items.map((group) => ({
                 value: group.groupId,
                 label: group.groupName

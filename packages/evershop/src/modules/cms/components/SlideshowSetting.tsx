@@ -10,11 +10,15 @@ import React, { useEffect } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
+/* ── Fixed slideshow dimensions ────────────────────────────── */
+const REQUIRED_WIDTH = 2400;
+const REQUIRED_HEIGHT = 1200;
+
 interface SlideData {
   id: string;
   image: string;
-  width?: number; // Image natural width (automatically detected)
-  height?: number; // Image natural height (automatically detected)
+  width?: number;
+  height?: number;
   headline: string;
   subText: string;
   buttonText: string;
@@ -45,10 +49,7 @@ export default function SlideshowSetting({
     autoplaySpeed = 3000,
     arrows = true,
     dots = true,
-    fullWidth = true,
-    widthValue = 1920,
-    heightValue = 800,
-    heightType = 'auto'
+    fullWidth = true
   } = slideshowWidget || {};
 
   const { control, setValue, watch } = useFormContext();
@@ -139,6 +140,12 @@ export default function SlideshowSetting({
     img.src = imageUrl;
   };
 
+  // Check if dimensions match the required 2400×1200
+  const isDimensionMatch = (w?: number, h?: number): boolean => {
+    if (!w || !h) return false;
+    return w === REQUIRED_WIDTH && h === REQUIRED_HEIGHT;
+  };
+
   const handleImageSelect = (image: string) => {
     if (activeSlideIndex !== null) {
       setValue(`settings.slides.${activeSlideIndex}.image`, image);
@@ -153,13 +160,13 @@ export default function SlideshowSetting({
     const newSlide: SlideData = {
       id: uuidv4(),
       image: '',
-      width: 0, // Will be automatically set when image is selected
-      height: 0, // Will be automatically set when image is selected
+      width: 0,
+      height: 0,
       headline: '',
       subText: '',
       buttonText: '',
       buttonLink: '',
-      buttonColor: '#3B82F6' // Default blue color
+      buttonColor: '#3B82F6'
     };
     append(newSlide);
 
@@ -196,7 +203,18 @@ export default function SlideshowSetting({
 
       <Item variant={'outline'}>
         <ItemContent>
-          <ItemTitle>Slideshow Settings</ItemTitle>
+          <ItemTitle>Paramètres du diaporama</ItemTitle>
+
+          {/* Dimension notice */}
+          <div className="mt-3 mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800 font-medium">
+              📐 Dimensions requises : {REQUIRED_WIDTH} × {REQUIRED_HEIGHT} pixels (ratio 2:1)
+            </p>
+            <p className="text-xs text-blue-600 mt-1">
+              Les images qui ne correspondent pas à ces dimensions seront automatiquement redimensionnées et recadrées pour s'adapter.
+            </p>
+          </div>
+
           <div className="space-y-2 mt-3">
             <div className="col-span-2 md:col-span-1 space-y-2">
               <div className="flex items-center mb-4">
@@ -208,7 +226,7 @@ export default function SlideshowSetting({
                   }}
                   className="mr-2 h-4 w-4"
                 />
-                <Label htmlFor="arrows">Show Navigation Arrows</Label>
+                <Label htmlFor="arrows">Afficher les flèches de navigation</Label>
               </div>
               <div className="flex justify-start items-center">
                 <Checkbox
@@ -220,168 +238,167 @@ export default function SlideshowSetting({
                   className="mr-2 h-4 w-4"
                 />
                 <Label htmlFor="autoplay" className="text-sm">
-                  Enable Autoplay
+                  Lecture automatique
                 </Label>
               </div>
 
               {Boolean(currentAutoplay) && (
                 <InputField
                   type="number"
-                  label="Autoplay Speed (ms)"
+                  label="Vitesse de lecture auto (ms)"
                   name="settings.autoplaySpeed"
                   defaultValue={Number(autoplaySpeed) || 3000}
-                  placeholder="e.g., 3000 for 3 seconds"
+                  placeholder="ex. 3000 pour 3 secondes"
                   validation={{
-                    min: { value: 1000, message: 'Minimum speed is 1000ms' }
+                    min: { value: 1000, message: 'La vitesse minimale est 1000 ms' }
                   }}
                 />
               )}
             </div>
 
             <div className="col-span-2 md:col-span-1">
-              {/* <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="dots"
-                checked={Boolean(currentDots)}
-                onChange={(e) => {
-                  const isChecked = Boolean(e.target.checked);
-                  setValue('settings.dots', isChecked);
-                }}
-                className="mr-2 h-4 w-4"
-              />
-              <label htmlFor="dots" className="text-sm">
-                Show Navigation Dots
-              </label>
-            </div> */}
             </div>
           </div>
         </ItemContent>
       </Item>
       <div className="mt-4">
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-lg font-medium">Slides</h2>
+          <h2 className="text-lg font-medium">Diapositives</h2>
           <Button onClick={addSlide} variant={'outline'}>
-            Add New Slide
+            Ajouter une diapositive
           </Button>
         </div>
 
         {fields.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
-            {fields.map((slide, index) => (
-              <div
-                key={slide.id}
-                onClick={() => setActiveSlideIndex(index)}
-                className={`relative border border-border rounded overflow-hidden cursor-pointer ${
-                  activeSlideIndex === index ? 'ring-2 ring-blue-500' : ''
-                }`}
-              >
-                <div className="aspect-[16/9] bg-gray-100 flex items-center justify-center">
-                  {currentSlides[index]?.image ? (
-                    <img
-                      src={currentSlides[index].image}
-                      alt={`Slide ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="text-gray-400">No Image</div>
+            {fields.map((slide, index) => {
+              const slideW = currentSlides[index]?.width;
+              const slideH = currentSlides[index]?.height;
+              const match = isDimensionMatch(slideW, slideH);
+              const hasImage = !!currentSlides[index]?.image;
+              const hasDims = slideW && slideH;
+
+              return (
+                <div
+                  key={slide.id}
+                  onClick={() => setActiveSlideIndex(index)}
+                  className={`relative border rounded overflow-hidden cursor-pointer ${
+                    activeSlideIndex === index ? 'ring-2 ring-blue-500' : ''
+                  } ${hasImage && hasDims && !match ? 'border-amber-400' : 'border-border'}`}
+                >
+                  <div className="aspect-[2/1] bg-gray-100 flex items-center justify-center">
+                    {currentSlides[index]?.image ? (
+                      <img
+                        src={currentSlides[index].image}
+                        alt={`Slide ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-gray-400">Pas d'image</div>
+                    )}
+                  </div>
+                  {/* Dimension warning badge */}
+                  {hasImage && hasDims && !match && (
+                    <div className="absolute top-1 left-1 bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                      Redimensionnée
+                    </div>
                   )}
-                </div>
-                <div className="p-2 bg-white border-t border-border">
-                  <p className="text-sm font-medium truncate">
-                    {currentSlides[index]?.headline || `Slide ${index + 1}`}
-                  </p>
-                  <div className="flex mt-2">
-                    <Button
-                      variant={'outline'}
-                      size={'sm'}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        moveUp(index);
-                      }}
-                      disabled={index === 0}
-                      className={`mr-1 p-1`}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                  <div className="p-2 bg-white border-t border-border">
+                    <p className="text-sm font-medium truncate">
+                      {currentSlides[index]?.headline || `Slide ${index + 1}`}
+                    </p>
+                    <div className="flex mt-2">
+                      <Button
+                        variant={'outline'}
+                        size={'sm'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          moveUp(index);
+                        }}
+                        disabled={index === 0}
+                        className={`mr-1 p-1`}
                       >
-                        <path d="M18 15l-6-6-6 6" />
-                      </svg>
-                    </Button>
-                    <Button
-                      type="button"
-                      size={'sm'}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        moveDown(index);
-                      }}
-                      disabled={index === fields.length - 1}
-                      className={`mr-1 p-1`}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M18 15l-6-6-6 6" />
+                        </svg>
+                      </Button>
+                      <Button
+                        type="button"
+                        size={'sm'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          moveDown(index);
+                        }}
+                        disabled={index === fields.length - 1}
+                        className={`mr-1 p-1`}
                       >
-                        <path d="M6 9l6 6 6-6" />
-                      </svg>
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size={'sm'}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        remove(index);
-                        if (activeSlideIndex === index) {
-                          setActiveSlideIndex(null);
-                        } else if (
-                          activeSlideIndex !== null &&
-                          activeSlideIndex > index
-                        ) {
-                          setActiveSlideIndex(activeSlideIndex - 1);
-                        }
-                      }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M6 9l6 6 6-6" />
+                        </svg>
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size={'sm'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          remove(index);
+                          if (activeSlideIndex === index) {
+                            setActiveSlideIndex(null);
+                          } else if (
+                            activeSlideIndex !== null &&
+                            activeSlideIndex > index
+                          ) {
+                            setActiveSlideIndex(activeSlideIndex - 1);
+                          }
+                        }}
                       >
-                        <path d="M3 6h18"></path>
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                      </svg>
-                    </Button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M3 6h18"></path>
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        </svg>
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
-            <p className="text-gray-500 mb-4">No slides have been added yet.</p>
+            <p className="text-gray-500 mb-4">Aucune diapositive n'a encore été ajoutée.</p>
             <Button variant="outline" onClick={addSlide}>
-              Add Your First Slide
+              Ajouter votre première diapositive
             </Button>
           </div>
         )}
@@ -390,10 +407,10 @@ export default function SlideshowSetting({
       {activeSlideIndex !== null && fields[activeSlideIndex] && (
         <div className="bg-white p-4 rounded border border-border">
           <h3 className="text-sm font-normal mb-4">
-            Edit Slide {activeSlideIndex + 1}
+            Modifier la diapositive {activeSlideIndex + 1}
           </h3>
           <div className="mb-2 border border-border rounded overflow-hidden">
-            <div className="aspect-[16/9] bg-gray-100 relative">
+            <div className="aspect-[2/1] bg-gray-100 relative">
               {currentSlides[activeSlideIndex]?.image ? (
                 <div className="relative w-full h-full">
                   <img
@@ -401,7 +418,6 @@ export default function SlideshowSetting({
                     alt={`Slide ${activeSlideIndex + 1}`}
                     className="w-full h-full object-cover"
                     onLoad={(e) => {
-                      // Additional dimensions detection when the preview image loads
                       const img = e.target as HTMLImageElement;
                       if (img.naturalWidth > 0 && img.naturalHeight > 0) {
                         if (
@@ -451,7 +467,7 @@ export default function SlideshowSetting({
                     variant="outline"
                     onClick={() => setOpenFileBrowser(true)}
                   >
-                    Select Image
+                    Sélectionner une image
                   </Button>
                 </div>
               )}
@@ -462,7 +478,7 @@ export default function SlideshowSetting({
                   onClick={() => setOpenFileBrowser(true)}
                   className="absolute bottom-2 right-2"
                 >
-                  Change Image
+                  Changer l'image
                 </Button>
               )}
             </div>
@@ -498,25 +514,38 @@ export default function SlideshowSetting({
               value={currentSlides[activeSlideIndex]?.height || 0}
             />
 
-            {/* Display image dimensions if available */}
+            {/* Display image dimensions and warn if not matching */}
             {currentSlides[activeSlideIndex]?.image && (
               <div className="md:col-span-2 mb-2">
-                <div className="text-sm text-gray-500">
-                  {currentSlides[activeSlideIndex]?.width &&
-                  currentSlides[activeSlideIndex]?.height ? (
-                    <p>
-                      Image dimensions: {currentSlides[activeSlideIndex].width}{' '}
-                      × {currentSlides[activeSlideIndex].height} pixels
-                    </p>
-                  ) : (
-                    <p>Detecting image dimensions...</p>
-                  )}
-                </div>
+                {currentSlides[activeSlideIndex]?.width &&
+                currentSlides[activeSlideIndex]?.height ? (
+                  <div>
+                    <div className="text-sm text-gray-500">
+                      <p>
+                        Image dimensions : {currentSlides[activeSlideIndex].width}{' '}
+                        × {currentSlides[activeSlideIndex].height} pixels
+                      </p>
+                    </div>
+                    {!isDimensionMatch(
+                      currentSlides[activeSlideIndex].width,
+                      currentSlides[activeSlideIndex].height
+                    ) && (
+                      <div className="mt-1 p-2 bg-amber-50 border border-amber-200 rounded text-xs text-amber-700">
+                        ⚠️ Cette image ne fait pas {REQUIRED_WIDTH} × {REQUIRED_HEIGHT} px.
+                        Elle sera automatiquement redimensionnée et recadrée (cover) pour s'adapter au format {REQUIRED_WIDTH} × {REQUIRED_HEIGHT}.
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-500">
+                    <p>Détection des dimensions de l'image...</p>
+                  </div>
+                )}
               </div>
             )}
 
             <div className="md:col-span-2">
-              <label className="block mb-1 text-sm">Headline</label>
+              <label className="block mb-1 text-sm">Titre</label>
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded"
@@ -530,12 +559,12 @@ export default function SlideshowSetting({
                   };
                   setValue('settings.slides', newSlides);
                 }}
-                placeholder="e.g., New Collection Available"
+                placeholder="ex. Nouvelle collection disponible"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block mb-1 text-sm">Sub Text</label>
+              <label className="block mb-1 text-sm">Sous-texte</label>
               <textarea
                 className="w-full p-2 border border-gray-300 rounded"
                 name={`settings.slides.${activeSlideIndex}.subText`}
@@ -548,13 +577,13 @@ export default function SlideshowSetting({
                   };
                   setValue('settings.slides', newSlides);
                 }}
-                placeholder="e.g., Check out our latest products with special discounts"
+                placeholder="ex. Découvrez nos derniers produits avec des réductions spéciales"
                 rows={3}
               ></textarea>
             </div>
 
             <div>
-              <label className="block mb-1 text-sm">Button Text</label>
+              <label className="block mb-1 text-sm">Texte du bouton</label>
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded"
@@ -568,12 +597,12 @@ export default function SlideshowSetting({
                   };
                   setValue('settings.slides', newSlides);
                 }}
-                placeholder="e.g., Shop Now"
+                placeholder="ex. Acheter maintenant"
               />
             </div>
 
             <div>
-              <label className="block mb-1 text-sm">Button Link</label>
+              <label className="block mb-1 text-sm">Lien du bouton</label>
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded"
@@ -587,12 +616,12 @@ export default function SlideshowSetting({
                   };
                   setValue('settings.slides', newSlides);
                 }}
-                placeholder="e.g., /category/new-arrivals"
+                placeholder="ex. /category/new-arrivals"
               />
             </div>
 
             <div>
-              <label className="block mb-1 text-sm">Button Color</label>
+              <label className="block mb-1 text-sm">Couleur du bouton</label>
               <div className="flex items-center">
                 <input
                   type="color"

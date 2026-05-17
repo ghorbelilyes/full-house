@@ -64,7 +64,7 @@ function RateForm({
         if (!response.error) {
           await getTaxClasses({ requestPolicy: 'network-only' });
           closeModal();
-          toast.success('Tax rate has been saved successfully!');
+          toast.success('Le taux de taxe a été enregistré avec succès !');
         } else {
         }
         setSaving(false);
@@ -75,20 +75,20 @@ function RateForm({
           <div>
             <InputField
               name="name"
-              placeholder="Name"
+              placeholder="Nom"
               required
-              validation={{ required: 'Name is required' }}
-              label="Name"
+              validation={{ required: 'Le nom est requis' }}
+              label="Nom"
               defaultValue={rate?.name}
             />
           </div>
           <div>
             <NumberField
               name="rate"
-              label="Rate"
-              placeholder="Rate"
+              label="Taux"
+              placeholder="Taux"
               required
-              validation={{ required: 'Rate is required' }}
+              validation={{ required: 'Le taux est requis' }}
               defaultValue={rate?.rate}
             />
           </div>
@@ -99,34 +99,34 @@ function RateForm({
           <div>
             <InputField
               name="country"
-              label="Country"
-              placeholder="Country"
+              label="Pays"
+              placeholder="Pays"
               required
-              validation={{ required: 'Country is required' }}
+              validation={{ required: 'Le pays est requis' }}
               defaultValue={rate?.country}
-              helperText='Country code (e.g., "US"). Use "*" for all countries.'
+              helperText='Code pays (ex : « TN »). Utilisez « * » pour tous les pays.'
             />
           </div>
           <div>
             <InputField
               name="province"
-              label="Provinces"
-              placeholder="Provinces"
+              label="Province"
+              placeholder="Province"
               required
-              validation={{ required: 'Provinces is required' }}
+              validation={{ required: 'La province est requise' }}
               defaultValue={rate?.province}
-              helperText='Province code (e.g., "CA"). Use "*" for all provinces.'
+              helperText='Code province (ex : « CA »). Utilisez « * » pour toutes les provinces.'
             />
           </div>
           <div>
             <InputField
               name="postcode"
-              label="Postcode"
-              placeholder="Postcode"
+              label="Code postal"
+              placeholder="Code postal"
               required
-              validation={{ required: 'Postcode is required' }}
+              validation={{ required: 'Le code postal est requis' }}
               defaultValue={rate?.postcode}
-              helperText='Postcode (e.g., "90210"). Empty for all postcodes.'
+              helperText='Code postal (ex : « 1000 »). Vide pour tous les codes postaux.'
             />
           </div>
         </div>
@@ -134,7 +134,7 @@ function RateForm({
           <div>
             <ToggleField
               name="is_compound"
-              label="Is compound"
+              label="Composé"
               defaultValue={rate?.isCompound || false}
             />
           </div>
@@ -144,9 +144,9 @@ function RateForm({
           <div>
             <NumberField
               name="priority"
-              label="Priority"
-              placeholder="Priority"
-              validation={{ required: 'Priority is required' }}
+              label="Priorité"
+              placeholder="Priorité"
+              validation={{ required: 'La priorité est requise' }}
               required
               defaultValue={rate?.priority}
             />
@@ -155,11 +155,11 @@ function RateForm({
         </div>
       </div>
       <div className="flex justify-end gap-2">
-        <Button title="Cancel" variant="secondary" onClick={closeModal}>
-          Cancel
+        <Button title="Annuler" variant="secondary" onClick={closeModal}>
+          Annuler
         </Button>
         <Button
-          title="Save"
+          title="Enregistrer"
           variant="default"
           onClick={async () => {
             const result = await form.trigger();
@@ -178,7 +178,7 @@ function RateForm({
           }}
           isLoading={saving}
         >
-          Save
+          Enregistrer
         </Button>
       </div>
     </Form>

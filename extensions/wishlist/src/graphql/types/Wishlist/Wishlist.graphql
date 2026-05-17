@@ -1,0 +1,32 @@
+type Wishlist {
+  wishlistId: Int!
+  uuid: String!
+  sid: String
+  customerId: Int
+  customerEmail: String
+  customerFullName: String
+  status: Int!
+  itemCount: Int!
+  items: [WishlistItem!]!
+  addItemApi: String!
+  toggleItemApi: String!
+  createdAt: String
+  updatedAt: String
+}
+
+type WishlistItem {
+  wishlistItemId: Int!
+  uuid: String!
+  productId: Int!
+  productSku: String
+  productName: String
+  thumbnail: String
+  productUrl: String
+  removeApi: String!
+  createdAt: String
+}
+
+extend type Query {
+  myWishlist: Wishlist
+  wishlistProductIds: [Int!]!
+}

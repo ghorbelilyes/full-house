@@ -127,7 +127,7 @@ export function ShippingMethods({
               <div className="shipping-methods-list">
                 <input
                   type="hidden"
-                  {...form.register('shippingMethod', { required: true })}
+                  {...form.register('shippingMethod', { required: _('Please select a shipping method') })}
                   defaultValue={currentValue}
                 />
                 {methods?.length === 0 ? (

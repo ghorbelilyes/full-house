@@ -151,7 +151,7 @@ const formatTitle = (
  * // With site branding
  * <Title
  *   title="Product Details"
- *   suffix="EverShop"
+ *   suffix="Full House"
  *   separator=" | "
  * />
  *
@@ -174,7 +174,7 @@ const formatTitle = (
  * // Error page
  * <Title
  *   title="Page Not Found (404)"
- *   suffix="EverShop"
+ *   suffix="Full House"
  * />
  */
 export function Title({

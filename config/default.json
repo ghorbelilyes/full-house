@@ -1,8 +1,9 @@
 {
   "shop": {
-    "language": "en",
+    "name": "Full House",
+    "language": "fr-TN",
     "timezone": "Africa/Tunis",
-    "currency": "USD",
+    "currency": "TND",
     "weightUnit": "kg",
     "homeUrl": "http://localhost:3000"
   },
@@ -12,13 +13,13 @@
       {
         "name": "languageSwitcher",
         "resolve": "extensions/languageSwitcher",
-        "enabled": true,
+        "enabled": false,
         "priority": 10
       },
       {
         "name": "darkMode",
         "resolve": "extensions/darkMode",
-        "enabled": true,
+        "enabled": false,
         "priority": 11
       },
       {
@@ -26,6 +27,66 @@
         "resolve": "extensions/dashboardAnalytics",
         "enabled": true,
         "priority": 12
+      },
+      {
+        "name": "productPromotion",
+        "resolve": "extensions/productPromotion",
+        "enabled": true,
+        "priority": 13
+      },
+      {
+        "name": "productExtra",
+        "resolve": "extensions/productExtra",
+        "enabled": true,
+        "priority": 14
+      },
+      {
+        "name": "headerBar",
+        "resolve": "extensions/headerBar",
+        "enabled": true,
+        "priority": 15
+      },
+      {
+        "name": "emailNotifications",
+        "resolve": "extensions/emailNotifications",
+        "enabled": true,
+        "priority": 16
+      },
+      {
+        "name": "aiDescription",
+        "resolve": "extensions/aiDescription",
+        "enabled": true,
+        "priority": 20
+      },
+      {
+        "name": "inventoryHistory",
+        "resolve": "extensions/inventoryHistory",
+        "enabled": true,
+        "priority": 21
+      },
+      {
+        "name": "orderDocuments",
+        "resolve": "extensions/orderDocuments",
+        "enabled": true,
+        "priority": 22
+      },
+      {
+        "name": "orderReturns",
+        "resolve": "extensions/orderReturns",
+        "enabled": true,
+        "priority": 23
+      },
+      {
+        "name": "buyNow",
+        "resolve": "extensions/buyNow",
+        "enabled": true,
+        "priority": 24
+      },
+      {
+        "name": "wishlist",
+        "resolve": "extensions/wishlist",
+        "enabled": true,
+        "priority": 25
       }
     ],
     "session": {
@@ -36,10 +97,178 @@
   },
   "catalog": {
     "collectionPageSize": 20,
-    "showOutOfStockProduct": false
+    "showOutOfStockProduct": true
   },
   "checkout": {
     "showShippingNote": true
+  },
+  "themeConfig": {
+    "logo": {
+      "alt": "Full House - Electricity & Security",
+      "src": "/logo.png",
+      "width": 320,
+      "height": 80
+    },
+    "headTags": {
+      "links": [
+        {
+          "rel": "icon",
+          "href": "/favicon.ico",
+          "type": "image/x-icon"
+        },
+        {
+          "rel": "icon",
+          "href": "/favicon-32x32.png",
+          "type": "image/png",
+          "sizes": "32x32"
+        },
+        {
+          "rel": "icon",
+          "href": "/favicon-16x16.png",
+          "type": "image/png",
+          "sizes": "16x16"
+        },
+        {
+          "rel": "apple-touch-icon",
+          "href": "/apple-touch-icon.png",
+          "sizes": "180x180"
+        }
+      ],
+      "metas": [
+        {
+          "name": "viewport",
+          "content": "width=device-width, initial-scale=1"
+        }
+      ]
+    },
+    "copyRight": "© 2025 Full House - Electricity & Security. Tous droits réservés."
+  },
+  "oms": {
+    "order": {
+      "status": {
+        "new": {
+          "name": "Nouvelle",
+          "badge": "default",
+          "isDefault": true,
+          "next": ["shipped", "canceled"]
+        },
+        "shipped": {
+          "name": "Expédiée",
+          "badge": "warning",
+          "next": ["completed", "canceled"]
+        },
+        "completed": {
+          "name": "Terminée",
+          "badge": "success",
+          "next": ["return_requested"]
+        },
+        "return_requested": {
+          "name": "Retour demandé",
+          "badge": "warning",
+          "next": ["returned"]
+        },
+        "returned": {
+          "name": "Retournée",
+          "badge": "destructive",
+          "next": []
+        },
+        "canceled": {
+          "name": "Annulée",
+          "badge": "destructive",
+          "next": []
+        }
+      },
+      "shipmentStatus": {
+        "pending": {
+          "name": "En attente",
+          "badge": "default",
+          "isDefault": true
+        },
+        "processing": {
+          "name": "En préparation",
+          "badge": "default",
+          "isDefault": false
+        },
+        "shipped": {
+          "name": "Expédiée",
+          "badge": "warning"
+        },
+        "delivered": {
+          "name": "Livrée",
+          "badge": "success",
+          "isCancelable": false
+        },
+        "return_requested": {
+          "name": "Retour demandé",
+          "badge": "warning",
+          "isCancelable": false
+        },
+        "returned": {
+          "name": "Retournée",
+          "badge": "destructive",
+          "isCancelable": false
+        },
+        "canceled": {
+          "name": "Annulée",
+          "badge": "destructive",
+          "isCancelable": false
+        }
+      },
+      "paymentStatus": {
+        "pending": {
+          "name": "En attente",
+          "badge": "default",
+          "isDefault": true,
+          "isCancelable": true
+        },
+        "paid": {
+          "name": "Payée",
+          "badge": "success",
+          "isCancelable": false
+        },
+        "refund_pending": {
+          "name": "Remboursement à traiter",
+          "badge": "warning",
+          "isCancelable": false
+        },
+        "refunded": {
+          "name": "Remboursée",
+          "badge": "destructive",
+          "isCancelable": false
+        },
+        "canceled": {
+          "name": "Annulée",
+          "badge": "destructive",
+          "isCancelable": true
+        }
+      },
+      "psoMapping": {
+        "pending:pending": "new",
+        "pending:processing": "new",
+        "paid:pending": "new",
+        "paid:processing": "new",
+        "pending:shipped": "shipped",
+        "paid:shipped": "shipped",
+        "pending:delivered": "completed",
+        "paid:delivered": "completed",
+        "refund_pending:delivered": "return_requested",
+        "*:return_requested": "return_requested",
+        "*:returned": "returned",
+        "canceled:canceled": "canceled",
+        "canceled:*": "canceled",
+        "*:canceled": "canceled"
+      }
+    },
+    "carriers": {
+      "navex": {
+        "name": "Navex",
+        "trackingUrl": "https://app.navex.tn/track.php?track={trackingNumber}"
+      },
+      "aramex": {
+        "name": "Aramex",
+        "trackingUrl": "https://www.aramex.com/ae/en/track/shipments?ShipmentNumber={trackingNumber}"
+      }
+    }
   },
   "pricing": {
     "rounding": "round",
@@ -49,6 +278,16 @@
       "precision": 2,
       "round_level": "total",
       "price_including_tax": true
+    }
+  },
+  "orderDocuments": {
+    "company": {
+      "name": "Full House",
+      "address": "Tunisie",
+      "phone": "",
+      "email": "",
+      "taxId": "",
+      "rc": ""
     }
   }
 }

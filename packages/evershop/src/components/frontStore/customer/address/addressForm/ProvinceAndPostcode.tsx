@@ -41,10 +41,6 @@ export function ProvinceAndPostcode({
           defaultValue={postcode}
           label={_('Postcode')}
           placeholder={_('Postcode')}
-          required
-          validation={{
-            required: _('Postcode is required')
-          }}
         />
       </div>
     </div>

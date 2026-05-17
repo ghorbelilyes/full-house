@@ -78,16 +78,16 @@ export const DefaultCategoryFilterRender: React.FC<{
   const filteredCategories = getFilteredCategories();
 
   return (
-    <div className="category__filter__section border-b border-border pb-2 mb-2">
-      <div className="filter__header flex items-center justify-between mb-3">
+    <div className="category__filter__section border-b border-slate-200 pb-3 mb-3 dark:border-slate-700">
+      <div className="filter__header flex items-center justify-between mb-2">
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="flex items-center justify-between text-left flex-1 hover:text-primary transition-colors"
+          className="group flex flex-1 items-center justify-between rounded-lg px-1 py-1.5 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/40"
         >
-          <span className="font-medium">Categories</span>
+          <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-200">{_('Categories')}</span>
           <svg
-            className={`w-4 h-4 transition-transform ${
-              isCollapsed ? 'rotate-180' : ''
+            className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300 ${
+              isCollapsed ? '-rotate-90' : ''
             }`}
             fill="none"
             stroke="currentColor"
@@ -105,8 +105,8 @@ export const DefaultCategoryFilterRender: React.FC<{
         {selectedCount > 0 && (
           <button
             onClick={clearCategoryFilter}
-            className="text-muted-foreground hover:text-destructive text-sm transition-colors"
-            title="Clear categories"
+            className="ml-2 text-xs text-slate-400 transition-colors hover:text-orange-500 dark:text-slate-500 dark:hover:text-orange-400"
+            title={_('Clear')}
           >
             ✕
           </button>

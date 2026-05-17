@@ -1,0 +1,5 @@
+{
+  "methods": ["GET"],
+  "path": "/document-templates/:id",
+  "access": "private"
+}

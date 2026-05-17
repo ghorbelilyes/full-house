@@ -44,18 +44,18 @@ function Actions({ collections = [], selectedIds = [] }) {
 
   const actions = [
     {
-      name: 'Delete',
+      name: 'Supprimer',
       onAction: () => {
         openAlert({
-          heading: `Delete ${selectedIds.length} collections`,
-          content: <div>Can&apos;t be undone</div>,
+          heading: `Supprimer ${selectedIds.length} collections`,
+          content: <div>Action irréversible</div>,
           primaryAction: {
-            title: 'Cancel',
+            title: 'Annuler',
             onAction: closeAlert,
             variant: 'secondary'
           },
           secondaryAction: {
-            title: 'Delete',
+            title: 'Supprimer',
             onAction: async () => {
               await deleteCategories();
             },
@@ -121,7 +121,7 @@ export default function CollectionGrid({
           <Form submitBtn={false} id="collectionGridFilter">
             <InputField
               name="name"
-              placeholder="Search"
+              placeholder="Rechercher"
               defaultValue={currentFilters.find((f) => f.key === 'name')?.value}
               onKeyPress={(e) => {
                 // If the user press enter, we should submit the form
@@ -150,7 +150,7 @@ export default function CollectionGrid({
                 window.location.href = url.href;
               }}
             >
-              Clear filters
+              Effacer les filtres
             </Button>
           </CardAction>
         </CardHeader>
@@ -192,7 +192,7 @@ export default function CollectionGrid({
                       component: {
                         default: () => (
                           <SortableHeader
-                            title="Collection Name"
+                            title="Nom de la collection"
                             name="name"
                             currentFilters={currentFilters}
                           />
@@ -279,7 +279,7 @@ export default function CollectionGrid({
           </Table>
           {collections.length === 0 && (
             <div className="flex w-full justify-center mt-2">
-              There is no collections to display
+              Aucune collection à afficher
             </div>
           )}
           <GridPagination total={total} limit={limit} page={page} />

@@ -136,6 +136,7 @@ Subtotal, Sous-total
 View Cart (${totalQty}), Voir le panier (${totalQty})
 Add to Cart, Ajouter au panier
 Adding..., Ajout en cours...
+Buy now, Acheter
 Failed to add product to cart, Échec de l'ajout du produit au panier
 Coupon code is required, Le code coupon est requis
 Please enter a coupon code, Veuillez entrer un code coupon
@@ -147,3 +148,77 @@ No coupon to remove, Aucun coupon à supprimer
 Discount(${coupon}), Remise (${coupon})
 Inclusive of tax ${totalTaxAmount}, Taxes incluses ${totalTaxAmount}
 Shipping (${method}), Expédition (${method})
+Decrease quantity, Diminuer la quantité
+Increase quantity, Augmenter la quantité
+Remove item, Supprimer l'article
+Continue Shopping, Continuer les achats
+Oui, Oui
+Non, Non
+Ajouter votre email, Ajouter votre email
+Si vous ajoutez votre email, cela vous permettra de suivre votre colis à chaque étape., Si vous ajoutez votre email, cela vous permettra de suivre votre colis à chaque étape.
+Entrez votre email, Entrez votre email
+Continuer sans email, Continuer sans email
+Ajouter, Ajouter
+Veuillez entrer un email valide, Veuillez entrer un email valide
+Utiliser une adresse enregistrée, Utiliser une adresse enregistrée
+Nouvelle adresse, Nouvelle adresse
+Province, Gouvernorat
+BUY NOW, ACHETER MAINTENANT
+Achat rapide, Achat rapide
+Voulez-vous acheter uniquement cet article ?, Voulez-vous acheter uniquement cet article ?
+Oui, continuer, Oui, continuer
+Préparation de votre commande..., Préparation de votre commande...
+Finaliser la commande, Finaliser la commande
+optionnel, optionnel
+votre@email.com, votre@email.com
+Adresse de livraison, Adresse de livraison
+Mode de livraison, Mode de livraison
+Chargement des modes de livraison..., Chargement des modes de livraison...
+Veuillez remplir votre adresse pour voir les modes de livraison., Veuillez remplir votre adresse pour voir les modes de livraison.
+Mode de paiement, Mode de paiement
+Paiement à la livraison, Paiement à la livraison
+Résumé de la commande, Résumé de la commande
+Sous-total, Sous-total
+Livraison, Livraison
+Confirmer la commande, Confirmer la commande
+Traitement en cours..., Traitement en cours...
+Veuillez remplir tous les champs obligatoires, Veuillez remplir tous les champs obligatoires
+Veuillez choisir un mode de livraison, Veuillez choisir un mode de livraison
+Erreur lors de la commande, Erreur lors de la commande
+Commande confirmée !, Commande confirmée !
+Votre commande a été passée avec succès., Votre commande a été passée avec succès.
+Numéro de commande, Numéro de commande
+Fermer, Fermer
+Annuler, Annuler
+Une erreur est survenue, Une erreur est survenue
+Impossible de charger les modes de livraison, Impossible de charger les modes de livraison
+Quick purchase, Achat rapide
+What would you like to do?, Que souhaitez-vous faire ?
+Yes, continue, Oui, continuer
+Buy now and checkout directly, Acheter maintenant et passer commande directement
+Order via WhatsApp, Passer commande sur WhatsApp
+Send your order on WhatsApp, Envoyez votre commande sur WhatsApp
+Add to cart and continue shopping, Ajouter au panier et continuer mes achats
+Add to cart without leaving the page, Ajouter au panier sans quitter la page
+Product added to cart, Produit ajouté au panier
+Complete the order, Finaliser la commande
+Preparing your order..., Préparation de votre commande...
+Shipping address, Adresse de livraison
+Shipping method, Mode de livraison
+Loading shipping methods..., Chargement des modes de livraison...
+Please fill in your address to see available shipping methods., Veuillez remplir votre adresse pour voir les modes de livraison.
+Payment method, Mode de paiement
+Cash on delivery, Paiement à la livraison
+Order summary, Résumé de la commande
+Confirm order, Confirmer la commande
+Processing..., Traitement en cours...
+Please fill in all required fields, Veuillez remplir tous les champs obligatoires
+Please choose a shipping method, Veuillez choisir un mode de livraison
+Order error, Erreur lors de la commande
+Order confirmed!, Commande confirmée !
+Your order has been placed successfully., Votre commande a été passée avec succès.
+Order number, Numéro de commande
+Close, Fermer
+An error occurred, Une erreur est survenue
+optional, optionnel
+your@email.com, votre@email.com

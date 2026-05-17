@@ -128,7 +128,7 @@ export default function BannerSetting({
           }}
           className="absolute bottom-2 right-2 z-10"
         >
-          Select Image
+          Sélectionner une image
         </Button>
       </div>
 
@@ -140,7 +140,7 @@ export default function BannerSetting({
 
       <div className="mb-4">
         <div className="mb-2">
-          <label>Alignment</label>
+          <label>Alignement</label>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <div
@@ -244,21 +244,21 @@ export default function BannerSetting({
       {/* Display image dimensions as information */}
       <div className="mb-4">
         <div className="text-sm text-gray-500">
-          Image dimensions: {imageDimensions.width} × {imageDimensions.height}{' '}
+          Dimensions de l'image : {imageDimensions.width} × {imageDimensions.height}{' '}
           pixels
         </div>
       </div>
       <InputField
         type="text"
-        label="Alt Text"
-        placeholder='e.g., "Promotional Banner"'
+        label="Texte alternatif"
+        placeholder='ex. «Bannière promotionnelle»'
         name="settings.alt"
         defaultValue={alt}
       />
       <InputField
         type="text"
-        placeholder="e.g., https://example.com"
-        label="Banner Link"
+        placeholder="ex. https://example.com"
+        label="Lien de la bannière"
         name="settings.link"
         defaultValue={link || ''}
       />

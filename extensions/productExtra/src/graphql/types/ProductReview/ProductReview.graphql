@@ -1,0 +1,21 @@
+type ProductReview {
+  reviewId: Int!
+  uuid: String!
+  productId: Int!
+  customerId: Int!
+  customerName: String
+  rating: Int!
+  comment: String
+  createdAt: String!
+}
+
+type ProductReviewSummary {
+  averageRating: Float!
+  totalReviews: Int!
+  reviews: [ProductReview]!
+  customerReview: ProductReview
+}
+
+extend type Product {
+  reviewSummary: ProductReviewSummary
+}

@@ -1,0 +1,16 @@
+type DocumentTemplate {
+  uuid: String
+  type: String!
+  name: String!
+  content: String!
+  isDefault: Boolean
+  isNew: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+extend type Query {
+  documentTemplates: [DocumentTemplate]
+  documentTemplate(uuid: String, type: String): DocumentTemplate
+  documentTemplateEdit: DocumentTemplate
+}

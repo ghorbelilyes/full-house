@@ -129,15 +129,20 @@ export const getAvailableShippingMethods = async (
           }))
           .sort((a, b) => a.min_weight - b.min_weight);
 
-        let cost = 0;
+        let matchedTier = null;
         for (let i = 0; i < weightBasedCost.length; i += 1) {
           if (totalWeight >= weightBasedCost[i].min_weight) {
-            cost = weightBasedCost[i].cost;
+            matchedTier = weightBasedCost[i];
           }
+        }
+        // If the cart weight does not meet any tier's min_weight,
+        // exclude this method from available shipping methods
+        if (matchedTier === null) {
+          return null;
         }
         return {
           ...method,
-          cost: toPrice(cost.toString(), false)
+          cost: toPrice(matchedTier.cost.toString(), false)
         };
       } else if (method.price_based_cost) {
         const subTotal = toPrice(cart.sub_total);
@@ -147,15 +152,21 @@ export const getAvailableShippingMethods = async (
             cost: toPrice(cost)
           }))
           .sort((a, b) => a.min_price - b.min_price);
-        let cost = 0;
+        // Find the last tier whose min_price the cart subtotal meets
+        let matchedTier = null;
         for (let i = 0; i < priceBasedCost.length; i += 1) {
           if (subTotal >= priceBasedCost[i].min_price) {
-            cost = priceBasedCost[i].cost;
+            matchedTier = priceBasedCost[i];
           }
+        }
+        // If the cart subtotal does not meet any tier's min_price,
+        // exclude this method from available shipping methods
+        if (matchedTier === null) {
+          return null;
         }
         return {
           ...method,
-          cost: toPrice(cost.toString(), false)
+          cost: toPrice(matchedTier.cost.toString(), false)
         };
       } else {
         return {
@@ -166,10 +177,14 @@ export const getAvailableShippingMethods = async (
     })
   );
 
-  return methods.map((method) => ({
-    id: method.uuid,
-    code: method.uuid,
-    name: method.name,
-    cost: method.cost
-  }));
+  // Filter out methods that were excluded (returned null) due to
+  // unmet tier conditions (price_based_cost / weight_based_cost)
+  return methods
+    .filter((method) => method !== null)
+    .map((method) => ({
+      id: method.uuid,
+      code: method.uuid,
+      name: method.name,
+      cost: method.cost
+    }));
 };

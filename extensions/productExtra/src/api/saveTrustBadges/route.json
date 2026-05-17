@@ -1,0 +1,5 @@
+{
+  "methods": ["POST"],
+  "path": "/products/:id/trust-badges",
+  "access": "private"
+}

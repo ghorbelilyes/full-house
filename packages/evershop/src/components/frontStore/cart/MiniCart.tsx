@@ -1,7 +1,7 @@
 import {
-  useCartState,
   CartData,
-  CartSyncTrigger
+  CartSyncTrigger,
+  useOptionalCartState
 } from '@components/frontStore/cart/CartContext.js';
 import { DefaultMiniCartDropdown } from '@components/frontStore/cart/DefaultMiniCartDropdown.js';
 import { DefaultMiniCartIcon } from '@components/frontStore/cart/DefaultMiniCartIcon.js';
@@ -31,6 +31,7 @@ interface MiniCartProps {
   onItemRemove?: (itemId: string) => Promise<void> | void;
   className?: string;
   disabled?: boolean;
+  autoOpenOnAdd?: boolean;
 }
 
 export function MiniCart({
@@ -41,28 +42,40 @@ export function MiniCart({
   CartIconComponent,
   CartDropdownComponent,
   className = '',
-  disabled = false
+  disabled = false,
+  autoOpenOnAdd = true
 }: MiniCartProps) {
-  const { data: cartData, syncStatus } = useCartState();
+  const cartState = useOptionalCartState();
+  const cartData = cartState?.data;
+  const syncStatus = cartState?.syncStatus || {
+    syncing: false,
+    synced: false,
+    trigger: undefined
+  };
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const cart = cartData;
+  const effectiveDisabled = disabled || !cartState;
 
   const handleCartClick = useCallback(() => {
-    if (disabled) return;
+    if (effectiveDisabled) return;
 
     setIsDropdownOpen(!isDropdownOpen);
-  }, [disabled, isDropdownOpen, cartUrl]);
+  }, [effectiveDisabled, isDropdownOpen, cartUrl]);
 
   const handleDropdownClose = useCallback(() => {
     setIsDropdownOpen(false);
   }, []);
 
   useEffect(() => {
-    if (syncStatus.synced && syncStatus.trigger === CartSyncTrigger.ADD_ITEM) {
+    if (
+      autoOpenOnAdd &&
+      syncStatus.synced &&
+      syncStatus.trigger === CartSyncTrigger.ADD_ITEM
+    ) {
       setIsDropdownOpen(true);
     }
-  }, [syncStatus.synced, syncStatus.trigger]);
+  }, [autoOpenOnAdd, syncStatus.synced, syncStatus.trigger]);
 
   return (
     <div className={`mini__cart__wrapper relative ${className}`}>
@@ -71,7 +84,7 @@ export function MiniCart({
           totalQty={cart?.totalQty || 0}
           onClick={handleCartClick}
           isOpen={isDropdownOpen}
-          disabled={disabled}
+          disabled={effectiveDisabled}
           showItemCount={showItemCount}
           syncStatus={syncStatus}
         />
@@ -80,7 +93,7 @@ export function MiniCart({
           totalQty={cart?.totalQty || 0}
           onClick={handleCartClick}
           isOpen={isDropdownOpen}
-          disabled={disabled}
+          disabled={effectiveDisabled}
           showItemCount={showItemCount}
           syncStatus={syncStatus}
         />

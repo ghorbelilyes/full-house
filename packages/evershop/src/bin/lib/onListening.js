@@ -10,7 +10,7 @@ export function onListening() {
   const message = boxen(
     `Your website is running at "http://localhost:${port}"`,
     {
-      title: 'EverShop',
+      title: 'Full House',
       titleAlignment: 'center',
       padding: 1,
       margin: 1,

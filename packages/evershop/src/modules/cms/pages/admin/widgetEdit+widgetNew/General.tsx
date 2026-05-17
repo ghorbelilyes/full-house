@@ -73,7 +73,7 @@ const AreaInput: React.FC<{
                 : []
             )
           }
-          placeholder="Type area and press enter..."
+          placeholder="Saisir une zone et appuyer sur Entrée..."
           value={
             field.value
               ? field.value.map((val) =>
@@ -109,7 +109,7 @@ export default function General({ widget, routes }: GeneralProps) {
   const allRoutes = [
     {
       value: 'all',
-      label: 'All',
+      label: 'Tous',
       isAdmin: false,
       isApi: false,
       method: ['GET']
@@ -123,22 +123,22 @@ export default function General({ widget, routes }: GeneralProps) {
         <InputField
           name="name"
           defaultValue={widget?.name}
-          label="Name"
+          label="Nom"
           required
-          validation={{ required: 'Name is required' }}
-          placeholder="Name"
+          validation={{ required: 'Le nom est requis' }}
+          placeholder="Nom"
         />
       </CardContent>
       <CardContent className="pt-3 border-t border-border">
         <RadioGroupField
           name="status"
-          label="Status"
+          label="Statut"
           defaultValue={widget?.status}
           required
-          validation={{ required: 'Status is required' }}
+          validation={{ required: 'Le statut est requis' }}
           options={[
-            { value: 0, label: 'Disabled' },
-            { value: 1, label: 'Enabled' }
+            { value: 0, label: 'Désactivé' },
+            { value: 1, label: 'Activé' }
           ]}
         />
       </CardContent>
@@ -153,7 +153,7 @@ export default function General({ widget, routes }: GeneralProps) {
             data-slot="field-label"
             className="text-sm font-medium group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50 items-center select-none group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed has-data-checked:bg-primary/5 has-data-checked:border-primary dark:has-data-checked:bg-primary/10 gap-1 group-data-[disabled=true]/field:opacity-50 has-[&gt;[data-slot=field]]:rounded-md has-[&gt;[data-slot=field]]:border [&amp;&gt;*]:data-[slot=field]:p-3 group/field-label peer/field-label flex w-fit leading-snug has-[&gt;[data-slot=field]]:w-full has-[&gt;[data-slot=field]]:flex-col"
           >
-            Areas
+            Zones
           </label>
           <AreaInput
             control={control}
@@ -214,18 +214,18 @@ export default function General({ widget, routes }: GeneralProps) {
       <CardContent className="pt-3 border-t border-border">
         <NumberField
           name="sort_order"
-          label="Sort Order"
+          label="Ordre de tri"
           defaultValue={widget?.sortOrder}
-          placeholder="Sort Order"
+          placeholder="Ordre de tri"
           validation={{
-            required: 'Sort order is required',
+            required: 'L\'ordre de tri est requis',
             min: {
               value: 0,
-              message: 'Sort order must be a positive number'
+              message: 'L\'ordre de tri doit être un nombre positif'
             }
           }}
           required
-          helperText="The order in which this widget will be displayed. Lower numbers appear first."
+          helperText="L'ordre dans lequel ce widget sera affiché. Les plus petits nombres apparaissent en premier."
         />
       </CardContent>
     </Card>

@@ -41,7 +41,7 @@ const ParentCategory: React.FC<{
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <div className="my-3 space-y-3">
-        <Label>Parent category</Label>
+        <Label>Catégorie parente</Label>
         {category && (
           <div className="border rounded border-border mb-2 p-2">
             {category.path.map((item, index) => (
@@ -58,7 +58,7 @@ const ParentCategory: React.FC<{
                   setDialogOpen(true);
                 }}
               >
-                Change
+                Modifier
               </a>
             </span>
             <span className="text-destructive pl-5 hover:underline">
@@ -69,7 +69,7 @@ const ParentCategory: React.FC<{
                   handleCategoryChange(null);
                 }}
               >
-                Unlink
+                Délier
               </a>
             </span>
           </div>
@@ -83,12 +83,12 @@ const ParentCategory: React.FC<{
               setDialogOpen(true);
             }}
           >
-            Select category
+            Sélectionner une catégorie
           </Button>
         )}
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Select Parent Category</DialogTitle>
+            <DialogTitle>Sélectionner la catégorie parente</DialogTitle>
           </DialogHeader>
           <CategoryTree
             selectedCategories={category ? [category] : []}
@@ -138,12 +138,12 @@ export default function General({ category }: GeneralProps) {
         default: (
           <InputField
             name="name"
-            label="Category Name"
-            placeholder="Enter Category Name"
+            label="Nom de la catégorie"
+            placeholder="Entrer le nom de la catégorie"
             defaultValue={category?.name || ''}
             required
             validation={{
-              required: 'Category name is required'
+              required: 'Le nom de la catégorie est requis'
             }}
           />
         )
@@ -177,9 +177,9 @@ export default function General({ category }: GeneralProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>General</CardTitle>
+        <CardTitle>Général</CardTitle>
         <CardDescription>
-          Manage the general information of the category.
+          Gérer les informations générales de la catégorie.
         </CardDescription>
       </CardHeader>
       <CardContent>

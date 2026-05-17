@@ -112,7 +112,7 @@ export default function SearchBox({ resourceLinks }: SearchBoxProps) {
         </InputGroupAddon>
         <InputGroupInput
           type="text"
-          placeholder="Search"
+          placeholder="Rechercher"
           ref={InputRef}
           onChange={(e) => setKeyword(e.target.value)}
         />
@@ -129,7 +129,7 @@ export default function SearchBox({ resourceLinks }: SearchBoxProps) {
           )}
           {!keyword && (
             <div className="text-center">
-              <span>Search for products, order and other resources</span>
+              <span>Rechercher des produits, commandes et autres ressources</span>
             </div>
           )}
           {data?.products.items.length === 0 &&

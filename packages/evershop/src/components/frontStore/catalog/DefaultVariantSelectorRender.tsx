@@ -11,26 +11,31 @@ const DefaultVariantOptionItem: React.FC<VariantOptionItemProps> = ({
   isSelected,
   onSelect
 }) => {
-  let className = 'group ';
-  if (isSelected) {
-    className += 'selected';
-  }
-  if (option.available === false) {
-    className += 'un-available';
-  }
+  // A selected option must never be disabled so the user can always toggle it
+  // off (deselect).  Only mark an option as disabled when it is both
+  // unavailable AND not currently selected.
+  const isDisabled = option.available === false && !isSelected;
 
   return (
-    <li key={option.optionId} className={className}>
+    <li
+      key={option.optionId}
+      className={`${isSelected ? 'selected' : ''} ${isDisabled ? 'un-available' : ''}`}
+    >
       <Button
         variant={isSelected ? 'default' : 'outline'}
+        disabled={isDisabled}
         onClick={async (e) => {
           e.preventDefault();
-          if (option.available === false) {
-            return;
-          }
+          if (isDisabled) return;
           await onSelect(attribute.attributeCode, option.optionId);
         }}
-        className={'group-[.selected]:border-primary'}
+        className={`
+          transition-all duration-200
+          ${isSelected ? 'border-primary ring-2 ring-primary/30' : ''}
+          ${isDisabled ? 'opacity-40 cursor-not-allowed line-through pointer-events-none' : 'cursor-pointer'}
+        `.trim()}
+        aria-pressed={isSelected}
+        aria-disabled={isDisabled}
       >
         {option.optionText}
       </Button>
@@ -48,6 +53,12 @@ const DefaultVariantAttribute: React.FC<VariantAttributeGroupProps> = ({
     <div key={attribute.attributeCode}>
       <div className="mb-2 text-textSubdued uppercase">
         <span>{attribute.attributeName}</span>
+        {attribute.selected && attribute.selectedOption !== null && (
+          <span className="ml-2 text-foreground font-medium normal-case">
+            {options.find((o) => o.optionId === attribute.selectedOption)
+              ?.optionText || ''}
+          </span>
+        )}
       </div>
       <ul className="variant-option-list flex justify-start gap-2 flex-wrap">
         {options.map((option) => (

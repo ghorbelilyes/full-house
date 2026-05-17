@@ -11,10 +11,10 @@ export default function NewCouponButton({
   return (
     <Button
       onClick={() => (window.location.href = newCouponUrl)}
-      title="New Coupon"
+      title="Nouveau Coupon"
     >
       {' '}
-      New Coupon{' '}
+      Nouveau Coupon{' '}
     </Button>
   );
 }

@@ -13,6 +13,7 @@
     font-size: 100%;
     color: var(--foreground);
     background-color: var(--background);
+    overflow-x: hidden;
     input[type='email'],
     input[type='password'],
     input[type='tel'],
@@ -169,11 +170,15 @@
     margin: 0 auto;
   }
   .page-width {
-    max-width: 1200px;
+    width: 100%;
+    max-width: 100%;
     margin: 0 auto;
     padding: 0 22px;
+    @media screen and (min-width: 768px) {
+      padding: 0 40px;
+    }
     @media screen and (min-width: 1200px) {
-      padding: 0 55px;
+      padding: 0 60px;
     }
   }
 

@@ -41,11 +41,11 @@ export default function CancelButton({
     >
       <Dialog>
         <DialogTrigger>
-          <Button variant="destructive">Cancel Order</Button>
+          <Button variant="destructive">Annuler la commande</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Cancel Order</DialogTitle>
+            <DialogTitle>Annuler la commande</DialogTitle>
           </DialogHeader>
           <Form
             form={form}
@@ -65,18 +65,18 @@ export default function CancelButton({
             <div>
               <TextareaField
                 name="reason"
-                label="Reason for cancellation"
-                placeholder="Reason for cancellation"
+                label="Motif d'annulation"
+                placeholder="Motif d'annulation"
                 required
                 validation={{
-                  required: 'Reason is required'
+                  required: 'Le motif est requis'
                 }}
               />
             </div>
           </Form>
           <DialogFooter>
             <DialogClose>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Annuler</Button>
             </DialogClose>
             <Button
               variant="default"
@@ -89,7 +89,7 @@ export default function CancelButton({
                 );
               }}
             >
-              Submit Cancellation
+              Confirmer l'annulation
             </Button>
           </DialogFooter>
         </DialogContent>

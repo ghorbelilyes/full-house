@@ -42,7 +42,7 @@ export default function BestSellers({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Best Sellers</CardTitle>
+        <CardTitle>Meilleures Ventes</CardTitle>
         <CardDescription>A list of best selling products</CardDescription>
         <CardAction>
           <a href={listUrl} className="text-sm text-primary hover:underline">

@@ -433,13 +433,20 @@ export function registerCartBaseFields(fields) {
                 }))
                 .sort((a, b) => a.min_weight - b.min_weight);
 
-              let cost = 0;
+              let matchedTier = null;
               for (let i = 0; i < weightBasedCost.length; i += 1) {
                 if (totalWeight >= weightBasedCost[i].min_weight) {
-                  cost = weightBasedCost[i].cost;
+                  matchedTier = weightBasedCost[i];
                 }
               }
-              return toPrice(cost);
+              if (matchedTier === null) {
+                this.setError(
+                  'shipping_fee_excl_tax',
+                  'Cart weight does not meet the minimum for this shipping method'
+                );
+                return 0;
+              }
+              return toPrice(matchedTier.cost);
             } else if (shippingMethod.price_based_cost) {
               const subTotal = this.getData('sub_total');
               const priceBasedCost = shippingMethod.price_based_cost
@@ -448,13 +455,21 @@ export function registerCartBaseFields(fields) {
                   cost: toPrice(cost)
                 }))
                 .sort((a, b) => a.min_price - b.min_price);
-              let cost = 0;
+              let matchedTier = null;
               for (let i = 0; i < priceBasedCost.length; i += 1) {
                 if (subTotal >= priceBasedCost[i].min_price) {
-                  cost = priceBasedCost[i].cost;
+                  matchedTier = priceBasedCost[i];
                 }
               }
-              return toPrice(cost);
+              // Reject the method if no tier matches the current subtotal
+              if (matchedTier === null) {
+                this.setError(
+                  'shipping_fee_excl_tax',
+                  'Cart subtotal does not meet the minimum for this shipping method'
+                );
+                return 0;
+              }
+              return toPrice(matchedTier.cost);
             } else {
               this.setError(
                 'shipping_fee_excl_tax',

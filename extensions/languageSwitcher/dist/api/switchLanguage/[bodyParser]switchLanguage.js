@@ -1,6 +1,9 @@
 export default async function switchLanguage(request, response) {
     const { language } = request.body;
-    const supportedLanguages = ['en', 'fr'];
+    const supportedLanguages = [
+        'en',
+        'fr'
+    ];
     if (!language || !supportedLanguages.includes(language)) {
         response.status(400).json({
             success: false,
@@ -20,4 +23,3 @@ export default async function switchLanguage(request, response) {
         language
     });
 }
-//# sourceMappingURL=%5BbodyParser%5DswitchLanguage.js.map

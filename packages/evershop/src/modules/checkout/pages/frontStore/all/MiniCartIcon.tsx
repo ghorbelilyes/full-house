@@ -11,7 +11,7 @@ export default function MiniCartIcon({ cartUrl }: MiniCartIconProps) {
 }
 
 export const layout = {
-  areaId: 'headerMiddleRight',
+  areaId: 'headerActions',
   sortOrder: 20
 };
 

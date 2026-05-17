@@ -1,0 +1,11 @@
+type ProductTrustBadge {
+  trustBadgeId: Int!
+  productId: Int!
+  icon: String!
+  label: String!
+  sortOrder: Int!
+}
+
+extend type Product {
+  trustBadges: [ProductTrustBadge]!
+}

@@ -15,7 +15,7 @@ export default {
       if (codDisplayName) {
         return codDisplayName.value;
       } else {
-        return 'Cash On Delivery';
+        return 'Paiement à la livraison';
       }
     }
   }

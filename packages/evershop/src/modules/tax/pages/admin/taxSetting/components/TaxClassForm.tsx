@@ -28,18 +28,18 @@ function TaxClassForm({
       <InputField
         name="name"
         type="text"
-        label="Tax class name"
+        label="Nom de la classe de taxe"
         defaultValue=""
-        placeholder="Enter tax class name"
+        placeholder="Entrer le nom de la classe de taxe"
         required
-        validation={{ required: 'Tax class name is required' }}
+        validation={{ required: 'Le nom de la classe de taxe est requis' }}
       />
       <div className="flex justify-end gap-2 mt-3">
-        <Button title="Cancel" variant="secondary" onClick={closeModal}>
-          Cancel
+        <Button title="Annuler" variant="secondary" onClick={closeModal}>
+          Annuler
         </Button>
         <Button
-          title="Save"
+          title="Enregistrer"
           variant="default"
           onClick={() => {
             (
@@ -52,7 +52,7 @@ function TaxClassForm({
             );
           }}
         >
-          Save
+          Enregistrer
         </Button>
       </div>
     </Form>

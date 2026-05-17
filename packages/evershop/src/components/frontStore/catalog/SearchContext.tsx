@@ -9,7 +9,7 @@ export interface SearchProducts {
 }
 
 export interface SearchPageData {
-  keyword: string;
+  keyword?: string;
   url?: string;
   products: SearchProducts;
   [extendedFields: string]: any;

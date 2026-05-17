@@ -1,5 +1,5 @@
-import { jsx as _jsx } from "react/jsx-runtime";
 import { cn } from '@evershop/evershop/lib/util/cn';
+import { jsx as _jsx } from "react/jsx-runtime";
 function Table({ className, ...props }) {
     return (_jsx("div", { "data-slot": "table-container", className: "relative w-full", children: _jsx("table", { "data-slot": "table", className: cn('w-full caption-bottom text-sm', className), ...props }) }));
 }

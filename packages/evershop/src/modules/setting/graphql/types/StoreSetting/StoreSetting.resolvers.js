@@ -7,7 +7,7 @@ export default {
       if (storeName) {
         return storeName.value;
       } else {
-        return 'An Amazing EverShop Store';
+        return 'Full House';
       }
     },
     storeDescription: (setting) => {
@@ -17,7 +17,7 @@ export default {
       if (storeDescription) {
         return storeDescription.value;
       } else {
-        return 'An Amazing EverShop Store';
+        return 'Full House - Electricity & Security';
       }
     },
     storeLanguage: () => getConfig('shop.language', 'en'),
@@ -87,6 +87,13 @@ export default {
       } else {
         return null;
       }
+    },
+    allowNegativeStock: (setting) => {
+      const row = setting.find((s) => s.name === 'allowNegativeStock');
+      if (row) {
+        return row.value === '1' || row.value === 'true';
+      }
+      return false;
     }
   }
 };

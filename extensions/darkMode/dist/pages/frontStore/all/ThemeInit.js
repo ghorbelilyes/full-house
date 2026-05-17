@@ -2,8 +2,7 @@ import React from 'react';
 /**
  * Inline script to prevent flash of wrong theme on page load.
  * Must be placed in the <head> area and execute before body renders.
- */
-export default function ThemeInit() {
+ */ export default function ThemeInit() {
     const themeScript = `
 (function() {
   try {
@@ -17,10 +16,13 @@ export default function ThemeInit() {
   } catch(e) {}
 })();
 `.trim();
-    return (React.createElement("script", { dangerouslySetInnerHTML: { __html: themeScript } }));
+    return /*#__PURE__*/ React.createElement("script", {
+        dangerouslySetInnerHTML: {
+            __html: themeScript
+        }
+    });
 }
 export const layout = {
     areaId: 'head',
     sortOrder: 1
 };
-//# sourceMappingURL=ThemeInit.js.map

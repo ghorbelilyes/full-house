@@ -38,12 +38,12 @@ export default function TaxSettingMenu({ taxSettingUrl }: TaxSettingMenuProps) {
                 isActive && 'text-primary'
               )}
             >
-              Tax Setting
+              Paramètres de Taxe
             </a>
           </div>
         </ItemTitle>
         <ItemDescription>
-          <div>Configure tax classes and tax rates</div>
+          <div>Configurer les classes et taux de taxes</div>
         </ItemDescription>
       </ItemContent>
       <ItemActions>

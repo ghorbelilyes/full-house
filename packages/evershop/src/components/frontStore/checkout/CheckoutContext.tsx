@@ -58,6 +58,7 @@ interface CheckoutState {
   allowGuestCheckout: boolean;
   checkoutData: CheckoutData; // Add checkout data to state
   registeredPaymentComponents: Record<string, PaymentMethodComponent>;
+  showEmailPrompt: boolean;
 }
 
 type CheckoutAction =
@@ -66,6 +67,7 @@ type CheckoutAction =
   | { type: 'SET_CHECKOUT_DATA'; payload: CheckoutData }
   | { type: 'UPDATE_CHECKOUT_DATA'; payload: Partial<CheckoutData> }
   | { type: 'CLEAR_CHECKOUT_DATA' }
+  | { type: 'SET_SHOW_EMAIL_PROMPT'; payload: boolean }
   // Payment method component registry actions
   | {
       type: 'REGISTER_PAYMENT_COMPONENT';
@@ -80,7 +82,8 @@ const initialState: CheckoutState = {
   },
   allowGuestCheckout: false, // Default to false, will be set by provider
   checkoutData: {}, // Initialize empty checkout data
-  registeredPaymentComponents: {} // Initialize empty payment component registry
+  registeredPaymentComponents: {}, // Initialize empty payment component registry
+  showEmailPrompt: false
 };
 
 // Reducer with Immer for immutable updates
@@ -111,6 +114,9 @@ const checkoutReducer = (
         draft.registeredPaymentComponents[action.payload.code] =
           action.payload.component;
         break;
+      case 'SET_SHOW_EMAIL_PROMPT':
+        draft.showEmailPrompt = action.payload;
+        break;
     }
   });
 };
@@ -129,6 +135,7 @@ interface CheckoutDispatchContextValue<
 > {
   placeOrder: () => Promise<T>;
   checkout: () => Promise<T>;
+  proceedCheckoutWithoutEmail: () => Promise<T>;
   getPaymentMethods: () => PaymentMethod[];
   getShippingMethods: (
     params?: ShippingAddressParams
@@ -144,6 +151,7 @@ interface CheckoutDispatchContextValue<
   ) => void;
   enableForm: () => void;
   disableForm: () => void;
+  setShowEmailPrompt: (show: boolean) => void;
 }
 
 // Contexts
@@ -288,17 +296,10 @@ export function CheckoutProvider({
   }, [placeOrderApi, cartId]);
 
   // New checkout method with all data submission (cart.checkoutApi)
-  const checkout = useCallback(async () => {
+  // Internal: performs the actual checkout (form already validated)
+  const _doCheckout = useCallback(async () => {
     if (!cartId) {
       throw new Error(_('Cart ID is required to checkout'));
-    }
-
-    // Trigger form validation
-    const isValid = await form.trigger(undefined, {
-      shouldFocus: true
-    });
-    if (!isValid) {
-      return;
     }
 
     disableForm();
@@ -312,7 +313,7 @@ export function CheckoutProvider({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             cart_id: cartId,
-            ...checkoutDataRef.current
+            ...JSON.parse(JSON.stringify(checkoutDataRef.current))
           })
         })
       );
@@ -337,6 +338,40 @@ export function CheckoutProvider({
 
     return json.data;
   }, [cartState.data?.checkoutApi, cartId, form, enableForm, disableForm]);
+
+  // Public checkout: validates form first, then checks for email
+  const checkout = useCallback(async () => {
+    if (!cartId) {
+      throw new Error(_('Cart ID is required to checkout'));
+    }
+
+    // Validate form FIRST before checking email
+    const isValid = await form.trigger(undefined, {
+      shouldFocus: true
+    });
+    if (!isValid) {
+      return;
+    }
+
+    // Check if email is provided
+    const email = form.getValues('contact.email') || checkoutDataRef.current?.customer?.email;
+    if (!email) {
+      // Show email prompt popup
+      dispatch({ type: 'SET_SHOW_EMAIL_PROMPT', payload: true });
+      return;
+    }
+    return _doCheckout();
+  }, [_doCheckout, form, cartId]);
+
+  // Proceed without email (called from popup)
+  const proceedCheckoutWithoutEmail = useCallback(async () => {
+    dispatch({ type: 'SET_SHOW_EMAIL_PROMPT', payload: false });
+    return _doCheckout();
+  }, [_doCheckout]);
+
+  const setShowEmailPrompt = useCallback((show: boolean) => {
+    dispatch({ type: 'SET_SHOW_EMAIL_PROMPT', payload: show });
+  }, []);
 
   // Checkout data management
   const setCheckoutData = useCallback((data: CheckoutData) => {
@@ -381,6 +416,7 @@ export function CheckoutProvider({
     (): CheckoutDispatchContextValue => ({
       placeOrder,
       checkout,
+      proceedCheckoutWithoutEmail,
       getPaymentMethods,
       getShippingMethods,
       setCheckoutData,
@@ -388,11 +424,13 @@ export function CheckoutProvider({
       clearCheckoutData,
       registerPaymentComponent,
       enableForm,
-      disableForm
+      disableForm,
+      setShowEmailPrompt
     }),
     [
       placeOrder,
       checkout,
+      proceedCheckoutWithoutEmail,
       getPaymentMethods,
       getShippingMethods,
       setCheckoutData,
@@ -400,7 +438,8 @@ export function CheckoutProvider({
       clearCheckoutData,
       registerPaymentComponent,
       enableForm,
-      disableForm
+      disableForm,
+      setShowEmailPrompt
     ]
   );
 

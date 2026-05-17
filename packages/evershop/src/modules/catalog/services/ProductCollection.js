@@ -3,6 +3,7 @@ import { pool } from '../../../lib/postgres/connection.js';
 import { camelCase } from '../../../lib/util/camelCase.js';
 import { getConfig } from '../../../lib/util/getConfig.js';
 import { getValue } from '../../../lib/util/registry.js';
+import { getAllowNegativeStock } from '../../../modules/setting/services/setting.js';
 
 export class ProductCollection {
   constructor(baseQuery) {
@@ -19,7 +20,8 @@ export class ProductCollection {
     // If the user is not admin, we need to filter out the out of stock products and the disabled products
     if (!isAdmin) {
       this.baseQuery.andWhere('product.status', '=', 1);
-      if (getConfig('catalog.showOutOfStockProduct', false) === false) {
+      const allowNegative = await getAllowNegativeStock();
+      if (!allowNegative && getConfig('catalog.showOutOfStockProduct', false) === false) {
         this.baseQuery
           .andWhere('product_inventory.manage_stock', '=', false)
           .addNode(

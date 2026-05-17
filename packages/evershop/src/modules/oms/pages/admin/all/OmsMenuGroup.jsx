@@ -7,12 +7,12 @@ export default function OmsMenuGroup({ orderGrid }) {
   return (
     <NavigationItemGroup
       id="omsMenuGroup"
-      name="Sale"
+      name="Ventes"
       items={[
         {
           Icon: Package,
           url: orderGrid,
-          title: 'Orders'
+          title: 'Commandes'
         }
       ]}
     />

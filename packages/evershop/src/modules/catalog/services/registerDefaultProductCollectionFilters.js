@@ -11,12 +11,14 @@ export default async function registerDefaultProductCollectionFilters() {
       operation: ['eq'],
       callback: (query, operation, value, currentFilters) => {
         const where = query.getWhere();
-        const bindingKey = `keyword_${uniqid()}`;
+        const nameKey = `keyword_name_${uniqid()}`;
+        const descKey = `keyword_desc_${uniqid()}`;
         where.addRaw(
           'AND',
-          `to_tsvector('simple', product_description.name || ' ' || product_description.description) @@ websearch_to_tsquery('simple', :${bindingKey})`,
+          `(unaccent(product_description.name) ILIKE unaccent(:${nameKey}) OR unaccent(product_description.description) ILIKE unaccent(:${descKey}))`,
           {
-            [bindingKey]: `%${value}%`
+            [nameKey]: `%${value}%`,
+            [descKey]: `%${value}%`
           }
         );
         currentFilters.push({

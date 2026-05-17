@@ -1,9 +1,11 @@
 Featured collection, Collection en vedette
+Shop, Boutique
+Promotions, Promotions
 SHOP BY, Acheter par
 Sort By, Trier par
 There is no product to display, Aucun produit à afficher
 ${count} products, ${count} produits
-Search results for "${keyword}", Résultats de recherche pour "${keyword}"
+"Search results for ""${keyword}""","Résultats de recherche pour « ${keyword} »"
 Search results for: ${keyword}, Résultats de recherche pour : ${keyword}
 Product not found, Produit non trouvé
 Product name is required, Le nom du produit est requis
@@ -29,9 +31,54 @@ SOLD OUT, ÉPUISÉ
 Contact for pricing, Contactez-nous pour le prix
 Product is out of stock, Le produit est en rupture de stock
 ${count} Products, ${count} produits
-No categories found for "${term}", Aucune catégorie trouvée pour "${term}"
-No options found for "${code}", Aucune option trouvée pour "${code}"
+No categories found for "${term}", Aucune catégorie trouvée pour « ${term} »
+No options found for "${code}", Aucune option trouvée pour « ${code} »
 Price: ${value}, Prix : ${value}
 SKU ${sku}, SKU ${sku}
 SKU: ${sku}, SKU : ${sku}
 Show all ${count} options, Afficher les ${count} options
+Collapse, Réduire
+Expand, Développer
+Subcategories, Sous-catégories
+Clear, Effacer
+Customer Reviews, Avis clients
+Leave a review, Laisser un avis
+Update your review, Modifier votre avis
+Your rating, Votre note
+Your comment (optional), Votre commentaire (facultatif)
+Submit review, Soumettre l'avis
+Update review, Modifier l'avis
+Submitting..., Envoi en cours...
+You must be logged in to leave a review, Vous devez être connecté pour laisser un avis
+Log in, Se connecter
+No reviews yet. Be the first to leave a review!, Aucun avis pour le moment. Soyez le premier à laisser un avis !
+Product Description, Description du produit
+Your review, Votre avis
+Edit your review, Modifier votre avis
+Edit, Modifier
+Cancel, Annuler
+Save, Enregistrer
+You, Vous
+"Have you used this product? Share your opinion!","Vous avez utilisé ce produit ? Partagez votre avis !"
+Your review has been saved!, Votre avis a été enregistré !
+Error submitting review, Erreur lors de la soumission
+Categories & Filters, Catégories & Filtres
+My Favorites, Mes Favoris
+Your favorites are empty, Vos favoris sont vides
+Browse our products and click the heart icon to save your favorites here., Parcourez nos produits et cliquez sur le cœur pour sauvegarder vos favoris ici.
+Discover our products, Découvrir nos produits
+Add to favorites, Ajouter aux favoris
+Remove from favorites, Retirer des favoris
+In favorites, Dans les favoris
+Add to cart, Ajouter au panier
+Croissant, Croissant
+Décroissant, Décroissant
+Prix croissant, Prix croissant
+Prix décroissant, Prix décroissant
+Promo d'abord, Promo d'abord
+Pertinence (avis), Pertinence (avis)
+Voir tout, Voir tout
+Parcourez toutes nos catégories, Parcourez toutes nos catégories
+Autres catégories, Autres catégories
+sous-catégorie, sous-catégorie
+sous-catégories, sous-catégories

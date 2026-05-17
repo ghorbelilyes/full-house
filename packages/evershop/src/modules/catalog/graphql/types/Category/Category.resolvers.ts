@@ -102,13 +102,14 @@ export default {
       }
     },
     image: (category) => {
-      const { image, name } = category;
+      const { image, name, uuid } = category;
       if (!image) {
         return null;
       } else {
         return {
           alt: name,
-          url: image
+          url: image,
+          uuid: uuid
         };
       }
     },

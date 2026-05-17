@@ -30,6 +30,7 @@ The `CategoryImage` type represents a category image object.
 type CategoryImage {
   alt: String!
   url: String!
+  uuid: String
 }
 
 """

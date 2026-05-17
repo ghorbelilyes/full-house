@@ -34,13 +34,15 @@ const generateCacheKey = (
   quality: number,
   format: string,
   height?: number,
-  allowUpscale: boolean = false
+  allowUpscale: boolean = false,
+  fit?: string
 ) => {
   // Use base64 encoding to safely handle both internal paths and external URLs
   const encodedSrc = Buffer.from(src).toString('base64url'); // URL-safe base64
   const heightPart = height ? `-${height}h` : '';
   const upscalePart = allowUpscale ? '-up' : '';
-  return `${encodedSrc}-${width}w${heightPart}${upscalePart}-${quality}q.${format}`;
+  const fitPart = fit ? `-${fit}` : '';
+  return `${encodedSrc}-${width}w${heightPart}${upscalePart}${fitPart}-${quality}q.${format}`;
 };
 
 interface ProcessedImage {
@@ -60,7 +62,8 @@ export const imageProcessor = async (
   quality: number,
   format: 'jpeg' | 'png' | 'webp' | 'avif' = 'webp',
   height?: number,
-  allowUpscale: boolean = false
+  allowUpscale: boolean = false,
+  fit?: 'cover' | undefined
 ): Promise<ProcessedImage> => {
   if (
     !src ||
@@ -171,7 +174,8 @@ export const imageProcessor = async (
       quality,
       format,
       height,
-      allowUpscale
+      allowUpscale,
+      fit
     );
 
     if (isExternalUrl) {
@@ -265,7 +269,8 @@ export const imageProcessor = async (
       quality,
       finalFormat,
       height,
-      allowUpscale
+      allowUpscale,
+      fit
     );
 
     // Process image with Sharp (common for both internal and external)
@@ -274,14 +279,14 @@ export const imageProcessor = async (
     // Set up resize options
     const resizeOptions: sharp.ResizeOptions = {
       width: width,
-      withoutEnlargement: !allowUpscale, // Don't upscale unless explicitly allowed
+      withoutEnlargement: !allowUpscale && !fit, // Allow upscale when fit=cover to fill exact dimensions
       background: { r: 0, g: 0, b: 0, alpha: 0 } // Transparent background for padding
     };
 
     // Add height if specified
     if (height !== undefined) {
       resizeOptions.height = height;
-      resizeOptions.fit = 'contain'; // Use contain to preserve aspect ratio
+      resizeOptions.fit = fit === 'cover' ? 'cover' : 'contain';
     }
 
     // Check if the image is SVG for special handling

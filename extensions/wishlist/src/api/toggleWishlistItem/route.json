@@ -1,0 +1,5 @@
+{
+  "methods": ["POST"],
+  "path": "/wishlist/mine/toggle",
+  "access": "public"
+}

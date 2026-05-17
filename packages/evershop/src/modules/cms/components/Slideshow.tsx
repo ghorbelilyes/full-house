@@ -1,78 +1,29 @@
-import { Image } from '@components/common/Image.js';
-import React from 'react';
+import React, { useRef } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 
-function PrevArrow(props: any) {
-  const { onClick } = props;
-  return (
-    <button
-      className="absolute bottom-[20px] right-[70px] z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white transition-all hover:bg-black/70 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 md:bottom-[20px] md:right-[70px] md:h-10 md:w-10"
-      onClick={onClick}
-      aria-label="Previous slide"
-      type="button"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        width="24"
-        height="24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-6 w-6 md:h-6 md:w-6"
-      >
-        <polyline points="15 18 9 12 15 6"></polyline>
-      </svg>
-    </button>
-  );
+/* ── Fixed slideshow dimensions ────────────────────────────── */
+const SLIDE_WIDTH = 2400;
+const SLIDE_HEIGHT = 1200;
+
+/**
+ * Build srcSet entries for a slideshow image.
+ * Every variant is requested at the fixed 2:1 aspect ratio with fit=cover
+ * so the server crops / resizes non-conforming images automatically.
+ */
+function buildSlideSrcSet(src: string, quality: number = 75): string {
+  const widths = [640, 960, 1280, 1600, 1920, 2400];
+  return widths
+    .map((w) => {
+      const h = Math.round(w * (SLIDE_HEIGHT / SLIDE_WIDTH));
+      const url = `/images?src=${encodeURIComponent(src)}&w=${w}&h=${h}&q=${quality}&fit=cover`;
+      return `${url} ${w}w`;
+    })
+    .join(', ');
 }
 
-function NextArrow(props: any) {
-  const { onClick } = props;
-  return (
-    <button
-      className="absolute bottom-[20px] right-5 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white transition-all hover:bg-black/70 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 md:bottom-[20px] md:right-5 md:h-10 md:w-10"
-      onClick={onClick}
-      aria-label="Next slide"
-      type="button"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        width="24"
-        height="24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-6 w-6 md:h-6 md:w-6"
-      >
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-    </button>
-  );
-}
-
-function CustomDot(props: any) {
-  const { onClick, active, className } = props;
-  const isActive = active || (className && className.includes('active'));
-
-  return (
-    <button
-      onClick={onClick}
-      className={`mx-1 my-0 h-3 w-3 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-white/50 md:h-3 md:w-3 ${
-        isActive
-          ? '!bg-black scale-125 shadow-md'
-          : '!bg-black/70 !hover:bg-black/90'
-      }`}
-      aria-label="Go to slide"
-      type="button"
-    />
-  );
+function buildSlideFallback(src: string, quality: number = 75): string {
+  return `/images?src=${encodeURIComponent(src)}&w=${SLIDE_WIDTH}&h=${SLIDE_HEIGHT}&q=${quality}&fit=cover`;
 }
 
 const SliderComponent = Slider as any;
@@ -80,8 +31,8 @@ const SliderComponent = Slider as any;
 interface SlideData {
   id: string;
   image: string;
-  width?: number; // Image natural width (automatically detected)
-  height?: number; // Image natural height (automatically detected)
+  width?: number;
+  height?: number;
   headline?: string;
   subText?: string;
   buttonText?: string;
@@ -108,6 +59,8 @@ export default function Slideshow({
     dots = true
   }
 }: SlideshowProps) {
+  const sliderRef = useRef<any>(null);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -116,67 +69,61 @@ export default function Slideshow({
     slidesToScroll: 1,
     autoplay: Boolean(autoplay),
     autoplaySpeed: Number(autoplaySpeed) || 3000,
-    arrows: Boolean(arrows),
+    arrows: false,
     fade: false,
     pauseOnHover: true,
-    adaptiveHeight: true,
-    nextArrow: arrows ? <NextArrow /> : undefined,
-    prevArrow: arrows ? <PrevArrow /> : undefined,
-    customPaging: function (i: number) {
-      return <CustomDot active={false} />;
-    },
-    appendDots: (dots: React.ReactNode) => (
-      <div className="w-full flex justify-center items-center">
-        <div className="pr-[120px] md:pr-[120px]">{dots}</div>
-      </div>
-    ),
-    dotsClass: 'slick-dots custom-dots-container'
+    adaptiveHeight: false
   };
 
   if (!slides || slides.length === 0) {
     return null;
   }
 
-  const containerClasses = ['slideshow-widget', 'relative', 'w-full'].join(' ');
-
-  const containerStyle: React.CSSProperties = {
-    height: 'auto',
-    maxWidth: '100%'
-  };
-
-  const sliderStyle: React.CSSProperties = {
-    height: 'auto' // Adaptive height for slider
-  };
+  const showArrows = Boolean(arrows) && slides.length > 1;
 
   return (
-    <div className={containerClasses} style={containerStyle}>
-      <SliderComponent {...settings} style={sliderStyle}>
+    <div
+      className="slideshow-widget w-full"
+      style={{ position: 'relative', overflow: 'hidden' }}
+    >
+      <SliderComponent ref={sliderRef} {...settings}>
         {slides.map((slide) => (
-          <div
-            key={slide.id}
-            className="relative lg:h-auto slide__wrapper !block"
-            style={{ display: 'block' }}
-          >
-            <div className="relative w-full h-full">
-              <Image
-                src={slide.image}
+          <div key={slide.id}>
+            {/* Each slide is a simple relative wrapper; image sets the height */}
+            <div style={{ position: 'relative', lineHeight: 0 }}>
+              <img
+                src={buildSlideFallback(slide.image)}
+                srcSet={buildSlideSrcSet(slide.image)}
+                sizes="100vw"
                 alt={slide.headline || 'Slideshow image'}
-                width={slide.width || 1920} // Use individual slide width if available
-                height={slide.height || 0} // Use individual slide height if available
+                loading="eager"
+                decoding="async"
                 style={{
-                  objectFit: 'cover',
+                  display: 'block',
                   width: '100%',
-                  height: '100%',
+                  height: 'auto',
+                  aspectRatio: '2 / 1',
+                  objectFit: 'cover',
                   objectPosition: 'center'
                 }}
-                sizes="100vw"
-                priority={true}
               />
 
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-8">
-                {(slide.headline ||
-                  slide.subText ||
-                  (slide.buttonText && slide.buttonLink)) && (
+              {/* Overlay content */}
+              {(slide.headline ||
+                slide.subText ||
+                (slide.buttonText && slide.buttonLink)) && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    padding: '1rem'
+                  }}
+                >
                   <div className="p-4 md:p-8 rounded-lg max-w-3xl">
                     {slide.headline && (
                       <h2 className="text-white text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 drop-shadow-lg">
@@ -202,12 +149,70 @@ export default function Slideshow({
                       </a>
                     )}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </SliderComponent>
+
+      {/* Arrow buttons — children of the same relative wrapper, positioned with inline style */}
+      {showArrows && (
+        <>
+          <button
+            onClick={() => sliderRef.current?.slickPrev()}
+            aria-label="Diapositive précédente"
+            type="button"
+            className="flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 focus:outline-none h-8 w-8 md:h-10 md:w-10"
+            style={{
+              position: 'absolute',
+              left: 8,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 20
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-4 w-4 md:h-5 md:w-5"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <button
+            onClick={() => sliderRef.current?.slickNext()}
+            aria-label="Diapositive suivante"
+            type="button"
+            className="flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 focus:outline-none h-8 w-8 md:h-10 md:w-10"
+            style={{
+              position: 'absolute',
+              right: 8,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 20
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-4 w-4 md:h-5 md:w-5"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </>
+      )}
     </div>
   );
 }

@@ -40,15 +40,15 @@ const SKUAndPrice: React.FC<{
       <InputField
         name="sku"
         label="SKU"
-        placeholder="Enter SKU"
+        placeholder="Entrez le SKU"
         defaultValue={sku}
         required
         helperText={_('SKU must be unique')}
       />
       <NumberField
         name="price"
-        placeholder="Enter price"
-        label={`Price`}
+        placeholder="Entrez le prix"
+        label={`Prix`}
         defaultValue={price?.value}
         unit={setting.storeCurrency}
         min={0}
@@ -92,7 +92,7 @@ const ProductCategory: React.FC<{
     );
   }
   if (fetching) {
-    return <span>Loading...</span>;
+    return <span>Chargement...</span>;
   }
   return (
     <div>
@@ -110,7 +110,7 @@ const ProductCategory: React.FC<{
             onChange();
           }}
         >
-          Change
+          Changer
         </a>
         <a
           href="#"
@@ -120,7 +120,7 @@ const ProductCategory: React.FC<{
           }}
           className="text-destructive ml-5"
         >
-          Unassign
+          Retirer
         </a>
       </span>
       <input type="hidden" {...register('category_id')} value={categoryId} />
@@ -153,7 +153,7 @@ const CategorySelect: React.FC<{
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <div className="space-y-3">
-        <Label>Category</Label>
+        <Label>Catégorie</Label>
         {category && (
           <div className="border rounded border-border p-2">
             <ProductCategory
@@ -177,12 +177,12 @@ const CategorySelect: React.FC<{
               setDialogOpen(true);
             }}
           >
-            Select category
+            Sélectionner une catégorie
           </Button>
         )}
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Select Category</DialogTitle>
+            <DialogTitle>Sélectionner une catégorie</DialogTitle>
           </DialogHeader>
           <CategorySelector
             onSelect={onSelect}
@@ -246,9 +246,9 @@ export default function General({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>General Information</CardTitle>
+        <CardTitle>Informations Générales</CardTitle>
         <CardDescription>
-          Manage the general information of the product.
+          Gérer les informations générales du produit.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -261,8 +261,8 @@ export default function General({
                 default: (
                   <InputField
                     name="name"
-                    placeholder="Enter product name"
-                    label="Product Name"
+                    placeholder="Entrez le nom du produit"
+                    label="Nom du Produit"
                     defaultValue={product?.name}
                     required
                     helperText={_('Product name is required')}
@@ -301,7 +301,7 @@ export default function General({
                 default: (
                   <SelectField
                     name="tax_class"
-                    label="Tax Class"
+                    label="Classe de Taxe"
                     options={taxClasses.map((taxClass) => ({
                       value: taxClass.value,
                       label: taxClass.text

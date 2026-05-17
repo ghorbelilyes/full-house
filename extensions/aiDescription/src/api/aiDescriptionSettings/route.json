@@ -1,0 +1,5 @@
+{
+  "methods": ["GET"],
+  "path": "/ai-description/settings",
+  "access": "private"
+}

@@ -71,18 +71,18 @@ function Actions({ products = [], selectedIds = [] }) {
 
   const actions = [
     {
-      name: 'Disable',
+      name: 'Désactiver',
       onAction: () => {
         openAlert({
-          heading: `Disable ${selectedIds.length} products`,
-          content: 'Are you sure?',
+          heading: `Désactiver ${selectedIds.length} produits`,
+          content: 'Êtes-vous sûr ?',
           primaryAction: {
-            title: 'Cancel',
+            title: 'Annuler',
             onAction: closeAlert,
             variant: 'secondary'
           },
           secondaryAction: {
-            title: 'Disable',
+            title: 'Désactiver',
             onAction: async () => {
               await updateProducts(0);
             },
@@ -93,18 +93,18 @@ function Actions({ products = [], selectedIds = [] }) {
       }
     },
     {
-      name: 'Enable',
+      name: 'Activer',
       onAction: () => {
         openAlert({
-          heading: `Enable ${selectedIds.length} products`,
-          content: 'Are you sure?',
+          heading: `Activer ${selectedIds.length} produits`,
+          content: 'Êtes-vous sûr ?',
           primaryAction: {
-            title: 'Cancel',
+            title: 'Annuler',
             onAction: closeAlert,
             variant: 'secondary'
           },
           secondaryAction: {
-            title: 'Enable',
+            title: 'Activer',
             onAction: async () => {
               await updateProducts(1);
             },
@@ -115,18 +115,18 @@ function Actions({ products = [], selectedIds = [] }) {
       }
     },
     {
-      name: 'Delete',
+      name: 'Supprimer',
       onAction: () => {
         openAlert({
-          heading: `Delete ${selectedIds.length} products`,
-          content: <div>Can&apos;t be undone</div>,
+          heading: `Supprimer ${selectedIds.length} produits`,
+          content: <div>Action irréversible</div>,
           primaryAction: {
-            title: 'Cancel',
+            title: 'Annuler',
             onAction: closeAlert,
             variant: 'secondary'
           },
           secondaryAction: {
-            title: 'Delete',
+            title: 'Supprimer',
             onAction: async () => {
               await deleteProducts();
             },
@@ -203,7 +203,7 @@ export default function ProductGrid({
                     default: () => (
                       <InputField
                         name="keyword"
-                        placeholder="Search"
+                        placeholder="Rechercher"
                         defaultValue={
                           currentFilters.find((f) => f.key === 'keyword')?.value
                         }
@@ -239,13 +239,13 @@ export default function ProductGrid({
                         }}
                       >
                         <SelectTrigger>
-                          <SelectValue>Status</SelectValue>
+                          <SelectValue>Statut</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            <SelectLabel>Status</SelectLabel>
-                            <SelectItem value="1">Enabled</SelectItem>
-                            <SelectItem value="0">Disabled</SelectItem>
+                            <SelectLabel>Statut</SelectLabel>
+                            <SelectItem value="1">Activé</SelectItem>
+                            <SelectItem value="0">Désactivé</SelectItem>
                           </SelectGroup>
                         </SelectContent>
                       </Select>
@@ -267,11 +267,11 @@ export default function ProductGrid({
                         }}
                       >
                         <SelectTrigger>
-                          <SelectValue>Product type</SelectValue>
+                          <SelectValue>Type de produit</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            <SelectLabel>Product type</SelectLabel>
+                            <SelectLabel>Type de produit</SelectLabel>
                             <SelectItem value="simple">Simple</SelectItem>
                             <SelectItem value="configurable">
                               Configurable
@@ -298,7 +298,7 @@ export default function ProductGrid({
               window.location.href = url.href;
             }}
           >
-            Clear Filters
+            Effacer les filtres
           </Button>
         </CardAction>
       </CardHeader>
@@ -327,7 +327,7 @@ export default function ProductGrid({
                         <TableHead>
                           <div className="table-header id-header">
                             <div className="font-medium uppercase text-xs">
-                              <span>Thumbnail</span>
+                              <span>Miniature</span>
                             </div>
                           </div>
                         </TableHead>
@@ -339,7 +339,7 @@ export default function ProductGrid({
                     component: {
                       default: () => (
                         <SortableHeader
-                          title="Name"
+                          title="Nom"
                           name="name"
                           currentFilters={currentFilters}
                         />
@@ -351,7 +351,7 @@ export default function ProductGrid({
                     component: {
                       default: () => (
                         <SortableHeader
-                          title="Price"
+                          title="Prix"
                           name="price"
                           currentFilters={currentFilters}
                         />
@@ -381,7 +381,7 @@ export default function ProductGrid({
                     component: {
                       default: () => (
                         <SortableHeader
-                          title="Status"
+                          title="Statut"
                           name="status"
                           currentFilters={currentFilters}
                         />
@@ -480,7 +480,7 @@ export default function ProductGrid({
         </Table>
         {products.length === 0 && (
           <div className="flex w-full justify-center mt-2">
-            There is no product to display
+            Aucun produit à afficher
           </div>
         )}
         <GridPagination total={total} limit={limit} page={page} />

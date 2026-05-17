@@ -1,0 +1,22 @@
+"""
+Promotion information for a product.
+"""
+type ProductPromotion {
+  productPromotionId: Int!
+  uuid: String!
+  promotionType: String!
+  promotionValue: Float!
+  promotionLabel: String
+  startDate: String
+  endDate: String
+  enabled: Boolean!
+  isActive: Boolean!
+  discountPercent: Float
+  savedAmount: Price
+  originalPrice: Price!
+  finalPrice: Price!
+}
+
+extend type Product {
+  promotion: ProductPromotion
+}
