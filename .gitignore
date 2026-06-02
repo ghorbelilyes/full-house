@@ -7,14 +7,14 @@ dist
 /packages/evershop/src/components/common/ui/*.js.map
 /packages/evershop/src/components/common/ui/Card.js
 /packages/evershop/src/components/common/ui/Table.js
-/extensions/*
-!extensions/agegate
-!extensions/azure_file_storage
-!extensions/google_login
-!extensions/s3_file_storage
-!extensions/resend
-!extensions/sendgrid
-!extensions/product_review
+# /extensions/*
+# !extensions/agegate
+# !extensions/azure_file_storage
+# !extensions/google_login
+# !extensions/s3_file_storage
+# !extensions/resend
+# !extensions/sendgrid
+# !extensions/product_review
 /themes
 .idea/*
 .evershop
@@ -34,7 +34,8 @@ cypress
 .prettierrc
 mysqlToPostgres.js
 /docs
-extensions
+# Extensions – ignore compiled output, keep source
+extensions/*/dist/
 
 # Agent / task notes
 AGENTS.md
@@ -50,5 +51,18 @@ new-ui.html
 profile-ui.html
 image.png
 image-1.png
+image-2.png
+image-3.png
+image-4.png
+header client .html
+product-detail.html
+product_detail.html
 documention/
 run.sh
+
+# Debug / bug / task notes
+debug.md
+DEBUG.md
+network bugs.md
+task_bugs.md
+task-list.md

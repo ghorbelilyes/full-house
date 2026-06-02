@@ -7,8 +7,32 @@ import {
   rollback
 } from '@evershop/postgres-query-builder';
 import { getConnection } from '@evershop/evershop/lib/postgres';
+import { readFileSync, existsSync } from 'fs';
+import { resolve } from 'path';
+
+/** Lightweight inline module check (reads config/modules.json) */
+function _isModuleActive(code) {
+  try {
+    const p = resolve(process.cwd(), 'config/modules.json');
+    if (!existsSync(p)) return true;
+    const cfg = JSON.parse(readFileSync(p, 'utf-8'));
+    const mod = cfg.modules?.[code];
+    if (!mod) return true;
+    if (mod.contractIncluded === false) return false;
+    return mod.enabled !== false;
+  } catch { return true; }
+}
 
 export default async function submitReview(request, response) {
+  // Module gate: block if productReviews is disabled
+  if (!_isModuleActive('productReviews')) {
+    response.status(403);
+    return response.json({
+      error: 'MODULE_DISABLED',
+      message: 'Ce module est désactivé pour ce magasin.'
+    });
+  }
+
   const productId = parseInt(request.params.id, 10);
   const { rating, comment } = request.body;
 

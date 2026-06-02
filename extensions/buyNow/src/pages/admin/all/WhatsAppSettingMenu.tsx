@@ -7,6 +7,7 @@ import {
   ItemTitle
 } from '@components/common/ui/Item.js';
 import { cn } from '@evershop/evershop/lib/util/cn';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import { MessageCircle } from 'lucide-react';
 import React from 'react';
 
@@ -17,6 +18,7 @@ interface WhatsAppSettingMenuProps {
 export default function WhatsAppSettingMenu({
   whatsappSettingUrl
 }: WhatsAppSettingMenuProps) {
+  if (!useModuleEnabled('whatsappNotifications')) return null;
   const isActive =
     typeof window !== 'undefined' &&
     new URL(whatsappSettingUrl, window.location.origin).pathname ===

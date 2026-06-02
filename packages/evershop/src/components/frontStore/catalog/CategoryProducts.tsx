@@ -19,7 +19,7 @@ export function CategoryProducts() {
         <ProductList
           products={products.items}
           layout="grid"
-          gridColumns={4}
+          gridColumns={3}
           showAddToCart={true}
         />
         <p className="mt-8 text-center text-sm text-slate-500">

@@ -95,14 +95,21 @@ export default async (request, response, next) => {
       .where('product_image_product_id', '=', product.product_id)
       .andWhere('is_main', '=', true)
       .load(pool);
-    const thumbnail = mainImage?.image || null;
+    const thumbnail = mainImage?.origin_image || mainImage?.thumb_image || null;
+
+    // Get product name from description table
+    const desc = await select('name')
+      .from('product_description')
+      .where('product_description_product_id', '=', product.product_id)
+      .load(pool);
+    const productName = desc?.name || product.sku || null;
 
     await insert('wishlist_item')
       .given({
         wishlist_id: wishlist.wishlist_id,
         product_id: product.product_id,
         product_sku: product.sku,
-        product_name: product.name || null,
+        product_name: productName,
         thumbnail
       })
       .execute(pool);

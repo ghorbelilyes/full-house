@@ -8,6 +8,7 @@ import { ProductSingleAttributes } from '@components/frontStore/catalog/ProductS
 import { ProductSingleDescription } from '@components/frontStore/catalog/ProductSingleDescription.js';
 import { ProductSingleForm } from '@components/frontStore/catalog/ProductSingleForm.js';
 import { ProductSingleName } from '@components/frontStore/catalog/ProductSingleName.js';
+import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import React from 'react';
 
 /* ── Helper: detect SVG string & render icon ────────────── */
@@ -51,132 +52,39 @@ function BadgeIcon({ icon, size }: { icon: string; size: number }) {
   );
 }
 
-/* ── Spec-badge size presets ─────────────────────────────── */
-const SPEC_SIZE_STYLES: Record<string, {
-  padding: string; iconSize: number; iconBox: string;
-  valueSize: string; labelSize: string; gap: string; borderRadius: string;
-}> = {
-  sm: {
-    padding: '6px 8px', iconSize: 14, iconBox: '20px',
-    valueSize: '12px', labelSize: '9px', gap: '6px', borderRadius: '10px'
-  },
-  md: {
-    padding: '12px', iconSize: 20, iconBox: '28px',
-    valueSize: '15px', labelSize: '11px', gap: '10px', borderRadius: '14px'
-  },
-  lg: {
-    padding: '16px 14px', iconSize: 26, iconBox: '36px',
-    valueSize: '19px', labelSize: '13px', gap: '12px', borderRadius: '16px'
-  }
-};
-
-/* ── Spec Badges (under gallery) ────────────────────────── */
+/* ── Spec Badges ────────────────────────────────────────── */
 function SpecBadges({ specBadges }: { specBadges: any[] }) {
   if (!specBadges || specBadges.length === 0) return null;
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent:  'flex-start',
-        gap: '10px',
-        marginTop: '24px'
-      }}
-      className="spec-badges-grid"
-    >
-      {specBadges.map((badge: any, i: number) => {
-        const s = SPEC_SIZE_STYLES[badge.badgeSize] || SPEC_SIZE_STYLES.md;
-        return (
-          <div
-            key={i}
-            style={{
-              background: '#fff',
-              border: '1px solid #e5e7eb',
-              padding: s.padding,
-              borderRadius: s.borderRadius,
-              display: 'flex',
-              alignItems: 'center',
-              gap: s.gap
-            }}
-          >
-            {badge.icon && (
-              <span
-                style={{
-                  width: s.iconBox,
-                  height: s.iconBox,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0
-                }}
-              >
-                <BadgeIcon icon={badge.icon} size={s.iconSize} />
-              </span>
-            )}
-            <div style={{ minWidth: 0 }}>
-              <strong
-                style={{
-                  display: 'block',
-                  fontSize: s.valueSize,
-                  fontWeight: 800,
-                  color: '#e48125',
-                  lineHeight: 1.2,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}
-              >
-                {badge.value}
-              </strong>
-              <span
-                style={{
-                  fontSize: s.labelSize,
-                  color: '#6b7280',
-                  lineHeight: 1.2,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: 'block'
-                }}
-              >
-                {badge.label}
-              </span>
-            </div>
+    <div className="pdp-spec-badges">
+      {specBadges.map((badge: any, i: number) => (
+        <div key={i} className="pdp-spec-badge">
+          {badge.icon && (
+            <span className="pdp-spec-badge__icon">
+              <BadgeIcon icon={badge.icon} size={16} />
+            </span>
+          )}
+          <div className="pdp-spec-badge__text">
+            <strong>{badge.value}</strong>
+            <small>{badge.label}</small>
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>
   );
 }
 
-/* ── Trust Badges (after add-to-cart) ───────────────────── */
+/* ── Trust Badges ───────────────────────────────────────── */
 function TrustBadges({ trustBadges }: { trustBadges: any[] }) {
   if (!trustBadges || trustBadges.length === 0) return null;
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: '12px',
-        marginTop: '24px'
-      }}
-    >
+    <div className="pdp-trust-badges">
       {trustBadges.map((badge: any, i: number) => (
-        <div
-          key={i}
-          style={{
-            background: '#f9fafb',
-            padding: '14px',
-            borderRadius: '14px',
-            fontSize: '14px',
-            border: '1px solid #e5e7eb',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <BadgeIcon icon={badge.icon} size={20} />
-          <span style={{ fontWeight: 600 }}>{badge.label}</span>
+        <div key={i} className="pdp-trust-badge">
+          <span className="pdp-trust-badge__icon">
+            <BadgeIcon icon={badge.icon} size={20} />
+          </span>
+          <span className="pdp-trust-badge__label">{badge.label}</span>
         </div>
       ))}
     </div>
@@ -184,64 +92,43 @@ function TrustBadges({ trustBadges }: { trustBadges: any[] }) {
 }
 
 /* ── Star Rating Summary ────────────────────────────────── */
-function RatingSummary({ reviewSummary }: { reviewSummary: any }) {
-  if (!reviewSummary) return null;
-  const { averageRating, totalReviews } = reviewSummary;
+function RatingSummary({ reviewSummary, sku }: { reviewSummary: any; sku: string }) {
+  const avg = reviewSummary?.averageRating || 0;
+  const total = reviewSummary?.totalReviews || 0;
   const stars = [];
   for (let i = 1; i <= 5; i++) {
-    if (i <= Math.floor(averageRating)) {
-      stars.push('★');
-    } else if (i - 0.5 <= averageRating) {
-      stars.push('★');
-    } else {
-      stars.push('☆');
-    }
+    stars.push(i <= Math.round(avg) ? '★' : '☆');
   }
   return (
-    <div
-      style={{
-        color: '#f59e0b',
-        fontWeight: 700,
-        marginBottom: '16px',
-        fontSize: '15px'
-      }}
-    >
-      {stars.join('')}{' '}
-      <span style={{ color: '#6b7280', fontWeight: 500 }}>
-        {averageRating > 0 ? averageRating.toFixed(1) : '—'} — {totalReviews}{' '}
-        avis
+    <div className="pdp-rating-row">
+      <span className="pdp-stars">{stars.join('')}</span>
+      <span className="pdp-rating-text">
+        {avg > 0 ? avg.toFixed(1) : '—'} {total} {_('reviews')}
       </span>
+      {sku && (
+        <>
+          <span className="pdp-rating-sep">·</span>
+          <span className="pdp-rating-text">SKU: {sku}</span>
+        </>
+      )}
     </div>
   );
 }
 
-export default function ProductView({
-  product
-}: { product: any }) {
+export default function ProductView({ product }: { product: any }) {
   const specBadges = product?.specBadges || [];
   const trustBadges = product?.trustBadges || [];
   const reviewSummary = product?.reviewSummary || null;
+
   return (
     <ProductProvider product={product}>
-      <div className="product__detail">
+      <div className="product__detail pdp-redesign">
         <Area id="productPageTop" className="product__page__top" />
         <div className="product__page__middle page-width">
-          {/* ── Main 2-column grid ── */}
-          <div
-            style={{
-              background: '#fff',
-              borderRadius: '24px',
-              padding: '32px',
-              display: 'grid',
-              gridTemplateColumns: '1.1fr 0.9fr',
-              gap: '48px',
-              boxShadow: '0 20px 50px rgba(0,0,0,0.06)',
-              overflow: 'hidden'
-            }}
-            className="product-layout-card"
-          >
+          {/* ── Main product card ── */}
+          <div className="pdp-card">
             {/* LEFT: gallery + spec badges */}
-            <div style={{ minWidth: 0, maxWidth: '100%', overflow: 'hidden' }}>
+            <div className="pdp-left">
               <Area
                 id="productPageMiddleLeft"
                 className="product__detail__left"
@@ -253,11 +140,14 @@ export default function ProductView({
                   }
                 ]}
               />
-              <SpecBadges specBadges={specBadges} />
+              {/* Desktop: spec badges under gallery */}
+              <div className="pdp-specs-desktop">
+                <SpecBadges specBadges={specBadges} />
+              </div>
             </div>
 
-            {/* RIGHT: info */}
-            <div>
+            {/* RIGHT: product info */}
+            <div className="pdp-right">
               <Area
                 id="productPageMiddleRight"
                 className="product__detail__right"
@@ -267,7 +157,14 @@ export default function ProductView({
                       default: (
                         <>
                           <ProductSingleName />
-                          <RatingSummary reviewSummary={reviewSummary} />
+                          <RatingSummary
+                            reviewSummary={reviewSummary}
+                            sku={product?.sku || ''}
+                          />
+                          {/* Mobile: spec badges after rating */}
+                          <div className="pdp-specs-mobile">
+                            <SpecBadges specBadges={specBadges} />
+                          </div>
                         </>
                       )
                     },
@@ -275,16 +172,16 @@ export default function ProductView({
                     id: 'nameAndRating'
                   },
                   {
-                    component: {
-                      default: <ProductSingleAttributes />
-                    },
-                    sortOrder: 20,
-                    id: 'attributes'
-                  },
-                  {
                     component: { default: <ProductSingleForm /> },
                     sortOrder: 30,
                     id: 'productForm'
+                  },
+                  {
+                    component: {
+                      default: <ProductSingleAttributes />
+                    },
+                    sortOrder: 35,
+                    id: 'attributes'
                   },
                   {
                     component: {
@@ -313,17 +210,213 @@ export default function ProductView({
         <Area id="productPageBottom" className="product__page__bottom" />
       </div>
 
-      {/* Responsive override for mobile */}
+      {/* ── Mobile sticky bottom CTA ── */}
+      <div className="pdp-mobile-cta" id="pdpMobileCta">
+        <Area id="pdpMobileCtaButtons" noOuter />
+      </div>
+
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            @media (max-width: 900px) {
-              .product-layout-card {
-                grid-template-columns: 1fr !important;
-                padding: 24px !important;
-              }
-            }
-          `
+/* ═══════════════════════════════════════════════════════
+   PDP Redesign — Desktop + Mobile
+   ═══════════════════════════════════════════════════════ */
+
+.pdp-redesign { padding-bottom: 0; }
+
+/* ── Main card ── */
+.pdp-card {
+  background: var(--card, #fff);
+  color: var(--card-foreground, #0f172a);
+  border-radius: 24px;
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 0.6fr 1fr;
+  gap: 32px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  border: 1px solid var(--border, #e5e7eb);
+  align-items: start;
+}
+
+.pdp-left { min-width: 0; max-width: 100%; overflow: hidden; }
+.pdp-right { position: relative; min-width: 0; }
+
+/* Show/hide spec badges by viewport */
+.pdp-specs-desktop { display: block; }
+.pdp-specs-mobile { display: none; }
+
+/* ── Spec badges ── */
+.pdp-spec-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.pdp-spec-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border, #e5e7eb);
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--card, #fff);
+  font-size: 12px;
+}
+.pdp-spec-badge__icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: #fff3ea; color: #e48125;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.pdp-spec-badge__text { min-width: 0; }
+.pdp-spec-badge__text strong {
+  display: block; font-size: 12.5px; font-weight: 800;
+  color: var(--card-foreground, #1e293b); line-height: 1.2;
+}
+.pdp-spec-badge__text small {
+  display: block; font-size: 10px; color: var(--muted-foreground, #6b7280); line-height: 1.2;
+}
+
+/* ── Rating row ── */
+.pdp-rating-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px; flex-wrap: wrap;
+}
+.pdp-stars { color: #f5a623; font-size: 14px; letter-spacing: 2px; }
+.pdp-rating-text { color: var(--muted-foreground, #6b7280); font-size: 13px; }
+.pdp-rating-sep { color: var(--border, #cbd5e1); }
+
+/* ── Trust badges ── */
+.pdp-trust-badges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+.pdp-trust-badge {
+  background: var(--muted, #f6f8fb);
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  border: 1px solid var(--border, #e5e7eb);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pdp-trust-badge__icon { font-size: 18px; flex-shrink: 0; }
+.pdp-trust-badge__label { font-weight: 600; color: var(--card-foreground, #1e293b); line-height: 1.3; }
+
+/* ── Product name ── */
+.pdp-redesign .product__single__name {
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 6px;
+  color: var(--card-foreground, #0f172a);
+  padding-right: 50px; /* space for wishlist heart */
+}
+
+/* ── Attributes (specs table) ── */
+.pdp-redesign .product__single__attributes {
+  padding: 0;
+  margin-top: 10px;
+}
+.pdp-redesign .product__single__attributes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.pdp-redesign .product__single__attributes li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border, #f0f0f0);
+  font-size: 14px;
+  gap: 16px;
+}
+.pdp-redesign .product__single__attributes li:last-child {
+  border-bottom: none;
+}
+.pdp-redesign .product__single__attributes li strong {
+  color: var(--muted-foreground, #94a3b8);
+  font-weight: 400;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pdp-redesign .product__single__attributes li span {
+  color: var(--card-foreground, #1e293b);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ── Mobile Sticky CTA ── */
+.pdp-mobile-cta {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Mobile (< 900px)
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .pdp-card {
+    grid-template-columns: 1fr;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    gap: 0;
+    background: transparent;
+  }
+
+  .pdp-left {
+    background: linear-gradient(135deg, #f7f8fb, #eef1f6);
+    border-radius: 0;
+  }
+
+  .pdp-right {
+    padding: 16px 16px 120px;
+    background: var(--card, #fff);
+  }
+
+  .pdp-specs-desktop { display: none; }
+  .pdp-specs-mobile { display: block; margin-top: 12px; }
+
+  .pdp-redesign .product__single__name {
+    font-size: 18px;
+    padding-right: 0;
+  }
+
+  .pdp-rating-row { margin-bottom: 4px; }
+
+  /* Trust badges stacked on mobile */
+  .pdp-trust-badges {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  /* Mobile sticky CTA bar */
+  .pdp-mobile-cta {
+    display: flex;
+    position: fixed;
+    left: 0; right: 0; bottom: 60px;
+    background: var(--card, #fff);
+    border-top: 1px solid var(--border, #e9edf2);
+    padding: 10px 16px;
+    gap: 10px;
+    z-index: 35;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
+  }
+}
+
+/* ── Dark mode via [data-theme] ── */
+[data-theme="dark"] .pdp-spec-badge__icon {
+  background: rgba(228,129,37,0.15);
+}
+[data-theme="dark"] .pdp-left {
+  background: linear-gradient(135deg, #1a1f2e, #0f1420);
+}
+`
         }}
       />
     </ProductProvider>

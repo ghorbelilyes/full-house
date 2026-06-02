@@ -332,17 +332,6 @@ export default function BasicMenu({
               isOpen ? 'block' : 'hidden'
             )}
           >
-            <div className="mobile-bottom-nav__drawer-header">
-              <span>Menu</span>
-              <button
-                type="button"
-                onClick={closeMenu}
-                className="mobile-bottom-nav__drawer-close"
-                aria-label="Fermer le menu principal"
-              >
-                <XIcon aria-hidden />
-              </button>
-            </div>
             <div className="mobile-bottom-nav__drawer-content">
               <div className="flex flex-col w-full">
                 {menus.map((item) => (

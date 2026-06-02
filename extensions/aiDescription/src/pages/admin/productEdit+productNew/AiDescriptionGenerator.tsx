@@ -8,6 +8,7 @@ import {
 } from '@components/common/ui/Card.js';
 import React, { useState, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import './AiDescriptionGenerator.scss';
 
 // ── Types ──
@@ -34,6 +35,7 @@ interface AiResponseData {
 // ── Component ──
 
 export default function AiDescriptionGenerator() {
+  if (!useModuleEnabled('aiProductDescriptions')) return null;
   const { setValue, getValues } = useFormContext();
 
   const [url, setUrl] = useState('');

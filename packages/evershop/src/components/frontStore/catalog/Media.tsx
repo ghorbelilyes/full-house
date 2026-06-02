@@ -129,10 +129,8 @@ export const Media: React.FC<MediaProps> = ({
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: allImages.length > 1,
+    arrows: false,
     fade: false,
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
     beforeChange: (_: number, next: number) => {
       setActiveSlide(next);
     },

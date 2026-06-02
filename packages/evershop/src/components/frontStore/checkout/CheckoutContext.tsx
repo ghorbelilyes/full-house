@@ -339,13 +339,13 @@ export function CheckoutProvider({
     return json.data;
   }, [cartState.data?.checkoutApi, cartId, form, enableForm, disableForm]);
 
-  // Public checkout: validates form first, then checks for email
+  // Public checkout: validates form first, then proceeds directly
   const checkout = useCallback(async () => {
     if (!cartId) {
       throw new Error(_('Cart ID is required to checkout'));
     }
 
-    // Validate form FIRST before checking email
+    // Validate form FIRST
     const isValid = await form.trigger(undefined, {
       shouldFocus: true
     });
@@ -353,13 +353,7 @@ export function CheckoutProvider({
       return;
     }
 
-    // Check if email is provided
-    const email = form.getValues('contact.email') || checkoutDataRef.current?.customer?.email;
-    if (!email) {
-      // Show email prompt popup
-      dispatch({ type: 'SET_SHOW_EMAIL_PROMPT', payload: true });
-      return;
-    }
+    // Proceed directly without email prompt
     return _doCheckout();
   }, [_doCheckout, form, cartId]);
 

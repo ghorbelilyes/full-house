@@ -26,12 +26,14 @@ interface CustomerAddressFormProps {
   address?: CustomerAddressGraphql;
   areaId?: string;
   fieldNamePrefix?: string;
+  showCity?: boolean;
 }
 export function CustomerAddressForm({
   allowCountries = [],
   address = {},
   areaId = 'customerAddressForm',
-  fieldNamePrefix = 'address'
+  fieldNamePrefix = 'address',
+  showCity = true
 }: CustomerAddressFormProps) {
   const { watch, setValue } = useFormContext();
 
@@ -95,21 +97,25 @@ export function CustomerAddressForm({
           },
           sortOrder: 30
         },
-        {
-          component: {
-            default: (
-              <InputField
-                name={getFieldName('city')}
-                label={_('City')}
-                placeholder={_('City')}
-                required
-                validation={{ required: _('City is required') }}
-                defaultValue={safeAddress?.city || ''}
-              />
-            )
-          },
-          sortOrder: 40
-        },
+        ...(showCity
+          ? [
+              {
+                component: {
+                  default: (
+                    <InputField
+                      name={getFieldName('city')}
+                      label={_('City')}
+                      placeholder={_('City')}
+                      required
+                      validation={{ required: _('City is required') }}
+                      defaultValue={safeAddress?.city || ''}
+                    />
+                  )
+                },
+                sortOrder: 40
+              }
+            ]
+          : []),
         {
           component: {
             default: (

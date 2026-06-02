@@ -48,9 +48,7 @@ function Breadcrumb({ pageInfo: { breadcrumbs } }: BreadcrumbProps) {
         dangerouslySetInnerHTML={{
           __html: `
             .breadcrumbs-nav {
-              position: sticky;
-              top: var(--header-h, 132px);
-              z-index: 50;
+              position: relative;
               min-height: 52px;
               display: flex;
               align-items: center;

@@ -15,18 +15,10 @@ export default function bootstrap() {
           }
 
           query
-            .innerJoin('product_promotion', 'product_promotion_filter')
-            .on('product_promotion_filter.product_id', '=', 'product.product_id')
-            .and('product_promotion_filter.enabled', '=', true);
-          query
             .getWhere()
             .addRaw(
               'AND',
-              '(product_promotion_filter.start_date IS NULL OR product_promotion_filter.start_date <= NOW())'
-            )
-            .addRaw(
-              'AND',
-              '(product_promotion_filter.end_date IS NULL OR product_promotion_filter.end_date >= NOW())'
+              'EXISTS (SELECT 1 FROM product_promotion pp_filter WHERE pp_filter.product_id = product.product_id AND pp_filter.enabled = true AND (pp_filter.start_date IS NULL OR pp_filter.start_date <= NOW()) AND (pp_filter.end_date IS NULL OR pp_filter.end_date >= NOW()))'
             );
           currentFilters.push({
             key: 'promo',

@@ -1,4 +1,5 @@
 import { NavigationItem } from '@components/admin/NavigationItem.js';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import { GiftIcon } from 'lucide-react';
 import React from 'react';
 
@@ -9,6 +10,7 @@ interface NewCouponQuickLinkProps {
 export default function NewProductQuickLink({
   couponNew
 }: NewCouponQuickLinkProps) {
+  if (!useModuleEnabled('coupons')) return null;
   return <NavigationItem Icon={GiftIcon} title="Nouveau Coupon" url={couponNew} />;
 }
 

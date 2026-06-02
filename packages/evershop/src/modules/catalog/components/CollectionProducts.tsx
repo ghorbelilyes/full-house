@@ -83,6 +83,10 @@ export default function CollectionProducts({
     swipe: true,
     swipeToSlide: true,
     draggable: true,
+    touchThreshold: 8,
+    touchMove: true,
+    useCSS: true,
+    cssEase: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
     beforeChange: handleBeforeChange,
     responsive: [
       {
@@ -108,8 +112,8 @@ export default function CollectionProducts({
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          centerMode: false,
-          centerPadding: '0px'
+          centerMode: true,
+          centerPadding: '24px'
         }
       },
       {
@@ -118,8 +122,10 @@ export default function CollectionProducts({
           slidesToShow: 1,
           slidesToScroll: 1,
           centerMode: true,
-          centerPadding: '32px',
-          infinite: true
+          centerPadding: '40px',
+          infinite: true,
+          touchThreshold: 5,
+          swipeToSlide: true
         }
       }
     ]

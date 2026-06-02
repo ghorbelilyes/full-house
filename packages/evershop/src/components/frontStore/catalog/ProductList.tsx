@@ -82,7 +82,7 @@ export const ProductList: React.FC<ProductListProps> = ({
       case 2:
         return 'grid-cols-1 sm:grid-cols-2';
       case 3:
-        return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+        return 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3';
       case 4:
         return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
       case 5:
@@ -90,12 +90,12 @@ export const ProductList: React.FC<ProductListProps> = ({
       case 6:
         return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6';
       default:
-        return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+        return 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3';
     }
   })();
 
   return (
-    <div className={`grid ${gridClassName} gap-8 ${className}`}>
+    <div className={`grid ${gridClassName} gap-5 ${className}`}>
       {products.map((product) => (
         <div key={product.productId}>
           {renderItem ? (

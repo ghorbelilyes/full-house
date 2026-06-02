@@ -8,10 +8,12 @@ import {
   ItemTitle
 } from '@components/common/ui/Item.js';
 import { cn } from '@evershop/evershop/lib/util/cn';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import { Bot } from 'lucide-react';
 import React from 'react';
 
 export default function AiDescriptionMenu({ aiDescriptionSettingUrl }) {
+  if (!useModuleEnabled('aiProductDescriptions')) return null;
   const isActive =
     typeof window !== 'undefined' &&
     new URL(aiDescriptionSettingUrl, window.location.origin).pathname ===
