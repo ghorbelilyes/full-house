@@ -5,28 +5,18 @@ import { CartSummaryItemsList } from '@components/frontStore/cart/CartSummaryIte
 import { CartTotalSummary } from '@components/frontStore/cart/CartTotalSummary.js';
 import { CheckoutButton } from '@components/frontStore/checkout/CheckoutButton.js';
 import {
-  CheckoutProvider,
-  useCheckout,
-  useCheckoutDispatch
+  CheckoutProvider
 } from '@components/frontStore/checkout/CheckoutContext.js';
 import { ContactInformation } from '@components/frontStore/checkout/ContactInformation.js';
 import { Payment } from '@components/frontStore/checkout/Payment.js';
 import { Shipment } from '@components/frontStore/checkout/Shipment.js';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter
-} from '@components/common/ui/Dialog.js';
-import { Button } from '@components/common/ui/Button.js';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Checkout.scss';
 import { useForm } from 'react-hook-form';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
-import { Mail } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { useCartState } from '@components/frontStore/cart/CartContext.js';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
+import { MessageCircle } from 'lucide-react';
 
 interface CheckoutPageProps {
   placeOrderApi: string;
@@ -35,101 +25,83 @@ interface CheckoutPageProps {
   checkoutSuccessUrl: string;
 }
 
-function EmailPromptDialog() {
-  const { showEmailPrompt, form } = useCheckout();
-  const { setShowEmailPrompt, proceedCheckoutWithoutEmail, updateCheckoutData } =
-    useCheckoutDispatch();
-  const [emailValue, setEmailValue] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+/* ── WhatsApp checkout button ── */
+function WhatsAppCheckoutButton() {
+  const whatsappModuleEnabled = useModuleEnabled('whatsappNotifications');
+  const cartState = useCartState();
+  const [whatsapp, setWhatsapp] = useState<{ enabled: boolean; number: string | null }>({ enabled: false, number: null });
+  const [loaded, setLoaded] = useState(false);
 
-  const handleAddEmail = async () => {
-    if (!emailValue || !emailValue.includes('@')) {
-      toast.error(_('Veuillez entrer un email valide'));
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      form.setValue('contact.email', emailValue);
-      updateCheckoutData({ customer: { email: emailValue } });
-      setShowEmailPrompt(false);
-      await proceedCheckoutWithoutEmail();
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : _('Failed to checkout')
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  useEffect(() => {
+    fetch('/api/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: `{ setting { whatsappEnabled whatsappNumber } }`
+      })
+    })
+      .then((r) => r.json())
+      .then((json) => {
+        const s = json?.data?.setting;
+        if (s) {
+          setWhatsapp({ enabled: !!s.whatsappEnabled, number: s.whatsappNumber || null });
+        }
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
+  }, []);
 
-  const handleContinueWithout = async () => {
-    setIsSubmitting(true);
-    try {
-      await proceedCheckoutWithoutEmail();
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : _('Failed to checkout')
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
+  if (!loaded || !whatsapp.enabled || !whatsapp.number || !whatsappModuleEnabled) return null;
+
+  const handleWhatsApp = () => {
+    const items = cartState?.data?.items || [];
+    const lines = items.map((item: any) =>
+      `• ${item.productName} × ${item.qty} — ${item.finalPrice?.text || item.productPrice?.text || ''}`
+    );
+    const total = cartState?.data?.grandTotal?.text || '';
+    const message = `Bonjour, je souhaite passer commande :\n\n${lines.join('\n')}\n\nTotal : ${total}\n\nMerci de me confirmer la disponibilité.`;
+    window.open(
+      `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`,
+      '_blank'
+    );
   };
 
   return (
-    <Dialog
-      open={showEmailPrompt}
-      onOpenChange={(open) => {
-        if (!open) setShowEmailPrompt(false);
-      }}
+    <button
+      type="button"
+      onClick={handleWhatsApp}
+      className="checkout-whatsapp-btn"
     >
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            <div className="flex items-center gap-2">
-              <Mail className="w-5 h-5" />
-              <span>{_('Ajouter votre email')}</span>
-            </div>
-          </DialogTitle>
-          <DialogDescription>
-            {_(
-              'Si vous ajoutez votre email, cela vous permettra de suivre votre colis à chaque étape.'
-            )}
-          </DialogDescription>
-        </DialogHeader>
-        <div>
-          <input
-            type="email"
-            value={emailValue}
-            onChange={(e) => setEmailValue(e.target.value)}
-            placeholder={_('Entrez votre email')}
-            className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleAddEmail();
-              }
-            }}
-          />
-        </div>
-        <DialogFooter>
-          <Button
-            variant="outline"
-            type="button"
-            onClick={handleContinueWithout}
-            disabled={isSubmitting}
-          >
-            {_('Continuer sans email')}
-          </Button>
-          <Button
-            type="button"
-            onClick={handleAddEmail}
-            disabled={isSubmitting}
-          >
-            {_('Ajouter')}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <MessageCircle className="w-5 h-5" />
+      {_('Commander via WhatsApp')}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .checkout-whatsapp-btn {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 10px;
+              width: 100%;
+              padding: 14px 20px;
+              margin-top: 12px;
+              border: 2px solid #25d366;
+              border-radius: 12px;
+              background: #e8fdf0;
+              color: #128c4e;
+              font-weight: 700;
+              font-size: 15px;
+              cursor: pointer;
+              transition: all 0.2s;
+            }
+            .checkout-whatsapp-btn:hover {
+              background: #d4f5e2;
+              border-color: #1eba5a;
+            }
+          `
+        }}
+      />
+    </button>
   );
 }
 
@@ -154,7 +126,6 @@ export default function CheckoutPage({
       placeOrderApi={placeOrderApi}
       checkoutSuccessUrl={checkoutSuccessUrl}
     >
-      <EmailPromptDialog />
       <div className="page-width grid grid-cols-1 md:grid-cols-2 gap-7 pt-8 pb-8">
         <Form form={form} submitBtn={false}>
           <Area id="checkoutFormBefore" noOuter />
@@ -163,6 +134,7 @@ export default function CheckoutPage({
             <Shipment />
             <Payment />
             <CheckoutButton />
+            <WhatsAppCheckoutButton />
           </div>
           <Area id="checkoutForm" noOuter />
           <Area id="checkoutFormAfter" noOuter />

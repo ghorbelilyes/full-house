@@ -7,8 +7,8 @@ import {
   SheetTitle,
   SheetFooter
 } from '@components/common/ui/Sheet.js';
+import { DefaultPromoFilterRender } from '@components/frontStore/catalog/DefaultPromoFilterRender.js';
 import { DefaultAttributeFilterRender } from '@components/frontStore/catalog/DefaultAttributeFilterRender.js';
-import { DefaultCategoryFilterRender } from '@components/frontStore/catalog/DefaultCategoryFilterRender.js';
 import { DefaultPriceFilterRender as PriceFilterRenderer } from '@components/frontStore/catalog/DefaultPriceFilterRender.js';
 import { DefaultProductFilterSummary } from '@components/frontStore/catalog/DefaultProductFilterSummary.js';
 import {
@@ -50,21 +50,20 @@ export const DefaultProductFilterRender: React.FC<{
   const defaultComponents = useMemo(() => {
     const components: FilterComponent[] = [];
 
+    // Promo toggle filter (always visible)
+    components.push({
+      component: { default: DefaultPromoFilterRender },
+      props: { currentFilters },
+      sortOrder: 5,
+      id: 'promoFilter'
+    });
+
     if (priceRange && priceRange.min !== priceRange.max) {
       components.push({
         component: { default: PriceFilterRenderer },
         props: { priceRange, currentFilters, setting },
         sortOrder: 10,
         id: 'priceFilter'
-      });
-    }
-
-    if (categories.length > 0) {
-      components.push({
-        component: { default: DefaultCategoryFilterRender },
-        props: { categories, currentFilters },
-        sortOrder: 15,
-        id: 'categoryFilter'
       });
     }
 

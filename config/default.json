@@ -11,6 +11,12 @@
     "file_storage": "local",
     "extensions": [
       {
+        "name": "moduleManager",
+        "resolve": "extensions/moduleManager",
+        "enabled": true,
+        "priority": 1
+      },
+      {
         "name": "languageSwitcher",
         "resolve": "extensions/languageSwitcher",
         "enabled": false,
@@ -87,6 +93,18 @@
         "resolve": "extensions/wishlist",
         "enabled": true,
         "priority": 25
+      },
+      {
+        "name": "spinToWin",
+        "resolve": "extensions/spinToWin",
+        "enabled": true,
+        "priority": 30
+      },
+      {
+        "name": "referralProgram",
+        "resolve": "extensions/referralProgram",
+        "enabled": true,
+        "priority": 31
       }
     ],
     "session": {

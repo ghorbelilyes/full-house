@@ -89,8 +89,14 @@ export default function Slideshow({
       <SliderComponent ref={sliderRef} {...settings}>
         {slides.map((slide) => (
           <div key={slide.id}>
-            {/* Each slide is a simple relative wrapper; image sets the height */}
-            <div style={{ position: 'relative', lineHeight: 0 }}>
+            <div
+              style={{
+                position: 'relative',
+                lineHeight: 0,
+                height: '440px'
+              }}
+              className="sm:h-[280px] lg:h-[400px]"
+            >
               <img
                 src={buildSlideFallback(slide.image)}
                 srcSet={buildSlideSrcSet(slide.image)}
@@ -101,8 +107,7 @@ export default function Slideshow({
                 style={{
                   display: 'block',
                   width: '100%',
-                  height: 'auto',
-                  aspectRatio: '2 / 1',
+                  height: '100%',
                   objectFit: 'cover',
                   objectPosition: 'center'
                 }}

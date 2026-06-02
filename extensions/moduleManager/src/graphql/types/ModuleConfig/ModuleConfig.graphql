@@ -1,0 +1,34 @@
+type ModuleDefinition {
+  code: String!
+  name: String!
+  description: String!
+  version: String!
+  type: String!
+  contractIncluded: Boolean!
+  enabled: Boolean!
+  locked: Boolean!
+  settingsRoute: String
+  icon: String
+}
+
+type ContractInfo {
+  clientName: String!
+  plan: String!
+  expiresAt: String
+}
+
+type ModuleManagerData {
+  contract: ContractInfo!
+  modules: [ModuleDefinition!]!
+}
+
+extend type Query {
+  moduleEnabled(code: String!): Boolean!
+  allModuleStatuses: [ModuleStatus!]!
+  moduleManager: ModuleManagerData!
+}
+
+type ModuleStatus {
+  code: String!
+  enabled: Boolean!
+}

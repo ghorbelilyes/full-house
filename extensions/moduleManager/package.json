@@ -1,0 +1,6 @@
+{
+  "name": "moduleManager",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Central module registry and feature-flag management for per-client deployment"
+}

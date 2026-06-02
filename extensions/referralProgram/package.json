@@ -1,0 +1,6 @@
+{
+  "name": "@local/referral-program",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Programme de parrainage - Recommandation client avec récompenses"
+}

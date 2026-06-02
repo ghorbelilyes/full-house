@@ -27,6 +27,7 @@ import {
   Star
 } from 'lucide-react';
 import React, { ReactNode, useState, useCallback, useRef, useEffect } from 'react';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import { useForm, FormProvider } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -119,22 +120,22 @@ function ProductRating({ product }: { product: ProductData }) {
   );
 }
 
-/* ── Diagonal PROMO ribbon (top-right corner) ─────────────── */
+/* ── Diagonal PROMO ribbon (top-left corner) ─────────────── */
 function PromoRibbon({ percent }: { percent: number }) {
   return (
     <div
-      className="absolute -right-[1px] -top-[1px] z-10 overflow-hidden pointer-events-none"
-      style={{ width: 100, height: 100 }}
+      className="absolute -left-[1px] -top-[1px] z-10 overflow-hidden pointer-events-none"
+      style={{ width: 120, height: 120 }}
     >
       <div
-        className="flex items-center justify-center bg-red-600 text-center text-[11px] font-extrabold uppercase tracking-wider text-white shadow-md"
+        className="flex items-center justify-center bg-red-600 text-center text-[13px] font-extrabold uppercase tracking-wider text-white shadow-md"
         style={{
           position: 'absolute',
-          top: 18,
-          right: -28,
-          width: 140,
-          transform: 'rotate(45deg)',
-          padding: '5px 0'
+          top: 22,
+          left: -34,
+          width: 170,
+          transform: 'rotate(-45deg)',
+          padding: '7px 0'
         }}
       >
         PROMO -{percent}%
@@ -539,6 +540,7 @@ function CardBuyNowCheckout({
                   <CustomerAddressForm
                     areaId="cardBuyNowAddressForm"
                     fieldNamePrefix="shippingAddress"
+                    showCity={false}
                   />
                 </div>
 
@@ -663,6 +665,7 @@ function ProductActionModal({
   open: boolean;
   onClose: () => void;
 }) {
+  const whatsappModuleEnabled = useModuleEnabled('whatsappNotifications');
   const [showCheckout, setShowCheckout] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
   const [whatsapp, setWhatsapp] = useState<WhatsAppConfig>({
@@ -757,7 +760,7 @@ function ProductActionModal({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="card-action-dialog-content">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>
             <div className="flex items-center gap-2">
@@ -809,7 +812,7 @@ function ProductActionModal({
           </button>
 
           {/* Option 2: WhatsApp (conditional) */}
-          {whatsapp.enabled && whatsapp.number && (
+          {whatsappModuleEnabled && whatsapp.enabled && whatsapp.number && (
             <button
               type="button"
               onClick={handleWhatsApp}
@@ -891,23 +894,6 @@ function ProductActionModal({
             </div>
           </button>
         </div>
-
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-              .card-action-dialog-content {
-                max-width: calc(100% - 2rem) !important;
-                max-height: 90vh !important;
-                overflow-y: auto !important;
-              }
-              @media (min-width: 640px) {
-                .card-action-dialog-content {
-                  max-width: 26rem !important;
-                }
-              }
-            `
-          }}
-        />
       </DialogContent>
     </Dialog>
   );
@@ -919,25 +905,82 @@ function ProductCardActions({
 }: {
   product: ProductData;
 }) {
-  const [showModal, setShowModal] = useState(false);
+  const whatsappModuleEnabled = useModuleEnabled('whatsappNotifications');
+  const [whatsapp, setWhatsapp] = useState<WhatsAppConfig>({
+    enabled: false,
+    number: null,
+    template: null
+  });
+  const [loadedWa, setLoadedWa] = useState(false);
   const inStock = product.inventory.isInStock;
+  const onSale = hasPromotion(product);
+  const displayPrice = onSale
+    ? product.price.special!.text
+    : product.price.regular.text;
+
+  useEffect(() => {
+    if (!loadedWa) {
+      fetch('/api/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: `{ setting { whatsappEnabled whatsappNumber whatsappMessageTemplate } }`
+        })
+      })
+        .then((r) => r.json())
+        .then((json) => {
+          const setting = json?.data?.setting;
+          if (setting) {
+            setWhatsapp({
+              enabled: !!setting.whatsappEnabled,
+              number: setting.whatsappNumber || null,
+              template: setting.whatsappMessageTemplate || null
+            });
+          }
+          setLoadedWa(true);
+        })
+        .catch(() => setLoadedWa(true));
+    }
+  }, [loadedWa]);
+
+  const handleWhatsAppOrder = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!inStock || !whatsappModuleEnabled || !whatsapp.enabled || !whatsapp.number) {
+        return;
+      }
+      const template =
+        whatsapp.template ||
+        'Bonjour, je souhaite commander :\n\nProduit : {product}\nPrix : {price}\nQuantité : {qty}\nLien : {url}';
+      const productUrl =
+        typeof window !== 'undefined'
+          ? `${window.location.origin}${product.url}`
+          : product.url || '';
+      const message = template
+        .replace(/{product}/g, product.name)
+        .replace(/{price}/g, displayPrice)
+        .replace(/{qty}/g, '1')
+        .replace(/{url}/g, productUrl);
+      window.open(
+        `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`,
+        '_blank'
+      );
+    },
+    [displayPrice, inStock, product.name, product.url, whatsapp]
+  );
 
   return (
     <>
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        {/* Buy Now button */}
+      <div className="mt-2 grid grid-cols-2 gap-1.5">
         <button
           type="button"
-          disabled={!inStock}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (inStock) setShowModal(true);
-          }}
-          className="flex min-h-[46px] items-center justify-center gap-2 rounded-[13px] bg-orange-500 px-2 text-center text-[13px] font-extrabold leading-tight text-white transition hover:bg-orange-600 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={!inStock || !whatsappModuleEnabled || !whatsapp.enabled || !whatsapp.number}
+          onClick={handleWhatsAppOrder}
+          className="flex min-h-[42px] items-center justify-center gap-1.5 rounded-[13px] bg-green-600 px-1.5 text-center text-[12px] font-extrabold leading-tight text-white transition hover:bg-green-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <ShoppingBag className="h-4 w-4 flex-shrink-0" />
-          <span>{_('Buy now')}</span>
+          <MessageCircle className="h-4 w-4 flex-shrink-0" />
+          <span className="truncate">{_('Order via WhatsApp')}</span>
         </button>
 
         {/* Add to Cart button */}
@@ -959,26 +1002,18 @@ function ProductCardActions({
                 e.stopPropagation();
                 if (inStock) actions.addToCart();
               }}
-              className="flex min-h-[46px] items-center justify-center gap-2 rounded-[13px] border border-slate-200 bg-white px-2 text-center text-[13px] font-extrabold leading-tight text-slate-900 transition hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex min-h-[42px] items-center justify-center gap-1.5 rounded-[13px] border border-slate-200 bg-white px-1.5 text-center text-[12px] font-extrabold leading-tight text-slate-900 transition hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {state.isLoading ? (
                 <Loader2 className="h-4 w-4 flex-shrink-0 animate-spin" />
               ) : (
                 <ShoppingCart className="h-4 w-4 flex-shrink-0" />
               )}
-              <span>{state.isLoading ? _('Adding...') : _('Add to Cart')}</span>
+              <span className="truncate">{state.isLoading ? _('Adding...') : _('Add to Cart')}</span>
             </button>
           )}
         </AddToCart>
       </div>
-
-      {showModal && (
-        <ProductActionModal
-          product={product}
-          open={showModal}
-          onClose={() => setShowModal(false)}
-        />
-      )}
     </>
   );
 }
@@ -1139,14 +1174,9 @@ export const ProductListItemRender = ({
 
   /* ── Grid layout ─────────────────────────────────────────── */
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-[0_8px_22px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-1 hover:border-orange-200 hover:shadow-[0_14px_36px_rgba(15,23,42,0.10)] dark:border-slate-800 dark:bg-slate-950">
+    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-[0_8px_22px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-1 hover:border-orange-200 hover:shadow-[0_14px_36px_rgba(15,23,42,0.10)] dark:border-slate-800 dark:bg-slate-950">
       {/* Wishlist heart */}
       <WishlistHeart productId={product.productId} />
-      {badgeLabel && (
-        <span className="absolute left-4 top-4 z-20 rounded-full bg-orange-500 px-2.5 py-1.5 text-[11px] font-extrabold leading-none text-white shadow-sm">
-          {badgeLabel}
-        </span>
-      )}
       {/* Out-of-stock overlay */}
       {!product.inventory.isInStock && (
         <div className="absolute inset-0 z-[6] flex items-center justify-center bg-white/60 dark:bg-slate-950/60">
@@ -1161,6 +1191,7 @@ export const ProductListItemRender = ({
         href={product.url}
         className="relative flex h-[240px] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-orange-50/40 p-7 dark:from-slate-900 dark:to-slate-950"
       >
+        {onSale && <PromoRibbon percent={discountPercent} />}
         {product.image ? (
           <img
             src={product.image.url}

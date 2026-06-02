@@ -21,12 +21,14 @@ interface IndexProps {
   address?: CustomerAddressGraphql;
   areaId?: string;
   fieldNamePrefix?: string;
+  showCity?: boolean;
 }
 
 export default function Index({
   address = {},
   areaId = 'customerAddressForm',
-  fieldNamePrefix = 'address'
+  fieldNamePrefix = 'address',
+  showCity = true
 }: IndexProps) {
   const [result] = useQuery({
     query: CountriesQuery
@@ -45,6 +47,7 @@ export default function Index({
       areaId={areaId}
       allowCountries={data.allowedCountries}
       fieldNamePrefix={fieldNamePrefix}
+      showCity={showCity}
     />
   );
 }

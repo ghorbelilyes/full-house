@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import { Button } from '@components/common/ui/Button.js';
 import { cn } from '@evershop/evershop/lib/util/cn';
 import {
   ChevronLeftIcon,
@@ -27,7 +26,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn('gap-1 flex items-center', className)}
+      className={cn('flex items-center gap-1.5', className)}
       {...props}
     />
   );
@@ -39,29 +38,26 @@ function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
 
 type PaginationLinkProps = {
   isActive?: boolean;
-} & Pick<React.ComponentProps<typeof Button>, 'size'> &
-  React.ComponentProps<'a'>;
+} & React.ComponentProps<'a'>;
 
 function PaginationLink({
   className,
   isActive,
-  size = 'icon',
   ...props
 }: PaginationLinkProps) {
   return (
-    <Button
-      variant={isActive ? 'outline' : 'ghost'}
-      size={size}
-      className={cn(className)}
-      nativeButton={false}
-      render={
-        <a
-          aria-current={isActive ? 'page' : undefined}
-          data-slot="pagination-link"
-          data-active={isActive}
-          {...props}
-        />
-      }
+    <a
+      aria-current={isActive ? 'page' : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      className={cn(
+        'inline-flex h-10 w-10 items-center justify-center rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer select-none',
+        isActive
+          ? 'bg-orange-500 text-white shadow-md shadow-orange-200 pointer-events-none'
+          : 'text-slate-600 hover:bg-orange-50 hover:text-orange-600 active:scale-95',
+        className
+      )}
+      {...props}
     />
   );
 }
@@ -73,12 +69,14 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Page précédente"
-      size="default"
-      className={cn('pl-2!', className)}
+      className={cn(
+        'w-auto gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-slate-600 shadow-sm hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600',
+        className
+      )}
       {...props}
     >
-      <ChevronLeftIcon data-icon="inline-start" />
-      <span className="hidden sm:block">Précédent</span>
+      <ChevronLeftIcon className="h-4 w-4" />
+      <span className="hidden sm:block text-sm font-semibold">Précédent</span>
     </PaginationLink>
   );
 }
@@ -90,12 +88,14 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label="Page suivante"
-      size="default"
-      className={cn('pr-2!', className)}
+      className={cn(
+        'w-auto gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-slate-600 shadow-sm hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600',
+        className
+      )}
       {...props}
     >
-      <span className="hidden sm:block">Suivant</span>
-      <ChevronRightIcon data-icon="inline-end" />
+      <span className="hidden sm:block text-sm font-semibold">Suivant</span>
+      <ChevronRightIcon className="h-4 w-4" />
     </PaginationLink>
   );
 }
@@ -109,12 +109,12 @@ function PaginationEllipsis({
       aria-hidden
       data-slot="pagination-ellipsis"
       className={cn(
-        "size-9 items-center justify-center [&_svg:not([class*='size-'])]:size-4 flex items-center justify-center",
+        'flex h-10 w-10 items-center justify-center text-slate-400',
         className
       )}
       {...props}
     >
-      <MoreHorizontalIcon />
+      <MoreHorizontalIcon className="h-4 w-4" />
       <span className="sr-only">Plus de pages</span>
     </span>
   );

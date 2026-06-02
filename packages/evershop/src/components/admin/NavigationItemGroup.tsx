@@ -38,7 +38,9 @@ export function NavigationItemGroup({
         <Area
           id={id}
           noOuter
-          coreComponents={items.map((item) => ({
+          coreComponents={items.map((item, index) => ({
+            id: `${id}_item_${index}`,
+            sortOrder: index,
             component: {
               default: () => (
                 <NavigationItem

@@ -22,7 +22,13 @@
     "start:debug": "node ./packages/evershop/dist/bin/start/index.js --debug",
     "test": "ALLOW_CONFIG_MUTATIONS=true NODE_OPTIONS=--experimental-vm-modules node_modules/jest/bin/jest.js",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ./packages",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:load:smoke": "k6 run --env PROFILE=smoke tests/load-test.js",
+    "test:load:small": "k6 run --env PROFILE=small tests/load-test.js",
+    "test:load:medium": "k6 run --env PROFILE=medium tests/load-test.js",
+    "test:load:heavy": "k6 run --env PROFILE=heavy tests/load-test.js",
+    "test:load:stress": "k6 run --env PROFILE=stress tests/load-test.js",
+    "test:load:cart:smoke": "k6 run --env PROFILE=smoke --env ENABLE_CART=true tests/load-test.js"
   },
   "author": "The Nguyen (https://evershop.io)",
   "license": "GNU GENERAL PUBLIC LICENSE 3.0",

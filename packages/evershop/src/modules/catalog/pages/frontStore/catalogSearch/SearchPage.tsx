@@ -196,17 +196,17 @@ export default function SearchPage({ search, menu }: SearchPageProps) {
               {_('Categories')}
             </SheetTitle>
           </SheetHeader>
-          <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4">
+          <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5">
             <SearchCategorySidebar categoryTree={categoryTree} showHeader={false} showSeparator={false} />
           </div>
         </SheetContent>
       </Sheet>
 
-      <div className="page-width grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
+      <div className="page-width grid grid-cols-1 gap-8 lg:grid-cols-[320px_1fr]">
         {/* ── Desktop sidebar (hidden on mobile) ── */}
         <Area
           id="searchLeftColumn"
-          className="hidden lg:block h-fit space-y-1 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-[140px]"
+          className="hidden lg:block h-fit space-y-1 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm lg:sticky lg:top-[140px]"
           coreComponents={[
             {
               component: {

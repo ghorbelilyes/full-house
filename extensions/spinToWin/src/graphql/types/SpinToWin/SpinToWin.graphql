@@ -1,0 +1,50 @@
+type SpinToWinReward {
+  rewardId: Int!
+  uuid: String!
+  label: String!
+  rewardType: String!
+  value: Float!
+  probability: Float!
+  couponPrefix: String
+  couponExpiryDays: Int
+  minOrderAmount: Float
+  maxUsage: Int
+  active: Boolean!
+  sortOrder: Int!
+}
+
+type SpinToWinSettings {
+  enabled: Boolean!
+  popupTitle: String!
+  popupSubtitle: String!
+  buttonText: String!
+  successMessage: String!
+  failureMessage: String!
+  triggerType: String!
+  triggerDelay: Int!
+  showOnPages: [String!]!
+  inputRequired: String!
+  allowGuest: Boolean!
+  requireLogin: Boolean!
+  maxSpinsVisitor: Int!
+  maxSpinsCustomer: Int!
+  cooldown: String!
+  mainColor: String!
+  bgColor: String!
+  textColor: String!
+  buttonColor: String!
+  wheelColors: [String!]!
+  soundEnabled: Boolean!
+  confettiEnabled: Boolean!
+  termsText: String
+}
+
+type SpinToWinConfig {
+  settings: SpinToWinSettings!
+  rewards: [SpinToWinReward!]!
+}
+
+extend type Query {
+  spinToWinConfig: SpinToWinConfig
+  spinToWinFrontConfig: SpinToWinSettings
+}

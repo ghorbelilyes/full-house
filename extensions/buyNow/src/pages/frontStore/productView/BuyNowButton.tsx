@@ -14,6 +14,7 @@ import {
 import { useProduct } from '@components/frontStore/catalog/ProductContext.js';
 import CustomerAddressForm from '@components/frontStore/customer/address/addressForm/Index.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useForm, FormProvider, useFormContext } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -204,6 +205,7 @@ export default function BuyNowButton({
   createCartApi: string;
   placeOrderApi: string;
 }) {
+  const whatsappModuleEnabled = useModuleEnabled('whatsappNotifications');
   const product = useProduct() as any;
   const cartDispatch = useCartDispatch();
   const cartState = useCartState();
@@ -271,9 +273,9 @@ export default function BuyNowButton({
     return productForm.trigger('qty');
   }, [productForm]);
 
-  // Fetch WhatsApp settings on first open
+  // Fetch WhatsApp settings on mount
   useEffect(() => {
-    if (open && !loadedWa) {
+    if (!loadedWa) {
       fetch('/api/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -295,7 +297,7 @@ export default function BuyNowButton({
         })
         .catch(() => setLoadedWa(true));
     }
-  }, [open, loadedWa]);
+  }, [loadedWa]);
 
   /* ── Reset on close ── */
   const handleClose = useCallback(
@@ -354,8 +356,9 @@ export default function BuyNowButton({
     }
   }, [createCartApi, qty, getProductSku, validateProductSelection]);
 
-  /* ── Action 2: WhatsApp order ── */
+  /* ── Action 2: WhatsApp order (direct, no popup) ── */
   const handleWhatsApp = useCallback(() => {
+    const currentQty = readQtyFromPage();
     const template =
       whatsapp.template ||
       'Bonjour, je souhaite commander :\n\nProduit : {product}\nPrix : {price}\nQuantité : {qty}\nLien : {url}';
@@ -375,15 +378,21 @@ export default function BuyNowButton({
     const message = template
       .replace(/{product}/g, product.name)
       .replace(/{price}/g, displayPrice)
-      .replace(/{qty}/g, String(qty))
+      .replace(/{qty}/g, String(currentQty))
       .replace(/{url}/g, productUrl);
 
     window.open(
       `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`,
       '_blank'
     );
-    handleClose(false);
-  }, [whatsapp, product, qty, handleClose]);
+  }, [whatsapp, product, readQtyFromPage]);
+
+  /* ── Direct WhatsApp from PDP button ── */
+  const handleDirectWhatsApp = useCallback(async () => {
+    const isValid = await validateProductSelection();
+    if (!isValid) return;
+    handleWhatsApp();
+  }, [validateProductSelection, handleWhatsApp]);
 
   /* ── Action 3: Add to cart ── */
   const handleAddToCart = useCallback(async () => {
@@ -560,8 +569,8 @@ export default function BuyNowButton({
     }
   }, [state.cartId, selectedShipping, checkoutForm]);
 
-  /* ── Do not render if out of stock ── */
-  if (!isInStock) return null;
+  /* ── Do not render if out of stock or module disabled ── */
+  if (!isInStock || !whatsappModuleEnabled) return null;
 
   const hasSpecial =
     product.price?.special &&
@@ -573,21 +582,15 @@ export default function BuyNowButton({
   /* ═══════════════════ Render ═══════════════════ */
   return (
     <>
-      <Button
-        variant="outline"
-        size="lg"
+      <button
         type="button"
-        onClick={handleBuyNow}
-        className="w-full py-6 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-        style={{
-          fontWeight: 700,
-          fontSize: '0.95rem',
-          letterSpacing: '0.03em'
-        }}
+        onClick={handleDirectWhatsApp}
+        data-buy-now-trigger
+        className="pdp-btn pdp-btn--outline pdp-btn--whatsapp"
       >
-        <ShoppingBag className="w-5 h-5 mr-2" />
-        {_('BUY NOW')}
-      </Button>
+        <MessageCircle className="h-5 w-5" />
+        {_('COMMANDER VIA WHATSAPP')}
+      </button>
 
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent
@@ -629,23 +632,34 @@ export default function BuyNowButton({
                 </div>
               </div>
 
-              {/* 4 action buttons */}
+              {/* 2 action buttons */}
               <div className="space-y-2.5">
-                {/* Option 1: Buy Now */}
+                {/* Option 1: Add to cart */}
                 <button
                   type="button"
-                  onClick={handleContinueCheckout}
-                  className="w-full flex items-center gap-3 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 py-3.5 text-left transition-colors hover:bg-orange-100"
+                  disabled={addingToCart || cartState.loading}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleAddToCart();
+                  }}
+                  className="w-full flex items-center gap-3 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 py-3.5 text-left transition-colors hover:bg-orange-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex-shrink-0 w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center">
-                    <ShoppingBag className="w-4.5 h-4.5 text-white" />
+                    {addingToCart || cartState.loading ? (
+                      <Loader2 className="w-4.5 h-4.5 text-white animate-spin" />
+                    ) : (
+                      <ShoppingCart className="w-4.5 h-4.5 text-white" />
+                    )}
                   </div>
                   <div>
                     <p className="text-sm font-bold text-orange-700">
-                      {_('Yes, continue')}
+                      {addingToCart || cartState.loading
+                        ? _('Adding...')
+                        : _('Add to cart')}
                     </p>
                     <p className="text-[11px] text-orange-600/80">
-                      {_('Buy now and checkout directly')}
+                      {_('Add to cart and continue shopping')}
                     </p>
                   </div>
                 </button>
@@ -671,37 +685,7 @@ export default function BuyNowButton({
                   </button>
                 )}
 
-                {/* Option 3: Add to cart */}
-                <button
-                  type="button"
-                  disabled={addingToCart || cartState.loading}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleAddToCart();
-                  }}
-                  className="w-full flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-white px-4 py-3.5 text-left transition-colors hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <div className="flex-shrink-0 w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center">
-                    {addingToCart || cartState.loading ? (
-                      <Loader2 className="w-4.5 h-4.5 text-white animate-spin" />
-                    ) : (
-                      <ShoppingCart className="w-4.5 h-4.5 text-white" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-slate-700">
-                      {addingToCart || cartState.loading
-                        ? _('Adding...')
-                        : _('Add to cart and continue shopping')}
-                    </p>
-                    <p className="text-[11px] text-slate-500">
-                      {_('Add to cart without leaving the page')}
-                    </p>
-                  </div>
-                </button>
-
-                {/* Option 4: Cancel */}
+                {/* Cancel */}
                 <button
                   type="button"
                   onClick={() => handleClose(false)}
@@ -769,6 +753,7 @@ export default function BuyNowButton({
                     <CustomerAddressForm
                       areaId="buyNowAddressForm"
                       fieldNamePrefix="shippingAddress"
+                      showCity={false}
                     />
                   </div>
 
@@ -870,6 +855,32 @@ export default function BuyNowButton({
       <style
         dangerouslySetInnerHTML={{
           __html: `
+            .pdp-btn--outline {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+              border: 1.5px solid #ff6a00;
+              background: #fff;
+              color: #ff6a00;
+              cursor: pointer;
+              font-weight: 700;
+              border-radius: 14px;
+              padding: 14px 18px;
+              font-size: 14px;
+              transition: all 0.2s;
+              text-transform: uppercase;
+              letter-spacing: 0.03em;
+              width: 100%;
+            }
+            .pdp-btn--outline:hover { background: #fff7f0; transform: translateY(-1px); }
+            .pdp-btn--outline:active { transform: scale(0.98); }
+            .pdp-btn--whatsapp {
+              border-color: #25d366;
+              color: #128c4e;
+              background: #e8fdf0;
+            }
+            .pdp-btn--whatsapp:hover { background: #d4f5e2; border-color: #1eba5a; transform: translateY(-1px); }
             .buy-now-dialog-content {
               max-width: calc(100% - 2rem) !important;
               max-height: 90vh !important;
@@ -888,8 +899,8 @@ export default function BuyNowButton({
 }
 
 export const layout = {
-  areaId: 'productSinglePageForm',
-  sortOrder: 35
+  areaId: 'productActionButtons',
+  sortOrder: 10
 };
 
 export const query = `

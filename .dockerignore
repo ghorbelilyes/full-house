@@ -1,0 +1,15 @@
+.git
+.github
+node_modules
+.evershop
+npm-debug.log
+.DS_Store
+*.log
+coverage
+tests
+sync-exports
+**/sync-exports
+scripts/sync-qa-to-prod.sh
+scripts/sync-quick.sh
+.env
+.env.local-vps

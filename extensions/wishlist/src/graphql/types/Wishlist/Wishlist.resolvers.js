@@ -100,14 +100,25 @@ export default {
 
   WishlistItem: {
     productUrl: async (item, _, { pool }) => {
-      const desc = await select('url_key')
-        .from('product_description')
-        .where('product_description_product_id', '=', item.productId)
+      // Get full SEO path from url_rewrite
+      const product = await select('uuid')
+        .from('product')
+        .where('product_id', '=', item.productId)
         .load(pool);
-      return desc ? `/${desc.url_key}` : null;
+      if (!product) return null;
+      const rewrite = await select('request_path')
+        .from('url_rewrite')
+        .where('entity_uuid', '=', product.uuid)
+        .andWhere('entity_type', '=', 'product')
+        .load(pool);
+      return rewrite?.request_path || null;
     },
     removeApi: (item) =>
       buildUrl('removeWishlistItem', { product_id: item.productId }),
-    thumbnail: (item) => item.thumbnail || null
+    thumbnail: (item) => {
+      if (!item.thumbnail) return null;
+      // Return the image path for the img src (will be served by the app)
+      return item.thumbnail;
+    }
   }
 };

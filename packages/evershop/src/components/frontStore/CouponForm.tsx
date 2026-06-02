@@ -6,12 +6,14 @@ import {
   CouponActions,
   CouponState
 } from '@components/frontStore/Coupon.js';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export function CouponForm() {
+  if (!useModuleEnabled('coupons')) return null;
   const form = useForm<{ coupon: string }>();
   const coupon = form.watch('coupon');
   return (

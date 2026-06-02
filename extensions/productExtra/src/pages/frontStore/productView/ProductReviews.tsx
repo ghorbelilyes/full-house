@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useProduct } from '@components/frontStore/catalog/ProductContext.js';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 
 /* ── Star Rating Input ── */
@@ -237,6 +238,7 @@ export default function ProductReviews({
   reviews: any;
   customer: any;
 }) {
+  if (!useModuleEnabled('productReviews')) return null;
   const product = useProduct();
   const reviewSummary = reviewData?.reviewSummary || {
     averageRating: 0,

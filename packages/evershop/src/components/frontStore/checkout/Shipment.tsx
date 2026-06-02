@@ -346,6 +346,7 @@ export function Shipment() {
               areaId="checkoutShippingAddressForm"
               fieldNamePrefix="shippingAddress"
               address={shippingAddress ? JSON.parse(JSON.stringify(shippingAddress)) : undefined}
+              showCity={false}
             />
           </CardContent>
         </Card>

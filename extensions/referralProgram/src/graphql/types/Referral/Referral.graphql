@@ -1,0 +1,40 @@
+type ReferralStats {
+  code: String!
+  referralLink: String!
+  invitedCount: Int!
+  validatedCount: Int!
+  availableRewards: Int!
+  usedRewards: Int!
+  pendingRewards: Int!
+}
+
+type ReferralSettings {
+  enabled: Boolean!
+  title: String!
+  description: String!
+  referrerRewardType: String!
+  referrerRewardValue: Float!
+  referredRewardType: String!
+  referredRewardValue: Float!
+  minOrderAmount: Float!
+  rewardTrigger: String!
+  couponExpiryDays: Int!
+  maxReferrals: Int!
+  allowGuestTracking: Boolean!
+  requireNewCustomer: Boolean!
+  preventSelfReferral: Boolean!
+  cookieDurationDays: Int!
+  whatsappTemplate: String!
+  termsText: String
+  enableInAccount: Boolean!
+  enableAfterCheckout: Boolean!
+}
+
+type ReferralConfig {
+  settings: ReferralSettings!
+}
+
+extend type Query {
+  referralConfig: ReferralConfig
+  myReferralStats: ReferralStats
+}

@@ -17,11 +17,11 @@ export const ProductSingleAttributes = () => {
   return (
     <>
       <Area id="productAttributesBefore" noOuter />
-      <div className="product__single__attributes py-3">
+      <div className="product__single__attributes">
         <ul className="list-none">
           {list.map((attribute) => (
-            <li key={attribute.attributeCode} className="py-1">
-              <strong>{attribute.attributeName}: </strong>{' '}
+            <li key={attribute.attributeCode}>
+              <strong>{attribute.attributeName}</strong>
               <span>{attribute.optionText}</span>
             </li>
           ))}
