@@ -147,7 +147,7 @@ export default () => {
       scripts: [],
       bases: []
     },
-    copyRight: `© 2025 Full House. Tous droits réservés.`
+    copyRight: `© 2025 Protek. Tous droits réservés.`
   };
   config.util.setModuleDefaults('themeConfig', defaultThemeConfig);
 

@@ -116,7 +116,7 @@ export default async (
           )}${buildUrl('paypalReturn', { order_id })}`,
           shipping_preference: 'SET_PROVIDED_ADDRESS',
           user_action: 'PAY_NOW',
-          brand_name: await getSetting('storeName', 'Full House')
+          brand_name: await getSetting('storeName', 'Protek')
         }
       } as CreateOrderRequestBody;
       const shippingAddress = await select()

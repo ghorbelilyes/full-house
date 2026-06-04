@@ -186,8 +186,8 @@
 }
 
 .search-input-wrapper:focus-within {
-  border-color: var(--primary, #f97316);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  border-color: var(--primary, #ef233c);
+  box-shadow: 0 0 0 3px var(--brand-shadow, rgba(239, 35, 60, 0.18));
 }
 
 .search-input-icon {
@@ -301,7 +301,7 @@
 .search-dropdown__price {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--primary, #f97316);
+  color: var(--primary, #ef233c);
   margin-top: 2px;
 }
 
@@ -321,7 +321,7 @@
 }
 
 .header-action-item:hover {
-  color: var(--primary, #f97316);
+  color: var(--primary, #ef233c);
   background: var(--accent, #fff7ed);
 }
 
@@ -359,7 +359,7 @@
 }
 
 .wishlist-header-icon:hover {
-  color: var(--primary, #f97316);
+  color: var(--primary, #ef233c);
   background: var(--accent, #fff7ed);
 }
 
@@ -379,7 +379,7 @@
   min-width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--primary, #f97316);
+  background: var(--primary, #ef233c);
   color: var(--primary-foreground, #ffffff);
   display: grid;
   place-items: center;
@@ -410,7 +410,7 @@
 }
 
 .main-header__actions .mini-cart-icon:hover {
-  color: var(--primary, #f97316);
+  color: var(--primary, #ef233c);
   background: var(--accent, #fff7ed);
 }
 
@@ -426,7 +426,7 @@
   min-width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--primary, #f97316);
+  background: var(--primary, #ef233c);
   color: var(--primary-foreground, #ffffff);
   display: grid;
   place-items: center;
@@ -483,11 +483,11 @@
 }
 
 .nav-submenu__heading:hover {
-  color: var(--primary, #f97316);
+  color: var(--primary, #ef233c);
 }
 
 .nav-submenu__heading--active {
-  color: var(--primary, #f97316);
+  color: var(--primary, #ef233c);
 }
 
 .nav-submenu__list {
@@ -511,12 +511,12 @@
 }
 
 .nav-submenu__link:hover {
-  color: var(--primary, #f97316);
+  color: var(--primary, #ef233c);
   background: var(--accent, #fff7ed);
 }
 
 .nav-submenu__link--active {
-  color: var(--primary, #f97316);
+  color: var(--primary, #ef233c);
   font-weight: 600;
 }
 
@@ -600,6 +600,12 @@
       overflow: visible;
     }
 
+    /* Hide desktop nav inside nav-bar on mobile; only the
+       position:fixed bottom-nav should be visible */
+    .nav-bar .nav-menu__nav {
+      display: none;
+    }
+
     .mobile-bottom-nav {
       position: fixed;
       right: 0;
@@ -646,7 +652,7 @@
     .mobile-bottom-nav__item:hover,
     .mobile-bottom-nav__item:focus-visible,
     .mobile-bottom-nav__item--active {
-      color: var(--primary, #f97316);
+      color: var(--primary, #ef233c);
     }
 
     .mobile-bottom-nav__icon {
@@ -696,7 +702,7 @@
 
     .mobile-bottom-nav__drawer-close:hover,
     .mobile-bottom-nav__drawer-close:focus-visible {
-      color: var(--primary, #f97316);
+      color: var(--primary, #ef233c);
       background: var(--accent, #fff7ed);
     }
 

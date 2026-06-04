@@ -14,7 +14,7 @@ export function CategoryInfo() {
             <h1 className="text-4xl font-extrabold tracking-tight text-slate-800">
               {name}
             </h1>
-            <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-orange-500" />
+            <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-primary" />
           </header>
           {description && (
             <div className="category__description prose prose-base mx-auto">

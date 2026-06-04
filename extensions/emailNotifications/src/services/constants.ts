@@ -193,10 +193,10 @@ export const DEFAULT_SETTINGS: EmailNotificationSettings = {
   enabled: false,
   activeProvider: 'sendgrid',
   senderEmail: '',
-  senderName: 'Full House',
+  senderName: 'Protek',
   replyToEmail: '',
   adminEmail: '',
-  storeName: 'Full House',
+  storeName: 'Protek',
   storeUrl: '',
   testEmailRecipient: '',
   smtp: {
@@ -205,12 +205,12 @@ export const DEFAULT_SETTINGS: EmailNotificationSettings = {
     secure: false,
     username: '',
     fromEmail: '',
-    fromName: 'Full House',
+    fromName: 'Protek',
     replyToEmail: ''
   },
   sendgrid: {
     fromEmail: '',
-    fromName: 'Full House',
+    fromName: 'Protek',
     replyToEmail: ''
   },
   events: DEFAULT_EVENT_SETTINGS

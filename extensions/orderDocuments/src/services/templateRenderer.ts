@@ -196,7 +196,7 @@ export interface CompanyInfo {
 }
 
 const DEFAULT_COMPANY: CompanyInfo = {
-  name: 'Full House',
+  name: 'Protek',
   address: 'Tunisie',
   phone: '',
   email: '',

@@ -264,7 +264,8 @@ export default function ProductView({ product }: { product: any }) {
 }
 .pdp-spec-badge__icon {
   width: 28px; height: 28px; border-radius: 8px;
-  background: #fff3ea; color: #e48125;
+  background: var(--brand-primary-soft, #fff0f2);
+  color: var(--primary, #ef233c);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -282,7 +283,7 @@ export default function ProductView({ product }: { product: any }) {
   display: flex; align-items: center; gap: 8px;
   margin-bottom: 8px; flex-wrap: wrap;
 }
-.pdp-stars { color: #f5a623; font-size: 14px; letter-spacing: 2px; }
+.pdp-stars { color: var(--primary, #ef233c); font-size: 14px; letter-spacing: 2px; }
 .pdp-rating-text { color: var(--muted-foreground, #6b7280); font-size: 13px; }
 .pdp-rating-sep { color: var(--border, #cbd5e1); }
 

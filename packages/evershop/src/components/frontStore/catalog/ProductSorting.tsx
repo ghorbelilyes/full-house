@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+ 
 import { useAppDispatch } from '@components/common/context/app.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import { cn } from '@evershop/evershop/lib/util/cn';
@@ -104,8 +104,8 @@ export function ProductSorting({
           className={cn(
             'inline-flex items-center gap-2.5 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all duration-200',
             dropdownOpen
-              ? 'border-orange-300 bg-orange-50 text-orange-600 shadow-sm'
-              : 'border-slate-200 bg-white text-slate-700 shadow-sm hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600',
+              ? 'border-brand-muted bg-brand-soft text-primary shadow-sm'
+              : 'border-slate-200 bg-white text-slate-700 shadow-sm hover:border-brand-muted hover:bg-brand-soft hover:text-primary',
             disabled && 'opacity-50 pointer-events-none'
           )}
         >
@@ -139,12 +139,12 @@ export function ProductSorting({
                   className={cn(
                     'flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors',
                     isActive
-                      ? 'bg-orange-50 font-semibold text-orange-600'
+                      ? 'bg-brand-soft font-semibold text-primary'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   )}
                 >
                   {/* Check icon for active */}
-                  <span className={`flex h-4 w-4 items-center justify-center flex-shrink-0 ${isActive ? 'text-orange-500' : 'text-transparent'}`}>
+                  <span className={`flex h-4 w-4 items-center justify-center flex-shrink-0 ${isActive ? 'text-primary' : 'text-transparent'}`}>
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>

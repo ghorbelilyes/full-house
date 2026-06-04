@@ -139,7 +139,7 @@ export default function CollectionProducts({
         <h3 className="text-center text-3xl font-extrabold tracking-tight text-slate-800 mb-2">
           {collection?.name}
         </h3>
-        <div className="mx-auto mb-1 h-1 w-16 rounded-full bg-orange-500" />
+        <div className="mx-auto mb-1 h-1 w-16 rounded-full bg-primary" />
         <div className="flex justify-center mb-8">
           {collection?.description && <Editor rows={collection?.description} />}
         </div>
@@ -238,7 +238,7 @@ export default function CollectionProducts({
                             height: 7,
                             borderRadius: isActive ? 4 : '50%',
                             border: 'none',
-                            background: isActive ? '#f97316' : '#d1d5db',
+                            background: isActive ? 'var(--primary, #ef233c)' : '#d1d5db',
                             cursor: 'pointer',
                             transition: 'all 0.3s ease',
                             flexShrink: 0,

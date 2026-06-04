@@ -121,7 +121,7 @@ export default function WishlistPage({
           </p>
           <a
             href="/"
-            className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-orange-600 active:scale-[0.97]"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-strong active:scale-[0.97]"
           >
             {_('Discover our products')}
           </a>
@@ -206,7 +206,7 @@ export default function WishlistPage({
               <div className="flex flex-1 flex-col gap-2 p-4">
                 <a
                   href={item.productUrl || '#'}
-                  className="text-sm font-semibold text-slate-800 line-clamp-2 hover:text-orange-600 transition-colors dark:text-slate-100 dark:hover:text-orange-400"
+                  className="text-sm font-semibold text-slate-800 line-clamp-2 hover:text-primary transition-colors dark:text-slate-100 dark:hover:text-primary"
                 >
                   {item.productName || item.productSku}
                 </a>
@@ -221,7 +221,7 @@ export default function WishlistPage({
                   type="button"
                   onClick={() => handleAddToCart(item)}
                   disabled={addingToCartId === item.productId}
-                  className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-orange-600 active:scale-[0.97] disabled:opacity-60"
+                  className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-strong active:scale-[0.97] disabled:opacity-60"
                 >
                   {addingToCartId === item.productId ? (
                     <svg

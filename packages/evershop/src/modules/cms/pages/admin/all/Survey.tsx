@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function Survey() {
-  // Survey removed - not relevant for Full House
+  // Survey removed - not relevant for Protek
   return null;
 }
 

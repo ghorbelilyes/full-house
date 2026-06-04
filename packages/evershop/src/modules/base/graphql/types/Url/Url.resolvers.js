@@ -12,7 +12,7 @@ export default {
           queries[param.key] = param.value;
         }
       });
-      return `${homeUrl}${buildUrl(routeId, queries)}`;
+      return buildUrl(routeId, queries);
     }
   }
 };

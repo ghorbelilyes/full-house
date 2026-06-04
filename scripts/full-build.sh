@@ -7,6 +7,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 nvm use 20
 
+echo "━━━ 0/5 Compile postgres-query-builder ━━━"
+(cd node_modules/@evershop/postgres-query-builder && [ ! -d dist ] && npx tsc || true)
+
 echo "━━━ 1/5 Compile core ━━━"
 npm run compile
 
@@ -14,11 +17,11 @@ echo "━━━ 2/5 Fix Card.js + Table.js ━━━"
 cp packages/evershop/src/components/common/ui/Card.js packages/evershop/dist/components/common/ui/Card.js
 cp packages/evershop/src/components/common/ui/Table.js packages/evershop/dist/components/common/ui/Table.js
 
-echo "━━━ 3/5 Fix import with → assert ━━━"
-find packages/evershop/dist -name '*.js' -exec grep -l "import .* with " {} \; | \
+echo "━━━ 3/5 Fix import assert → with ━━━"
+find packages/evershop/dist -name '*.js' -exec grep -l "assert {" {} \; | \
   while read f; do
-    sed -i "s/from '\(.*\.json\)' with {/from '\1' assert {/g" "$f"
-    sed -i "s/from \"\(.*\.json\)\" with {/from \"\1\" assert {/g" "$f"
+    sed -i "s/from '\(.*\.json\)' assert {/from '\1' with {/g" "$f"
+    sed -i "s/from \"\(.*\.json\)\" assert {/from \"\1\" with {/g" "$f"
   done
 
 echo "━━━ 4/5 Compile extensions ━━━"

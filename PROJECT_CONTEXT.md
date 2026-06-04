@@ -1,8 +1,8 @@
-# Project Context — Full House (EverShop)
+# Project Context — Protek (EverShop)
 
 ## Executive Summary
 
-Full House is a Tunisian e-commerce store specializing in **electricity and security products** (electrical supplies, security cameras, alarm systems, etc.). Built on the EverShop v2.1.0 open-source platform, it operates entirely in **French** with **TND (Tunisian Dinar)** currency. The project is the EverShop source monorepo customized for a specific business, not a generated store app.
+Protek is a Tunisian e-commerce store specializing in **electricity and security products** (electrical supplies, security cameras, alarm systems, etc.). Built on the EverShop v2.1.0 open-source platform, it operates entirely in **French** with **TND (Tunisian Dinar)** currency. The project is the EverShop source monorepo customized for a specific business, not a generated store app.
 
 ## Business / User Problem Solved
 

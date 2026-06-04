@@ -9,7 +9,7 @@ export default function Logo({ dashboardUrl }: LogoProps) {
       <a href={dashboardUrl} className="flex items-center gap-2">
         <img
           src="/logo-icon.png"
-          alt="Full House"
+          alt="Protek"
           width={36}
           height={36}
           className="w-9 h-9"

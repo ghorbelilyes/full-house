@@ -643,9 +643,9 @@ export default function BuyNowButton({
                     e.stopPropagation();
                     handleAddToCart();
                   }}
-                  className="w-full flex items-center gap-3 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 py-3.5 text-left transition-colors hover:bg-orange-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex items-center gap-3 rounded-xl border-2 border-primary bg-brand-soft px-4 py-3.5 text-left transition-colors hover:bg-brand-soft disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <div className="flex-shrink-0 w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center">
+                  <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary flex items-center justify-center">
                     {addingToCart || cartState.loading ? (
                       <Loader2 className="w-4.5 h-4.5 text-white animate-spin" />
                     ) : (
@@ -653,12 +653,12 @@ export default function BuyNowButton({
                     )}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-orange-700">
+                    <p className="text-sm font-bold text-brand-strong">
                       {addingToCart || cartState.loading
                         ? _('Adding...')
                         : _('Add to cart')}
                     </p>
-                    <p className="text-[11px] text-orange-600/80">
+                    <p className="text-[11px] text-primary/80">
                       {_('Add to cart and continue shopping')}
                     </p>
                   </div>

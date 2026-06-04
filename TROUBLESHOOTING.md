@@ -1,4 +1,4 @@
-# Troubleshooting — Full House (EverShop)
+# Troubleshooting — Protek (EverShop)
 
 ## Setup Problems
 

@@ -1,6 +1,6 @@
 {
   "shop": {
-    "name": "Full House",
+    "name": "Protek",
     "language": "fr-TN",
     "timezone": "Africa/Tunis",
     "currency": "TND",
@@ -122,10 +122,10 @@
   },
   "themeConfig": {
     "logo": {
-      "alt": "Full House - Electricity & Security",
+      "alt": "Protek",
       "src": "/logo.png",
       "width": 320,
-      "height": 80
+      "height": 106
     },
     "headTags": {
       "links": [
@@ -150,16 +150,36 @@
           "rel": "apple-touch-icon",
           "href": "/apple-touch-icon.png",
           "sizes": "180x180"
+        },
+        {
+          "rel": "manifest",
+          "href": "/icons/site.webmanifest"
         }
       ],
       "metas": [
         {
           "name": "viewport",
           "content": "width=device-width, initial-scale=1"
+        },
+        {
+          "name": "theme-color",
+          "content": "#0A1625"
+        },
+        {
+          "name": "msapplication-TileColor",
+          "content": "#0A1625"
+        },
+        {
+          "name": "msapplication-TileImage",
+          "content": "/icons/mstile-150x150.png"
+        },
+        {
+          "name": "msapplication-config",
+          "content": "/icons/browserconfig.xml"
         }
       ]
     },
-    "copyRight": "© 2025 Full House - Electricity & Security. Tous droits réservés."
+    "copyRight": "© 2025 Protek. Tous droits réservés."
   },
   "oms": {
     "order": {
@@ -300,7 +320,7 @@
   },
   "orderDocuments": {
     "company": {
-      "name": "Full House",
+      "name": "Protek",
       "address": "Tunisie",
       "phone": "",
       "email": "",

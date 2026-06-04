@@ -12,7 +12,7 @@ interface LogoProps {
 }
 export default function Logo({
   themeConfig: {
-    logo: { src, alt = 'Full House', width = 200, height = 50 }
+    logo: { src, alt = 'Protek', width = 200, height = 50 }
   }
 }: LogoProps) {
   return (

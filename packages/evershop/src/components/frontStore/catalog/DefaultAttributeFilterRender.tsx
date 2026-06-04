@@ -143,7 +143,7 @@ export const DefaultAttributeFilterRender: React.FC<{
               {selectedCount > 0 && (
                 <button
                   onClick={() => clearAttributeFilter(attribute.attributeCode)}
-                  className="ml-2 text-xs text-slate-400 transition-colors hover:text-orange-500 dark:text-slate-500 dark:hover:text-orange-400"
+                  className="ml-2 text-xs text-slate-400 transition-colors hover:text-primary dark:text-slate-500 dark:hover:text-primary"
                   title={_('Clear')}
                 >
                   ✕

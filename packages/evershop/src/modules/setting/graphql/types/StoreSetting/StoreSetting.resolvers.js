@@ -7,7 +7,7 @@ export default {
       if (storeName) {
         return storeName.value;
       } else {
-        return 'Full House';
+        return 'Protek';
       }
     },
     storeDescription: (setting) => {
@@ -17,7 +17,7 @@ export default {
       if (storeDescription) {
         return storeDescription.value;
       } else {
-        return 'Full House - Electricity & Security';
+        return 'Protek';
       }
     },
     storeLanguage: () => getConfig('shop.language', 'en'),

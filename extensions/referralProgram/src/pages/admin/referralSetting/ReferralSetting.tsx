@@ -87,7 +87,7 @@ export default function ReferralSetting({
   const [preventSelfReferral, setPreventSelfReferral] = useState(initial?.preventSelfReferral ?? true);
   const [cookieDurationDays, setCookieDurationDays] = useState(initial?.cookieDurationDays || 30);
   const [whatsappTemplate, setWhatsappTemplate] = useState(
-    initial?.whatsappTemplate || 'Découvrez Full House ! Utilisez mon lien de parrainage pour une remise : {link}'
+    initial?.whatsappTemplate || 'Découvrez Protek ! Utilisez mon lien de parrainage pour une remise : {link}'
   );
   const [termsText, setTermsText] = useState(initial?.termsText || '');
   const [enableInAccount, setEnableInAccount] = useState(initial?.enableInAccount ?? true);

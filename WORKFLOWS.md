@@ -1,4 +1,4 @@
-# Workflows — Full House (EverShop)
+# Workflows — Protek (EverShop)
 
 ## How to Add a New Feature
 

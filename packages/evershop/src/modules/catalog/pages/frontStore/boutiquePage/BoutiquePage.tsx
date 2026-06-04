@@ -23,10 +23,10 @@ function CategoryCard({ category }: { category: CategoryItem }) {
   return (
     <a
       href={category.url}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-orange-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-orange-500"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-brand-muted dark:border-slate-700 dark:bg-slate-800 dark:hover:border-primary"
     >
       {/* Image / placeholder */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-slate-700 dark:to-slate-600">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-brand-soft to-white dark:from-slate-700 dark:to-slate-600">
         {category.image?.url ? (
           <img
             src={category.image.url}
@@ -37,7 +37,7 @@ function CategoryCard({ category }: { category: CategoryItem }) {
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <svg
-              className="h-16 w-16 text-orange-300 dark:text-slate-500"
+              className="h-16 w-16 text-brand-muted dark:text-slate-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -55,7 +55,7 @@ function CategoryCard({ category }: { category: CategoryItem }) {
 
       {/* Label */}
       <div className="flex flex-1 flex-col items-center justify-center px-4 py-4">
-        <h3 className="text-center text-base font-semibold text-slate-800 group-hover:text-orange-600 transition-colors dark:text-slate-100 dark:group-hover:text-orange-400">
+        <h3 className="text-center text-base font-semibold text-slate-800 group-hover:text-primary transition-colors dark:text-slate-100 dark:group-hover:text-primary">
           {category.name}
         </h3>
         {category.children && category.children.length > 0 && (
@@ -85,7 +85,7 @@ function CategoryGroup({ category }: { category: CategoryItem }) {
         <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
         <a
           href={category.url}
-          className="flex-shrink-0 text-sm font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+          className="flex-shrink-0 text-sm font-medium text-primary hover:text-brand-strong dark:text-primary dark:hover:text-brand-muted"
         >
           {_('Voir tout')} →
         </a>

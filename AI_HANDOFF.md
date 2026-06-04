@@ -1,8 +1,8 @@
-# AI Handoff — Full House (EverShop)
+# AI Handoff — Protek (EverShop)
 
 ## Project Summary (10 lines)
 
-- **Full House**: Tunisian e-commerce store for electricity & security products
+- **Protek**: Tunisian e-commerce store for electricity & security products
 - Built on **EverShop v2.1.0** open-source platform (source monorepo, not generated app)
 - Stack: **Node 20**, **Express**, **React (SSR)**, **PostgreSQL 16**, **GraphQL**, **Webpack**, **SWC**, **Tailwind CSS 4**
 - Entire UI is **French only** (`fr-TN`), currency is **TND**

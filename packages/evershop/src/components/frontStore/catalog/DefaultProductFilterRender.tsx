@@ -7,10 +7,10 @@ import {
   SheetTitle,
   SheetFooter
 } from '@components/common/ui/Sheet.js';
-import { DefaultPromoFilterRender } from '@components/frontStore/catalog/DefaultPromoFilterRender.js';
 import { DefaultAttributeFilterRender } from '@components/frontStore/catalog/DefaultAttributeFilterRender.js';
 import { DefaultPriceFilterRender as PriceFilterRenderer } from '@components/frontStore/catalog/DefaultPriceFilterRender.js';
 import { DefaultProductFilterSummary } from '@components/frontStore/catalog/DefaultProductFilterSummary.js';
+import { DefaultPromoFilterRender } from '@components/frontStore/catalog/DefaultPromoFilterRender.js';
 import {
   ProductFilterRenderProps,
   FilterComponent,
@@ -88,10 +88,10 @@ export const DefaultProductFilterRender: React.FC<{
     <ProductFilterDispatch.Provider value={contextValue}>
       <button
         onClick={() => setIsMobileFilterOpen(true)}
-        className="lg:hidden flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all active:scale-[0.98] hover:border-orange-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-orange-500"
+        className="lg:hidden flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all active:scale-[0.98] hover:border-brand-muted hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-primary"
       >
         <svg
-          className="h-[18px] w-[18px] flex-shrink-0 text-orange-500"
+          className="h-[18px] w-[18px] flex-shrink-0 text-primary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -105,7 +105,7 @@ export const DefaultProductFilterRender: React.FC<{
         </svg>
         <span className="flex-1 text-left">{_('Filters')}</span>
         {activeFilterCount > 0 && (
-          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-500 px-1.5 text-[10px] font-bold text-white">
+          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-white">
             {activeFilterCount}
           </span>
         )}
@@ -204,7 +204,7 @@ export const DefaultProductFilterRender: React.FC<{
                 <button
                   onClick={clearAllFilters}
                   disabled={isLoading}
-                  className="text-xs text-slate-500 transition-colors hover:text-orange-500 disabled:opacity-50 dark:text-slate-400 dark:hover:text-orange-400"
+                  className="text-xs text-slate-500 transition-colors hover:text-primary disabled:opacity-50 dark:text-slate-400 dark:hover:text-primary"
                 >
                   {_('Clear All')}
                 </button>

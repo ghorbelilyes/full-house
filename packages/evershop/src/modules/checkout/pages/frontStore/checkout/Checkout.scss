@@ -52,7 +52,7 @@
   width: 100%;
   min-height: 42px;
   padding: 8px 12px;
-  border: 2px solid var(--primary, #f97316);
+  border: 2px solid var(--primary, #ef233c);
   border-radius: 0.5rem;
   background: var(--background, #ffffff);
   font-size: 0.875rem;
@@ -64,7 +64,7 @@
 
 .saved-address-selector__trigger:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 3px var(--brand-shadow, rgba(239, 35, 60, 0.18));
 }
 
 .saved-address-selector__value {
@@ -125,13 +125,13 @@
 }
 
 .saved-address-selector__option--selected {
-  background: var(--primary, #f97316);
+  background: var(--primary, #ef233c);
   color: var(--primary-foreground, #ffffff);
   font-weight: 600;
 }
 
 .saved-address-selector__option--selected:hover {
-  background: var(--primary, #f97316);
+  background: var(--primary, #ef233c);
   opacity: 0.9;
 }
 

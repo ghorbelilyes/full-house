@@ -46,7 +46,7 @@ export default function LoginForm({ authUrl, dashboardUrl }: LoginFormProps) {
       <div className="flex items-center justify-center mb-7">
         <img
           src="/logo-icon.png"
-          alt="Full House - Electricity & Security"
+          alt="Protek"
           width={60}
           height={60}
         />

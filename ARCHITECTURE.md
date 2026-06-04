@@ -1,4 +1,4 @@
-# Architecture — Full House (EverShop)
+# Architecture — Protek (EverShop)
 
 ## High-Level Architecture
 

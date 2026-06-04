@@ -1,4 +1,4 @@
-# Full House - Local Fake VPS Deployment
+# Protek - Local Fake VPS Deployment
 
 This setup runs your EverShop source project on a local Ubuntu Server VM with Docker Compose.
 
@@ -69,9 +69,9 @@ Edit `.env.local-vps`:
 | `DB_PASSWORD` | PostgreSQL password | Yes | `postgres` for local only |
 | `DB_SSLMODE` | DB SSL mode inside Docker network | No | `disable` |
 | `STORE_URL` | Public URL used by app links/emails | No | `http://<VM_IP>` |
-| `STORE_NAME` | Store label used in emails/UI defaults | No | `Full House Local VPS` |
+| `STORE_NAME` | Store label used in emails/UI defaults | No | `Protek Local VPS` |
 | `EMAIL_FROM` | Default sender email | No | `local@test.invalid` |
-| `EMAIL_FROM_NAME` | Default sender display name | No | `Full House Local` |
+| `EMAIL_FROM_NAME` | Default sender display name | No | `Protek Local` |
 | `ADMIN_EMAIL` | Admin contact fallback | Low | `admin@local.test` |
 | `SMTP_*` | SMTP provider settings | Yes | leave empty |
 | `SENDGRID_*` | SendGrid provider settings | Yes | leave empty |

@@ -181,7 +181,7 @@ function ReviewEditForm({
           onClick={handleSubmit}
           disabled={submitting || rating === 0}
           style={{
-            background: rating === 0 ? '#d1d5db' : '#e48125',
+            background: rating === 0 ? '#d1d5db' : 'var(--primary, #ef233c)',
             color: '#fff',
             border: 'none',
             borderRadius: '12px',
@@ -367,7 +367,7 @@ export default function ProductReviews({
                   type="button"
                   onClick={() => setShowNewForm(true)}
                   style={{
-                    background: '#e48125',
+                    background: 'var(--primary, #ef233c)',
                     color: '#fff',
                     border: 'none',
                     borderRadius: '12px',
@@ -396,7 +396,7 @@ export default function ProductReviews({
                 <a
                   href="/account/login"
                   style={{
-                    color: '#e48125',
+                    color: 'var(--primary, #ef233c)',
                     fontWeight: 600,
                     textDecoration: 'underline'
                   }}
@@ -425,9 +425,9 @@ export default function ProductReviews({
                     padding: '16px 20px',
                     borderRadius: '14px',
                     border: isOwnReview
-                      ? '1px solid #fcd9b6'
+                      ? '1px solid var(--brand-primary-muted, #fecdd3)'
                       : '1px solid #e5e7eb',
-                    background: isOwnReview ? '#fffbf5' : '#fff'
+                    background: isOwnReview ? 'var(--brand-primary-soft, #fff0f2)' : '#fff'
                   }}
                 >
                   <div
@@ -457,7 +457,7 @@ export default function ProductReviews({
                         <span
                           style={{
                             fontSize: '11px',
-                            background: '#e48125',
+                            background: 'var(--primary, #ef233c)',
                             color: '#fff',
                             borderRadius: '6px',
                             padding: '2px 8px',
@@ -493,7 +493,7 @@ export default function ProductReviews({
                             background: 'none',
                             border: 'none',
                             cursor: 'pointer',
-                            color: '#e48125',
+                            color: 'var(--primary, #ef233c)',
                             padding: '4px',
                             borderRadius: '6px',
                             transition: 'background 0.15s'

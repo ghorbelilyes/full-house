@@ -1,5 +1,5 @@
-import { useOptionalWishlist } from '@components/frontStore/wishlist/WishlistContext.js';
 import { Image } from '@components/common/Image.js';
+import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import { ProductNoThumbnail } from '@components/common/ProductNoThumbnail.js';
 import {
   Dialog,
@@ -11,6 +11,7 @@ import {
 import { AddToCart } from '@components/frontStore/cart/AddToCart.js';
 import { ProductData } from '@components/frontStore/catalog/ProductContext.js';
 import CustomerAddressForm from '@components/frontStore/customer/address/addressForm/Index.js';
+import { useOptionalWishlist } from '@components/frontStore/wishlist/WishlistContext.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import {
   ShoppingBag,
@@ -27,7 +28,6 @@ import {
   Star
 } from 'lucide-react';
 import React, { ReactNode, useState, useCallback, useRef, useEffect } from 'react';
-import { useModuleEnabled } from '@components/common/modules/ModuleGate.js';
 import { useForm, FormProvider } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -206,8 +206,8 @@ function ShippingMethodSelector({
           key={m.code}
           className={`flex items-center justify-between p-2.5 rounded-lg border cursor-pointer transition-colors text-xs ${
             selectedMethod === m.code
-              ? 'border-orange-500 bg-orange-50'
-              : 'border-slate-200 hover:border-orange-300'
+              ? 'border-primary bg-brand-soft'
+              : 'border-slate-200 hover:border-brand-muted'
           }`}
         >
           <div className="flex items-center gap-2">
@@ -217,7 +217,7 @@ function ShippingMethodSelector({
               value={m.code}
               checked={selectedMethod === m.code}
               onChange={() => onSelect(m.code)}
-              className="accent-orange-500"
+              className="accent-primary"
             />
             <span className="font-medium">{m.name}</span>
           </div>
@@ -494,7 +494,7 @@ function CardBuyNowCheckout({
         {/* Creating cart spinner */}
         {creatingCart && (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
-            <Loader2 className="w-7 h-7 animate-spin text-orange-500" />
+            <Loader2 className="w-7 h-7 animate-spin text-primary" />
             <p className="text-sm text-slate-500">
               {_('Preparing your order...')}
             </p>
@@ -527,7 +527,7 @@ function CardBuyNowCheckout({
                     type="email"
                     {...form.register('contact.email')}
                     placeholder={_('your@email.com')}
-                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
 
@@ -564,13 +564,13 @@ function CardBuyNowCheckout({
                     <CreditCard className="w-3.5 h-3.5" />
                     {_('Payment method')}
                   </div>
-                  <div className="p-2.5 rounded-lg border border-orange-500 bg-orange-50">
+                  <div className="p-2.5 rounded-lg border border-primary bg-brand-soft">
                     <div className="flex items-center gap-2">
                       <input
                         type="radio"
                         checked
                         readOnly
-                        className="accent-orange-500"
+                        className="accent-primary"
                       />
                       <span className="text-xs font-medium">
                         {_('Cash on delivery')}
@@ -590,7 +590,7 @@ function CardBuyNowCheckout({
               <div className="mt-5">
                 <button
                   type="button"
-                  className="w-full rounded-lg bg-orange-500 py-3 text-sm font-bold text-white transition hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full rounded-lg bg-primary py-3 text-sm font-bold text-white transition hover:bg-brand-strong disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   onClick={handleSubmitOrder}
                   disabled={submitting}
                 >
@@ -626,7 +626,7 @@ function CardBuyNowCheckout({
             </div>
             <button
               type="button"
-              className="w-full mt-2 rounded-lg bg-orange-500 py-3 text-sm font-bold text-white transition hover:bg-orange-600"
+              className="w-full mt-2 rounded-lg bg-primary py-3 text-sm font-bold text-white transition hover:bg-brand-strong"
               onClick={() => handleClose(false)}
             >
               {_('Close')}
@@ -796,16 +796,16 @@ function ProductActionModal({
           <button
             type="button"
             onClick={() => setShowCheckout(true)}
-            className="w-full flex items-center gap-3 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 py-3.5 text-left transition-colors hover:bg-orange-100"
+            className="w-full flex items-center gap-3 rounded-xl border-2 border-primary bg-brand-soft px-4 py-3.5 text-left transition-colors hover:bg-brand-soft"
           >
-            <div className="flex-shrink-0 w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center">
+            <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary flex items-center justify-center">
               <ShoppingBag className="w-4.5 h-4.5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-bold text-orange-700">
+              <p className="text-sm font-bold text-brand-strong">
                 {_('Yes, continue')}
               </p>
-              <p className="text-[11px] text-orange-600/80">
+              <p className="text-[11px] text-primary/80">
                 {_('Buy now and checkout directly')}
               </p>
             </div>
@@ -1002,7 +1002,7 @@ function ProductCardActions({
                 e.stopPropagation();
                 if (inStock) actions.addToCart();
               }}
-              className="flex min-h-[42px] items-center justify-center gap-1.5 rounded-[13px] border border-slate-200 bg-white px-1.5 text-center text-[12px] font-extrabold leading-tight text-slate-900 transition hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex min-h-[42px] items-center justify-center gap-1.5 rounded-[13px] border border-slate-200 bg-white px-1.5 text-center text-[12px] font-extrabold leading-tight text-slate-900 transition hover:border-brand-muted hover:bg-brand-soft hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               {state.isLoading ? (
                 <Loader2 className="h-4 w-4 flex-shrink-0 animate-spin" />
@@ -1090,7 +1090,7 @@ export const ProductListItemRender = ({
   /* ── List layout ─────────────────────────────────────────── */
   if (layout === 'list') {
     return (
-      <article className="group relative flex gap-6 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-orange-200">
+      <article className="group relative flex gap-6 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-brand-muted">
         {/* Wishlist heart */}
         <WishlistHeart productId={product.productId} />
         {/* Image area with PROMO ribbon */}
@@ -1118,14 +1118,14 @@ export const ProductListItemRender = ({
         <div className="flex flex-1 flex-col justify-between py-1">
           <div>
             {brand && (
-              <p className="mb-1 text-xs font-extrabold uppercase tracking-wide text-orange-500">
+              <p className="mb-1 text-xs font-extrabold uppercase tracking-wide text-primary">
                 {brand}
               </p>
             )}
             <h3 className="line-clamp-2 text-base font-bold leading-snug text-slate-800">
               <a
                 href={product.url}
-                className="transition-colors hover:text-orange-500"
+                className="transition-colors hover:text-primary"
               >
                 {product.name}
               </a>
@@ -1155,8 +1155,8 @@ export const ProductListItemRender = ({
                   {_('In Stock')}
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-orange-500">
-                  <span className="size-1.5 rounded-full bg-orange-500" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary">
+                  <span className="size-1.5 rounded-full bg-primary" />
                   {_('Out of Stock')}
                 </span>
               )}
@@ -1174,7 +1174,7 @@ export const ProductListItemRender = ({
 
   /* ── Grid layout ─────────────────────────────────────────── */
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-[0_8px_22px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-1 hover:border-orange-200 hover:shadow-[0_14px_36px_rgba(15,23,42,0.10)] dark:border-slate-800 dark:bg-slate-950">
+    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-[0_8px_22px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-1 hover:border-brand-muted hover:shadow-[0_14px_36px_rgba(15,23,42,0.10)] dark:border-slate-800 dark:bg-slate-950">
       {/* Wishlist heart */}
       <WishlistHeart productId={product.productId} />
       {/* Out-of-stock overlay */}
@@ -1189,7 +1189,7 @@ export const ProductListItemRender = ({
       {/* Image area — PROMO ribbon is INSIDE here */}
       <a
         href={product.url}
-        className="relative flex h-[240px] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-orange-50/40 p-7 dark:from-slate-900 dark:to-slate-950"
+        className="relative flex h-[240px] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-brand-soft/40 p-7 dark:from-slate-900 dark:to-slate-950"
       >
         {onSale && <PromoRibbon percent={discountPercent} />}
         {product.image ? (
@@ -1208,14 +1208,14 @@ export const ProductListItemRender = ({
       {/* Info */}
       <div className="flex flex-1 flex-col border-t border-slate-100 p-4 dark:border-slate-800">
         {brand && (
-          <p className="mb-1 text-xs font-extrabold uppercase tracking-wide text-orange-500">
+          <p className="mb-1 text-xs font-extrabold uppercase tracking-wide text-primary">
             {brand}
           </p>
         )}
         <h3 className="line-clamp-2 min-h-[44px] text-base font-extrabold leading-snug text-slate-900 dark:text-slate-100">
           <a
             href={product.url}
-            className="transition-colors hover:text-orange-500"
+            className="transition-colors hover:text-primary"
           >
             {product.name}
           </a>
@@ -1227,7 +1227,7 @@ export const ProductListItemRender = ({
           <div className="min-w-0">
             {onSale ? (
               <div className="flex flex-wrap items-baseline gap-2">
-                <span className="text-[22px] font-extrabold tracking-tight text-orange-600">
+                <span className="text-[22px] font-extrabold tracking-tight text-primary">
                   {product.price.special!.text}
                 </span>
                 <span className="text-xs font-semibold text-slate-400 line-through decoration-slate-400">
@@ -1235,7 +1235,7 @@ export const ProductListItemRender = ({
                 </span>
               </div>
             ) : (
-              <p className="text-[22px] font-extrabold tracking-tight text-orange-600">
+              <p className="text-[22px] font-extrabold tracking-tight text-primary">
                 {product.price.regular.text}
               </p>
             )}
@@ -1245,7 +1245,7 @@ export const ProductListItemRender = ({
               {_('In Stock')}
             </span>
           ) : (
-            <span className="mb-1 flex-shrink-0 text-[13px] font-extrabold text-orange-500">
+            <span className="mb-1 flex-shrink-0 text-[13px] font-extrabold text-primary">
               {_('Out of Stock')}
             </span>
           )}

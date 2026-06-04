@@ -3,10 +3,10 @@ import { setPageMetaInfo } from '../../../services/pageMetaInfo.js';
 
 export default async (request, response, next) => {
   setPageMetaInfo(request, {
-    title: await getSetting('storeName', 'Full House'),
+    title: await getSetting('storeName', 'Protek'),
     description: await getSetting(
       'storeDescription',
-      'Full House - Electricity & Security'
+      'Protek'
     )
   });
   next();

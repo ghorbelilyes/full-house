@@ -17,7 +17,7 @@ export default function CopyRight({
 
 CopyRight.defaultProps = {
   themeConfig: {
-    copyRight: '© 2025 Full House - Electricity & Security. Tous droits réservés.'
+    copyRight: '© 2025 Protek. Tous droits réservés.'
   }
 };
 

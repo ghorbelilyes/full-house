@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================================
-# Full House — QA → Prod Data Sync Script
+# Protek — QA → Prod Data Sync Script
 # ============================================================================
 # Exports catalog/content/settings data from QA and imports into Prod.
 # Skips transactional data (orders, customers, carts, sessions).
@@ -155,7 +155,7 @@ get_table_count() {
 
 echo ""
 echo -e "${BLUE}╔══════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║     Full House — QA → Prod Data Sync                ║${NC}"
+echo -e "${BLUE}║     Protek — QA → Prod Data Sync                ║${NC}"
 echo -e "${BLUE}╚══════════════════════════════════════════════════════╝${NC}"
 echo ""
 

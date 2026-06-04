@@ -113,7 +113,7 @@ const Address: React.FC<{
               toast.error(error.message);
             }
           }}
-          className="rounded-xl bg-orange-50 px-4 py-2 text-sm font-bold text-orange-500 hover:bg-orange-100 dark:bg-orange-900/30 dark:text-orange-400 dark:hover:bg-orange-900/50"
+          className="rounded-xl bg-brand-soft px-4 py-2 text-sm font-bold text-primary hover:bg-brand-soft dark:bg-brand-navy-soft/40 dark:text-primary dark:hover:bg-brand-navy-soft/60"
         >
           {_('Delete')}
         </button>

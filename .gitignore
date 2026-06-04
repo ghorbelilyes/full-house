@@ -1,5 +1,5 @@
 node_modules
-.env
+# .env
 dist
 !packages/create-evershop-app/sample/extensions/sample/dist
 !packages/create-evershop-app/sample/themes/sample/dist
@@ -22,7 +22,7 @@ dist
 npm-debug.log
 /package-log.json
 /media
-/public
+# /public
 .DS_Store
 .log
 coverage

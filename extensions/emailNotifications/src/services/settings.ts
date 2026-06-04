@@ -146,7 +146,7 @@ function withEnvFallbacks(
     settings.storeName ||
     env('STORE_NAME') ||
     getConfig('shop.name', '') ||
-    'Full House';
+    'Protek';
   const storeUrl = settings.storeUrl || env('STORE_URL') || homeUrl;
   const senderEmail =
     settings.senderEmail ||

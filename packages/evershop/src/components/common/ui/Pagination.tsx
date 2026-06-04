@@ -53,8 +53,8 @@ function PaginationLink({
       className={cn(
         'inline-flex h-10 w-10 items-center justify-center rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer select-none',
         isActive
-          ? 'bg-orange-500 text-white shadow-md shadow-orange-200 pointer-events-none'
-          : 'text-slate-600 hover:bg-orange-50 hover:text-orange-600 active:scale-95',
+          ? 'bg-primary text-white shadow-md shadow-primary/20 pointer-events-none'
+          : 'text-slate-600 hover:bg-brand-soft hover:text-primary active:scale-95',
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ function PaginationPrevious({
     <PaginationLink
       aria-label="Page précédente"
       className={cn(
-        'w-auto gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-slate-600 shadow-sm hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600',
+        'w-auto gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-slate-600 shadow-sm hover:border-brand-muted hover:bg-brand-soft hover:text-primary',
         className
       )}
       {...props}
@@ -89,7 +89,7 @@ function PaginationNext({
     <PaginationLink
       aria-label="Page suivante"
       className={cn(
-        'w-auto gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-slate-600 shadow-sm hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600',
+        'w-auto gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-slate-600 shadow-sm hover:border-brand-muted hover:bg-brand-soft hover:text-primary',
         className
       )}
       {...props}

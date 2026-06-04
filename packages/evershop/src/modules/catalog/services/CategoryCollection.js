@@ -5,7 +5,7 @@ import { getValue } from '../../../lib/util/registry.js';
 export class CategoryCollection {
   constructor(baseQuery) {
     this.baseQuery = baseQuery;
-    this.baseQuery.orderBy('category.category_id', 'DESC');
+    this.baseQuery.orderBy('category.category_id', 'ASC');
   }
 
   async init(filters = [], isAdmin = false) {

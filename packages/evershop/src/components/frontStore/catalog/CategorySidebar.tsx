@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import { useCategory } from '@components/frontStore/catalog/CategoryContext.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
+import React, { useState } from 'react';
 
 interface SidebarCategory {
   categoryId?: number | null;
@@ -44,9 +44,9 @@ function CategoryBranch({
       <div
         className={`group/item flex items-center rounded-xl transition-colors duration-150 ${
           isCurrent
-            ? 'bg-gradient-to-r from-orange-500 to-orange-600 shadow-sm shadow-orange-200'
+            ? 'bg-gradient-to-r from-primary to-brand-strong shadow-sm shadow-primary/20'
             : isChildActive
-              ? 'bg-orange-50'
+              ? 'bg-brand-soft'
               : 'hover:bg-slate-50'
         }`}
       >
@@ -91,8 +91,8 @@ function CategoryBranch({
               isCurrent
                 ? 'font-bold text-white'
                 : isChildActive
-                  ? 'font-semibold text-orange-600'
-                  : 'font-medium text-slate-700 hover:text-orange-600'
+                  ? 'font-semibold text-primary'
+                  : 'font-medium text-slate-700 hover:text-primary'
             }`}
           >
             <span className="min-w-0 break-words">{category.name}</span>
@@ -117,8 +117,8 @@ function CategoryBranch({
               hasChildren ? 'px-2' : 'px-3.5'
             } ${
               isChildActive
-                ? 'font-semibold text-orange-600'
-                : 'font-medium text-slate-700 hover:text-orange-600'
+                ? 'font-semibold text-primary'
+                : 'font-medium text-slate-700 hover:text-primary'
             }`}
           >
             <span className="min-w-0 break-words">{category.name}</span>
@@ -135,7 +135,7 @@ function CategoryBranch({
       {hasChildren && expanded && (
         <ul className="relative ml-5 mt-1 space-y-1 pl-4">
           <div
-            className="absolute left-0 top-0 bottom-2 w-[2px] rounded-full bg-gradient-to-b from-orange-300 to-orange-100"
+            className="absolute left-0 top-0 bottom-2 w-[2px] rounded-full bg-gradient-to-b from-brand-muted to-brand-soft"
             aria-hidden
           />
           {category.children!.map((child) => (
@@ -176,11 +176,11 @@ export function CategorySidebar({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="group mb-2 flex w-full items-center justify-between rounded-xl px-2 py-2.5 text-left transition-colors hover:bg-orange-50"
+          className="group mb-2 flex w-full items-center justify-between rounded-xl px-2 py-2.5 text-left transition-colors hover:bg-brand-soft"
         >
           <span className="flex items-center gap-2.5 text-sm font-bold uppercase tracking-wider text-slate-800">
             <svg
-              className="h-4 w-4 text-orange-500"
+              className="h-4 w-4 text-primary"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

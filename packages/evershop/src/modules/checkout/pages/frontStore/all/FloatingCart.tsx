@@ -1,8 +1,8 @@
-import { MiniCart } from '@components/frontStore/cart/MiniCart.js';
 import {
   useCartState,
   CartSyncTrigger
 } from '@components/frontStore/cart/CartContext.js';
+import { MiniCart } from '@components/frontStore/cart/MiniCart.js';
 import { ShoppingCart } from 'lucide-react';
 import React, { useState, useEffect, useCallback } from 'react';
 
@@ -22,7 +22,7 @@ function FloatingCartIcon({
     <button
       type="button"
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-50 hidden h-14 w-14 items-center justify-center rounded-full bg-orange-500 text-white shadow-lg transition-all hover:bg-orange-600 hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer md:flex"
+      className="fixed bottom-6 right-6 z-50 hidden h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-all hover:bg-brand-strong hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer md:flex"
       aria-label={`Panier — ${totalQty} articles`}
     >
       {syncStatus.syncing ? (

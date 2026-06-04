@@ -14,7 +14,7 @@ export function NavigationItem({ Icon, url, title }: NavigationItemProps) {
     const checkActive = () => {
       const currentUrl = window.location.href;
       const currentUrlObj = new URL(currentUrl);
-      const menuUrlObj = new URL(url);
+      const menuUrlObj = new URL(url, window.location.origin);
 
       const currentPath = currentUrlObj.pathname;
       const menuPath = menuUrlObj.pathname;

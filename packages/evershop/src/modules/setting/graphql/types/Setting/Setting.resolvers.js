@@ -13,7 +13,7 @@ export default {
       if (storeName) {
         return storeName.value;
       } else {
-        return 'Full House';
+        return 'Protek';
       }
     }
   }

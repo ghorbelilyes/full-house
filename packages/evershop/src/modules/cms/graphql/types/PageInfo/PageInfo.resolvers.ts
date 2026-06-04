@@ -17,7 +17,7 @@ export default {
       title: get(
         context,
         'pageInfo.title',
-        await getSetting('storeName', 'Full House')
+        await getSetting('storeName', 'Protek')
       ),
       description: get(context, 'pageInfo.description', ''),
       keywords: get(context, 'pageInfo.keywords', []),
@@ -147,12 +147,12 @@ export default {
           twitterSite: get(
             context,
             'pageInfo.ogInfo.twitterSite',
-            await getSetting('storeName', 'Full House')
+            await getSetting('storeName', 'Protek')
           ),
           twitterCreator: get(
             context,
             'pageInfo.ogInfo.twitterCreator',
-            await getSetting('storeName', 'Full House')
+            await getSetting('storeName', 'Protek')
           ),
           twitterImage: get(context, 'pageInfo.ogInfo.twitterImage', image)
         },

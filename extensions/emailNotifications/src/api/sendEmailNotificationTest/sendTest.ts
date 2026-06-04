@@ -7,7 +7,7 @@ import { getEffectiveEmailNotificationSettings } from '../../services/settings.j
 
 function sampleData(settings, type: NotificationType) {
   return {
-    storeName: settings.storeName || 'Full House',
+    storeName: settings.storeName || 'Protek',
     storeUrl: settings.storeUrl || '',
     customerName: 'Client Test',
     customerEmail: 'client.test@example.com',

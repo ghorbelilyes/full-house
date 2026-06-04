@@ -1,4 +1,11 @@
 import Area from '@components/common/Area.js';
+import { useAppDispatch } from '@components/common/context/app.js';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle
+} from '@components/common/ui/Sheet.js';
 import {
   CategoryData,
   CategoryProvider
@@ -10,13 +17,6 @@ import { CategoryProductsPagination } from '@components/frontStore/catalog/Categ
 import { CategorySidebar } from '@components/frontStore/catalog/CategorySidebar.js';
 import { CategoryFilter } from '@components/frontStore/catalog/ProductFilter.js';
 import { ProductSorting } from '@components/frontStore/catalog/ProductSorting.js';
-import { useAppDispatch } from '@components/common/context/app.js';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle
-} from '@components/common/ui/Sheet.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import { ArrowUpDown, Check } from 'lucide-react';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
@@ -115,7 +115,7 @@ export default function CategoryView({
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all active:scale-[0.98] hover:border-orange-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-orange-500"
+          className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all active:scale-[0.98] hover:border-brand-muted hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-primary"
         >
           <svg
             className="h-[16px] w-[16px] flex-shrink-0 text-slate-600 dark:text-slate-300"
@@ -139,7 +139,7 @@ export default function CategoryView({
           <button
             type="button"
             onClick={() => setMobileSortOpen(!mobileSortOpen)}
-            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm transition-all active:scale-[0.98] hover:border-orange-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:hover:border-orange-500"
+            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm transition-all active:scale-[0.98] hover:border-brand-muted hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:hover:border-primary"
             aria-label={_('Sort By')}
           >
             <ArrowUpDown className="h-[18px] w-[18px] text-slate-600 dark:text-slate-300" />
@@ -152,11 +152,11 @@ export default function CategoryView({
                   key={preset.key}
                   type="button"
                   onClick={() => handleMobileSort(preset)}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-700 transition-colors hover:bg-orange-50 hover:text-orange-600 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-orange-400"
+                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-700 transition-colors hover:bg-brand-soft hover:text-primary dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-primary"
                 >
                   <span className="flex-1 text-left">{preset.label}</span>
                   {currentSortKey === preset.key && (
-                    <Check className="h-4 w-4 text-orange-500" />
+                    <Check className="h-4 w-4 text-primary" />
                   )}
                 </button>
               ))}
@@ -174,7 +174,7 @@ export default function CategoryView({
           <SheetHeader className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/95">
             <SheetTitle className="flex items-center gap-2.5 text-base font-bold text-slate-800 dark:text-slate-100">
               <svg
-                className="h-5 w-5 text-orange-500"
+                className="h-5 w-5 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

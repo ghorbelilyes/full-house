@@ -129,6 +129,7 @@ export default {
           'category.category_id'
         );
       query.where('category.parent_id', '=', category.categoryId);
+      query.orderBy('category.category_id', 'ASC');
       const results = await query.execute(pool);
       return results.map((row) => camelCase(row));
     },
