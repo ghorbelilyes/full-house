@@ -29,6 +29,7 @@ export interface CategoryFilter {
   categoryId: number;
   name: string;
   uuid: string;
+  url?: string;
 }
 
 export interface FilterComponent {

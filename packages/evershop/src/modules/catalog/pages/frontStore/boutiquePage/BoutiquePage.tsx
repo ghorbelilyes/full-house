@@ -1,5 +1,6 @@
 import Area from '@components/common/Area.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
+import { ChevronRight, Grid3x3, ShoppingBag } from 'lucide-react';
 import React from 'react';
 
 interface CategoryItem {
@@ -23,10 +24,10 @@ function CategoryCard({ category }: { category: CategoryItem }) {
   return (
     <a
       href={category.url}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-brand-muted dark:border-slate-700 dark:bg-slate-800 dark:hover:border-primary"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-slate-200 hover:shadow-lg"
     >
       {/* Image / placeholder */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-brand-soft to-white dark:from-slate-700 dark:to-slate-600">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-50 to-white">
         {category.image?.url ? (
           <img
             src={category.image.url}
@@ -36,36 +37,34 @@ function CategoryCard({ category }: { category: CategoryItem }) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <svg
-              className="h-16 w-16 text-brand-muted dark:text-slate-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            <Grid3x3
+              className="h-12 w-12 text-slate-200"
               strokeWidth={1}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-              />
-            </svg>
+            />
           </div>
         )}
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
       </div>
 
       {/* Label */}
-      <div className="flex flex-1 flex-col items-center justify-center px-4 py-4">
-        <h3 className="text-center text-base font-semibold text-slate-800 group-hover:text-primary transition-colors dark:text-slate-100 dark:group-hover:text-primary">
+      <div className="flex flex-1 flex-col items-start justify-center px-4 py-3.5">
+        <h3 className="text-sm font-bold text-slate-800 transition-colors group-hover:text-primary sm:text-base">
           {category.name}
         </h3>
         {category.children && category.children.length > 0 && (
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+          <p className="mt-0.5 text-xs text-slate-400">
             {category.children.length}{' '}
             {category.children.length === 1
               ? _('sous-catégorie')
               : _('sous-catégories')}
           </p>
         )}
+      </div>
+
+      {/* Arrow indicator */}
+      <div className="absolute bottom-3.5 right-3.5 flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition-all duration-200 group-hover:bg-primary group-hover:text-white">
+        <ChevronRight className="h-3.5 w-3.5" />
       </div>
     </a>
   );
@@ -79,20 +78,21 @@ function CategoryGroup({ category }: { category: CategoryItem }) {
     <section className="mb-10">
       {/* Parent heading */}
       <div className="mb-5 flex items-center gap-3">
-        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+        <h2 className="text-xl font-bold text-slate-800">
           {category.name}
         </h2>
-        <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+        <div className="h-px flex-1 bg-slate-200" />
         <a
           href={category.url}
-          className="flex-shrink-0 text-sm font-medium text-primary hover:text-brand-strong dark:text-primary dark:hover:text-brand-muted"
+          className="flex flex-shrink-0 items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-strong"
         >
-          {_('Voir tout')} →
+          {_('Voir tout')}
+          <ChevronRight className="h-3.5 w-3.5" />
         </a>
       </div>
 
       {/* Cards grid */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {hasChildren ? (
           category.children.map((child) => (
             <CategoryCard key={child.categoryId} category={child} />
@@ -108,10 +108,7 @@ function CategoryGroup({ category }: { category: CategoryItem }) {
 /* ── Page component ────────────────────────────────── */
 export default function BoutiquePage({ categories }: BoutiquePageProps) {
   const allCategories = categories?.items || [];
-  // Only show root-level categories (those without a parent)
   const topLevel = allCategories.filter((c) => !c.parent);
-
-  // Separate root categories (those with children) vs leaf categories
   const rootWithChildren = topLevel.filter(
     (c) => c.children && c.children.length > 0
   );
@@ -125,11 +122,16 @@ export default function BoutiquePage({ categories }: BoutiquePageProps) {
 
       <div className="page-width py-8">
         {/* Page heading */}
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">
+        <div className="mb-10 text-center">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-primary">
+            <ShoppingBag className="h-3.5 w-3.5" />
+            {_('Catalogue')}
+          </div>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-800 sm:text-4xl">
             {_('Boutique')}
           </h1>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-primary" />
+          <p className="mt-3 text-sm text-slate-500">
             {_('Parcourez toutes nos catégories')}
           </p>
         </div>
@@ -144,13 +146,13 @@ export default function BoutiquePage({ categories }: BoutiquePageProps) {
           <section className="mb-10">
             {rootWithChildren.length > 0 && (
               <div className="mb-5 flex items-center gap-3">
-                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                <h2 className="text-xl font-bold text-slate-800">
                   {_('Autres catégories')}
                 </h2>
-                <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+                <div className="h-px flex-1 bg-slate-200" />
               </div>
             )}
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
               {rootLeaf.map((cat) => (
                 <CategoryCard key={cat.categoryId} category={cat} />
               ))}

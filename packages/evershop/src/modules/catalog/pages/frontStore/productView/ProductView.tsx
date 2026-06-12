@@ -9,6 +9,7 @@ import { ProductSingleDescription } from '@components/frontStore/catalog/Product
 import { ProductSingleForm } from '@components/frontStore/catalog/ProductSingleForm.js';
 import { ProductSingleName } from '@components/frontStore/catalog/ProductSingleName.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
+import { Star } from 'lucide-react';
 import React from 'react';
 
 /* ── Helper: detect SVG string & render icon ────────────── */
@@ -30,21 +31,18 @@ function BadgeIcon({ icon, size }: { icon: string; size: number }) {
     }
     return (
       <span
-        style={{
-          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          width: `${size}px`, height: `${size}px`, flexShrink: 0, lineHeight: 1
-        }}
+        className="inline-flex items-center justify-center flex-shrink-0"
+        style={{ width: `${size}px`, height: `${size}px`, lineHeight: 1 }}
         dangerouslySetInnerHTML={{ __html: svg }}
       />
     );
   }
   return (
     <span
+      className="inline-flex items-center justify-center flex-shrink-0"
       style={{
         fontSize: `${size}px`, lineHeight: 1,
-        width: `${size}px`, height: `${size}px`,
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        flexShrink: 0
+        width: `${size}px`, height: `${size}px`
       }}
     >
       {icon}
@@ -56,17 +54,24 @@ function BadgeIcon({ icon, size }: { icon: string; size: number }) {
 function SpecBadges({ specBadges }: { specBadges: any[] }) {
   if (!specBadges || specBadges.length === 0) return null;
   return (
-    <div className="pdp-spec-badges">
+    <div className="mt-4 flex flex-wrap gap-2">
       {specBadges.map((badge: any, i: number) => (
-        <div key={i} className="pdp-spec-badge">
+        <div
+          key={i}
+          className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-xs"
+        >
           {badge.icon && (
-            <span className="pdp-spec-badge__icon">
+            <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-brand-soft text-primary">
               <BadgeIcon icon={badge.icon} size={16} />
             </span>
           )}
-          <div className="pdp-spec-badge__text">
-            <strong>{badge.value}</strong>
-            <small>{badge.label}</small>
+          <div className="min-w-0">
+            <strong className="block text-xs font-extrabold leading-tight text-slate-800">
+              {badge.value}
+            </strong>
+            <small className="block text-[10px] leading-tight text-slate-500">
+              {badge.label}
+            </small>
           </div>
         </div>
       ))}
@@ -78,13 +83,18 @@ function SpecBadges({ specBadges }: { specBadges: any[] }) {
 function TrustBadges({ trustBadges }: { trustBadges: any[] }) {
   if (!trustBadges || trustBadges.length === 0) return null;
   return (
-    <div className="pdp-trust-badges">
+    <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
       {trustBadges.map((badge: any, i: number) => (
-        <div key={i} className="pdp-trust-badge">
-          <span className="pdp-trust-badge__icon">
+        <div
+          key={i}
+          className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm"
+        >
+          <span className="flex-shrink-0 text-lg">
             <BadgeIcon icon={badge.icon} size={20} />
           </span>
-          <span className="pdp-trust-badge__label">{badge.label}</span>
+          <span className="text-xs font-semibold leading-tight text-slate-800">
+            {badge.label}
+          </span>
         </div>
       ))}
     </div>
@@ -95,20 +105,27 @@ function TrustBadges({ trustBadges }: { trustBadges: any[] }) {
 function RatingSummary({ reviewSummary, sku }: { reviewSummary: any; sku: string }) {
   const avg = reviewSummary?.averageRating || 0;
   const total = reviewSummary?.totalReviews || 0;
-  const stars = [];
-  for (let i = 1; i <= 5; i++) {
-    stars.push(i <= Math.round(avg) ? '★' : '☆');
-  }
+  const filledStars = Math.round(avg);
+
   return (
-    <div className="pdp-rating-row">
-      <span className="pdp-stars">{stars.join('')}</span>
-      <span className="pdp-rating-text">
+    <div className="mb-2 flex flex-wrap items-center gap-2">
+      <span className="flex items-center gap-px text-amber-500">
+        {Array.from({ length: 5 }, (_, index) => (
+          <Star
+            key={index}
+            className="h-3.5 w-3.5"
+            fill={index < filledStars ? 'currentColor' : 'none'}
+            strokeWidth={2}
+          />
+        ))}
+      </span>
+      <span className="text-[13px] text-slate-500">
         {avg > 0 ? avg.toFixed(1) : '—'} {total} {_('reviews')}
       </span>
       {sku && (
         <>
-          <span className="pdp-rating-sep">·</span>
-          <span className="pdp-rating-text">SKU: {sku}</span>
+          <span className="text-slate-300">·</span>
+          <span className="text-[13px] text-slate-500">SKU: {sku}</span>
         </>
       )}
     </div>
@@ -126,9 +143,9 @@ export default function ProductView({ product }: { product: any }) {
         <Area id="productPageTop" className="product__page__top" />
         <div className="product__page__middle page-width">
           {/* ── Main product card ── */}
-          <div className="pdp-card">
+          <div className="pdp-card grid grid-cols-1 gap-0 overflow-hidden rounded-none border-0 bg-transparent shadow-none md:grid-cols-[0.6fr_1fr] md:gap-8 md:rounded-3xl md:border md:border-slate-200 md:bg-white md:p-7 md:shadow-[0_4px_24px_rgba(0,0,0,0.08)]">
             {/* LEFT: gallery + spec badges */}
-            <div className="pdp-left">
+            <div className="min-w-0 max-w-full overflow-hidden bg-gradient-to-br from-slate-50 to-white md:rounded-2xl md:bg-transparent">
               <Area
                 id="productPageMiddleLeft"
                 className="product__detail__left"
@@ -141,13 +158,13 @@ export default function ProductView({ product }: { product: any }) {
                 ]}
               />
               {/* Desktop: spec badges under gallery */}
-              <div className="pdp-specs-desktop">
+              <div className="hidden md:block">
                 <SpecBadges specBadges={specBadges} />
               </div>
             </div>
 
             {/* RIGHT: product info */}
-            <div className="pdp-right">
+            <div className="relative min-w-0 px-4 pb-[120px] pt-4 md:px-0 md:pb-0 md:pt-0">
               <Area
                 id="productPageMiddleRight"
                 className="product__detail__right"
@@ -162,7 +179,7 @@ export default function ProductView({ product }: { product: any }) {
                             sku={product?.sku || ''}
                           />
                           {/* Mobile: spec badges after rating */}
-                          <div className="pdp-specs-mobile">
+                          <div className="block md:hidden">
                             <SpecBadges specBadges={specBadges} />
                           </div>
                         </>
@@ -218,106 +235,17 @@ export default function ProductView({ product }: { product: any }) {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-/* ═══════════════════════════════════════════════════════
-   PDP Redesign — Desktop + Mobile
-   ═══════════════════════════════════════════════════════ */
-
-.pdp-redesign { padding-bottom: 0; }
-
-/* ── Main card ── */
-.pdp-card {
-  background: var(--card, #fff);
-  color: var(--card-foreground, #0f172a);
-  border-radius: 24px;
-  padding: 28px;
-  display: grid;
-  grid-template-columns: 0.6fr 1fr;
-  gap: 32px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  border: 1px solid var(--border, #e5e7eb);
-  align-items: start;
-}
-
-.pdp-left { min-width: 0; max-width: 100%; overflow: hidden; }
-.pdp-right { position: relative; min-width: 0; }
-
-/* Show/hide spec badges by viewport */
-.pdp-specs-desktop { display: block; }
-.pdp-specs-mobile { display: none; }
-
-/* ── Spec badges ── */
-.pdp-spec-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
-}
-.pdp-spec-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--border, #e5e7eb);
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: var(--card, #fff);
-  font-size: 12px;
-}
-.pdp-spec-badge__icon {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: var(--brand-primary-soft, #fff0f2);
-  color: var(--primary, #ef233c);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.pdp-spec-badge__text { min-width: 0; }
-.pdp-spec-badge__text strong {
-  display: block; font-size: 12.5px; font-weight: 800;
-  color: var(--card-foreground, #1e293b); line-height: 1.2;
-}
-.pdp-spec-badge__text small {
-  display: block; font-size: 10px; color: var(--muted-foreground, #6b7280); line-height: 1.2;
-}
-
-/* ── Rating row ── */
-.pdp-rating-row {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 8px; flex-wrap: wrap;
-}
-.pdp-stars { color: var(--primary, #ef233c); font-size: 14px; letter-spacing: 2px; }
-.pdp-rating-text { color: var(--muted-foreground, #6b7280); font-size: 13px; }
-.pdp-rating-sep { color: var(--border, #cbd5e1); }
-
-/* ── Trust badges ── */
-.pdp-trust-badges {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 14px;
-}
-.pdp-trust-badge {
-  background: var(--muted, #f6f8fb);
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 13px;
-  border: 1px solid var(--border, #e5e7eb);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.pdp-trust-badge__icon { font-size: 18px; flex-shrink: 0; }
-.pdp-trust-badge__label { font-weight: 600; color: var(--card-foreground, #1e293b); line-height: 1.3; }
-
-/* ── Product name ── */
+/* PDP Redesign: product name */
 .pdp-redesign .product__single__name {
   font-size: 21px;
   font-weight: 700;
   line-height: 1.3;
   margin: 0 0 6px;
   color: var(--card-foreground, #0f172a);
-  padding-right: 50px; /* space for wishlist heart */
+  padding-right: 50px;
 }
 
-/* ── Attributes (specs table) ── */
+/* PDP Redesign: attributes (specs table) */
 .pdp-redesign .product__single__attributes {
   padding: 0;
   margin-top: 10px;
@@ -351,52 +279,17 @@ export default function ProductView({ product }: { product: any }) {
   text-align: right;
 }
 
-/* ── Mobile Sticky CTA ── */
+/* Mobile Sticky CTA */
 .pdp-mobile-cta {
   display: none;
 }
 
-/* ═══════════════════════════════════════════════════════
-   Mobile (< 900px)
-   ═══════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .pdp-card {
-    grid-template-columns: 1fr;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-    border: none;
-    gap: 0;
-    background: transparent;
-  }
-
-  .pdp-left {
-    background: linear-gradient(135deg, #f7f8fb, #eef1f6);
-    border-radius: 0;
-  }
-
-  .pdp-right {
-    padding: 16px 16px 120px;
-    background: var(--card, #fff);
-  }
-
-  .pdp-specs-desktop { display: none; }
-  .pdp-specs-mobile { display: block; margin-top: 12px; }
-
   .pdp-redesign .product__single__name {
     font-size: 18px;
     padding-right: 0;
   }
 
-  .pdp-rating-row { margin-bottom: 4px; }
-
-  /* Trust badges stacked on mobile */
-  .pdp-trust-badges {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  /* Mobile sticky CTA bar */
   .pdp-mobile-cta {
     display: flex;
     position: fixed;
@@ -408,14 +301,6 @@ export default function ProductView({ product }: { product: any }) {
     z-index: 35;
     box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
   }
-}
-
-/* ── Dark mode via [data-theme] ── */
-[data-theme="dark"] .pdp-spec-badge__icon {
-  background: rgba(228,129,37,0.15);
-}
-[data-theme="dark"] .pdp-left {
-  background: linear-gradient(135deg, #1a1f2e, #0f1420);
 }
 `
         }}

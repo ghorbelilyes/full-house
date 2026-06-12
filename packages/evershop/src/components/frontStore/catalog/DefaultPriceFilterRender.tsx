@@ -16,7 +16,6 @@ export const DefaultPriceFilterRender: React.FC<{
 }> = ({ priceRange, currentFilters, setting }) => {
   const { updateFilter } = useProductFilter();
 
-  // Initialize from current filters
   const [localMin, setLocalMin] = useState(() => {
     const minFilter = currentFilters.find((f) => f.key === 'min_price');
     return minFilter ? parseInt(minFilter.value) : priceRange.min;
@@ -52,11 +51,10 @@ export const DefaultPriceFilterRender: React.FC<{
         }
 
         updateFilter(newFilters);
-      }, 300); // 300ms debounce
+      }, 300);
     };
   }, [currentFilters, priceRange, updateFilter]);
 
-  // Sync with external filter changes
   React.useEffect(() => {
     const minFilter = currentFilters.find((f) => f.key === 'min_price');
     const maxFilter = currentFilters.find((f) => f.key === 'max_price');
@@ -72,21 +70,34 @@ export const DefaultPriceFilterRender: React.FC<{
     debouncedUpdate(min, max);
   };
 
+  const isFiltered =
+    localMin > priceRange.min || localMax < priceRange.max;
+
   return (
-    <DefaultFilterWrapperRender title={_('Price')}>
-      <div className="price__filter border-b border-border pb-2 mb-2">
-        <div className="price__slider mb-4">
+    <DefaultFilterWrapperRender
+      title={_('Price')}
+      badge={isFiltered ? 1 : 0}
+    >
+      <div className="px-1">
+        {/* Current range display */}
+        <div className="mb-4 flex items-center justify-center gap-2 text-sm">
+          <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 tabular-nums">
+            {priceRange.minText}
+          </span>
+          <span className="text-slate-400">—</span>
+          <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 tabular-nums">
+            {priceRange.maxText}
+          </span>
+        </div>
+
+        {/* Slider */}
+        <div className="px-1">
           <Slider
             min={priceRange.min}
             max={priceRange.max}
             value={[localMin, localMax]}
             onValueChange={handleRangeChange}
           />
-        </div>
-
-        <div className="flex justify-between text-small text-muted-foreground mt-2">
-          <span>{priceRange.minText}</span>
-          <span>{priceRange.maxText}</span>
         </div>
       </div>
     </DefaultFilterWrapperRender>

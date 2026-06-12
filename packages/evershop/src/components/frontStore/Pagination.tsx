@@ -303,9 +303,9 @@ export const DefaultPaginationRenderer: React.FC<{
   const showEndEllipsis = pageNumbers[pageNumbers.length - 1] < totalPages;
 
   return (
-    <div className={`products-pagination ${className}`}>
+    <div className={`${className}`}>
       {showInfo && (
-        <div className="pagination-info text-center text-muted-foreground mb-4">
+        <div className="text-center text-sm text-slate-500 mb-5">
           {getDisplayText()}
         </div>
       )}
@@ -406,8 +406,8 @@ export const DefaultPaginationRenderer: React.FC<{
       </PaginationUI>
 
       {isLoading && (
-        <div className="pagination-loading text-center mt-2">
-          <div className="inline-block w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <div className="text-center mt-3">
+          <div className="inline-block h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
         </div>
       )}
     </div>

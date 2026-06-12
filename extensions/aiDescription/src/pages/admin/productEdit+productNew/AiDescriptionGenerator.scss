@@ -60,3 +60,47 @@
     }
   }
 }
+
+.spec-table-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.spec-table-builder__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spec-table-builder__row {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.8fr) minmax(180px, 1.2fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.spec-table-builder__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.spec-table-builder__preview {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+}
+
+@media (max-width: 640px) {
+  .spec-table-builder__row {
+    grid-template-columns: 1fr;
+  }
+
+  .spec-table-builder__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

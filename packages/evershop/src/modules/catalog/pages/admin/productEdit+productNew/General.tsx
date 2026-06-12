@@ -21,9 +21,9 @@ import {
 import { Label } from '@components/common/ui/Label.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useQuery } from 'urql';
 import './General.scss';
-import { useFormContext } from 'react-hook-form';
 
 const SKUAndPrice: React.FC<{
   sku: string;
@@ -306,7 +306,7 @@ export default function General({
                       value: taxClass.value,
                       label: taxClass.text
                     }))}
-                    defaultValue={product?.taxClass || ''}
+                    defaultValue={product?.taxClass || taxClasses[0]?.value || ''}
                     required
                     validation={{ required: true }}
                   />

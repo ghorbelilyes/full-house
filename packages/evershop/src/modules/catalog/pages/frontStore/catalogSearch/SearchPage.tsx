@@ -21,7 +21,7 @@ import {
   getCurrentPresetKey
 } from '@components/frontStore/catalog/SearchSorting.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
-import { ArrowUpDown, Check } from 'lucide-react';
+import { ArrowUpDown, Check, LayoutGrid } from 'lucide-react';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 
 interface SidebarCategoryItem {
@@ -103,7 +103,6 @@ export default function SearchPage({ search, menu }: SearchPageProps) {
     history.pushState(null, '', url);
   }, [AppContextDispatch]);
 
-  // Close sort dropdown on outside click
   useEffect(() => {
     if (!mobileSortOpen) return;
     const handler = (e: MouseEvent) => {
@@ -120,50 +119,55 @@ export default function SearchPage({ search, menu }: SearchPageProps) {
       <Area id="searchPageTop" className="search__page__top" />
       <SearchInfo />
 
-      {/* ── Mobile: compact pill-style toolbar ── */}
-      <div className="page-width lg:hidden mb-4 flex items-center gap-2">
-        {/* Categories → left drawer */}
+      {/* ── Mobile toolbar ── */}
+      <div className="page-width lg:hidden mb-5 flex items-center gap-2">
+        {/* Categories drawer */}
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all active:scale-[0.98] hover:border-brand-muted hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-primary"
+          className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all active:scale-[0.98] hover:border-primary hover:shadow-md"
         >
-          <svg
-            className="h-[16px] w-[16px] flex-shrink-0 text-slate-600 dark:text-slate-300"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h7" />
-          </svg>
-          <span>{_('Shop')}</span>
+          <LayoutGrid className="h-4 w-4 flex-shrink-0 text-slate-500" />
+          <span>{_('Categories')}</span>
         </button>
 
-        {/* Filters → bottom sheet */}
+        {/* Filters */}
         <div className="flex-shrink-0">
           <SearchProductsFilter categories={filterCategories} />
         </div>
 
-        {/* Sort → simple dropdown */}
+        {/* Sort */}
         <div className="relative ml-auto" ref={sortDropdownRef}>
           <button
             type="button"
             onClick={() => setMobileSortOpen(!mobileSortOpen)}
-            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm transition-all active:scale-[0.98] hover:border-brand-muted hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:hover:border-primary"
+            className={`flex items-center gap-1.5 rounded-full border bg-white px-3.5 py-2.5 text-sm font-medium shadow-sm transition-all active:scale-[0.98] ${
+              currentSortKey
+                ? 'border-primary text-primary'
+                : 'border-slate-200 text-slate-700 hover:border-primary'
+            }`}
             aria-label={_('Sort By')}
           >
-            <ArrowUpDown className="h-[18px] w-[18px] text-slate-600 dark:text-slate-300" />
+            <ArrowUpDown className="h-4 w-4" />
+            <span className="hidden min-[480px]:inline">
+              {currentSortKey
+                ? searchSortPresets.find((p) => p.key === currentSortKey)?.label
+                : _('Sort')}
+            </span>
           </button>
 
           {mobileSortOpen && (
-            <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-800">
+            <div className="absolute right-0 top-full mt-1.5 z-50 w-52 rounded-xl border border-slate-100 bg-white py-1 shadow-xl">
               {searchSortPresets.map((preset) => (
                 <button
                   key={preset.key}
                   type="button"
                   onClick={() => handleMobileSort(preset)}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-700 transition-colors hover:bg-brand-soft hover:text-primary dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-primary"
+                  className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-sm transition-colors ${
+                    currentSortKey === preset.key
+                      ? 'bg-brand-soft font-semibold text-primary'
+                      : 'text-slate-600 hover:bg-slate-50'
+                  }`}
                 >
                   <span className="flex-1 text-left">{preset.label}</span>
                   {currentSortKey === preset.key && (
@@ -176,23 +180,15 @@ export default function SearchPage({ search, menu }: SearchPageProps) {
         </div>
       </div>
 
-      {/* ── Mobile category drawer (left side) ── */}
+      {/* ── Mobile category drawer ── */}
       <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
         <SheetContent
           side="left"
           className="w-[85vw] max-w-sm p-0"
         >
-          <SheetHeader className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/95">
-            <SheetTitle className="flex items-center gap-2.5 text-base font-bold text-slate-800 dark:text-slate-100">
-              <svg
-                className="h-5 w-5 text-primary"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h7" />
-              </svg>
+          <SheetHeader className="sticky top-0 z-10 border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur-sm">
+            <SheetTitle className="flex items-center gap-2.5 text-base font-bold text-slate-800">
+              <LayoutGrid className="h-5 w-5 text-primary" />
               {_('Categories')}
             </SheetTitle>
           </SheetHeader>
@@ -202,11 +198,12 @@ export default function SearchPage({ search, menu }: SearchPageProps) {
         </SheetContent>
       </Sheet>
 
-      <div className="page-width grid grid-cols-1 gap-8 lg:grid-cols-[320px_1fr]">
-        {/* ── Desktop sidebar (hidden on mobile) ── */}
+      {/* ── Main layout ── */}
+      <div className="page-width grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr] lg:gap-8">
+        {/* Desktop sidebar */}
         <Area
           id="searchLeftColumn"
-          className="hidden lg:block h-fit space-y-1 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm lg:sticky lg:top-[140px]"
+          className="hidden lg:block h-fit space-y-1 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm lg:sticky lg:top-[120px]"
           coreComponents={[
             {
               component: {
@@ -229,7 +226,7 @@ export default function SearchPage({ search, menu }: SearchPageProps) {
           ]}
         />
 
-        {/* ── Main content ── */}
+        {/* Main content */}
         <div>
           <SearchSorting />
           <SearchProducts />

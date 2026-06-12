@@ -29,6 +29,7 @@ export default function Shipping({ product, setting }: ShippingProps) {
     noShippingRequired: undefined,
     weight: undefined
   };
+  const defaultWeight = shipping.weight?.value ?? (product ? undefined : 0.1);
   const { control } = useFormContext();
   const noShippingRequired = useWatch({
     control,
@@ -43,7 +44,7 @@ export default function Shipping({ product, setting }: ShippingProps) {
       <CardHeader>
         <CardTitle>Expédition</CardTitle>
         <CardDescription>
-          Gérer les paramètres d'expédition du produit.
+          Gérer les paramètres d&apos;expédition du produit.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -61,7 +62,7 @@ export default function Shipping({ product, setting }: ShippingProps) {
             name="weight"
             placeholder="Entrez le poids"
             label={`Poids`}
-            defaultValue={shipping.weight?.value}
+            defaultValue={defaultWeight}
             unit={setting?.weightUnit}
             required
             validation={{
@@ -78,7 +79,7 @@ export default function Shipping({ product, setting }: ShippingProps) {
             name="weight_no_shipping"
             placeholder="Entrez le poids"
             label={`Poids`}
-            defaultValue={shipping.weight?.value}
+            defaultValue={defaultWeight}
             unit={setting?.weightUnit}
             disabled
             helperText={'Weight must be a positive number'}

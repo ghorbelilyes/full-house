@@ -27,9 +27,11 @@ import {
   Heart,
   Star
 } from 'lucide-react';
-import React, { ReactNode, useState, useCallback, useRef, useEffect } from 'react';
+import React, { ReactNode, useState, useCallback, useRef, useEffect, createContext, useContext } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { toast } from 'react-toastify';
+
+/* ═══════════════════ Shared Helpers ═══════════════════ */
 
 const hasPromotion = (product: ProductData): boolean => {
   return !!(
@@ -83,68 +85,200 @@ const getPromotionLabel = (
   return discountPercent > 0 ? `-${discountPercent}%` : null;
 };
 
+/* ═══════════════════ WhatsApp Settings Context ═══════════════════ */
+/* Avoids N+1 API calls — fetch once, share everywhere */
+
+interface WhatsAppConfig {
+  enabled: boolean;
+  number: string | null;
+  template: string | null;
+}
+
+const WhatsAppConfigContext = createContext<WhatsAppConfig>({
+  enabled: false,
+  number: null,
+  template: null
+});
+
+let _waConfigPromise: Promise<WhatsAppConfig> | null = null;
+
+function fetchWhatsAppConfig(): Promise<WhatsAppConfig> {
+  if (!_waConfigPromise) {
+    _waConfigPromise = fetch('/api/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: `{ setting { whatsappEnabled whatsappNumber whatsappMessageTemplate } }`
+      })
+    })
+      .then((r) => r.json())
+      .then((json) => {
+        const s = json?.data?.setting;
+        return {
+          enabled: !!s?.whatsappEnabled,
+          number: s?.whatsappNumber || null,
+          template: s?.whatsappMessageTemplate || null
+        };
+      })
+      .catch(() => ({ enabled: false, number: null, template: null }));
+  }
+  return _waConfigPromise;
+}
+
+function useWhatsAppConfig(): WhatsAppConfig {
+  const [config, setConfig] = useState<WhatsAppConfig>({
+    enabled: false,
+    number: null,
+    template: null
+  });
+
+  useEffect(() => {
+    fetchWhatsAppConfig().then(setConfig);
+  }, []);
+
+  return config;
+}
+
+/* ═══════════════════ Sub-Components ═══════════════════ */
+
 function ProductRating({ product }: { product: ProductData }) {
   const averageRating = Number(product.reviewSummary?.averageRating || 0);
   const totalReviews = Number(product.reviewSummary?.totalReviews || 0);
 
   if (!totalReviews) {
-    return (
-      <div
-        className="mt-2 flex min-h-[20px] items-center gap-1.5 text-sm text-slate-500"
-        aria-hidden="true"
-      />
-    );
+    return null;
   }
 
   const filledStars = Math.round(averageRating);
 
   return (
-    <div className="mt-2 flex min-h-[20px] items-center gap-1.5 text-sm text-slate-500">
-      <span className="flex items-center gap-[1px] text-amber-500">
-        {Array.from({ length: 5 }, (_, index) => {
-          const isFilled = index < filledStars;
-          return (
-            <Star
-              key={index}
-              className="h-3.5 w-3.5"
-              fill={isFilled ? 'currentColor' : 'none'}
-              strokeWidth={2.2}
-            />
-          );
-        })}
+    <div className="flex items-center gap-1 text-xs text-slate-500">
+      <span className="flex items-center gap-px text-amber-500">
+        {Array.from({ length: 5 }, (_, index) => (
+          <Star
+            key={index}
+            className="h-3 w-3"
+            fill={index < filledStars ? 'currentColor' : 'none'}
+            strokeWidth={2}
+          />
+        ))}
       </span>
-      <span className="truncate">
-        {averageRating.toFixed(1)} · {totalReviews} avis
+      <span className="truncate text-[11px]">
+        {averageRating.toFixed(1)} ({totalReviews})
       </span>
     </div>
   );
 }
 
-/* ── Diagonal PROMO ribbon (top-left corner) ─────────────── */
-function PromoRibbon({ percent }: { percent: number }) {
+/* ── Promo Badge ─────────────── */
+function PromoBadge({ percent }: { percent: number }) {
   return (
-    <div
-      className="absolute -left-[1px] -top-[1px] z-10 overflow-hidden pointer-events-none"
-      style={{ width: 120, height: 120 }}
-    >
-      <div
-        className="flex items-center justify-center bg-red-600 text-center text-[13px] font-extrabold uppercase tracking-wider text-white shadow-md"
-        style={{
-          position: 'absolute',
-          top: 22,
-          left: -34,
-          width: 170,
-          transform: 'rotate(-45deg)',
-          padding: '7px 0'
-        }}
-      >
-        PROMO -{percent}%
-      </div>
-    </div>
+    <span className="absolute left-2 top-2 z-10 inline-flex items-center rounded-lg bg-red-600 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
+      -{percent}%
+    </span>
   );
 }
 
-/* ─────────── API helper ─────────── */
+/* ── Stock Badge ─────────────── */
+function StockBadge({ inStock }: { inStock: boolean }) {
+  if (inStock) {
+    return (
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        {_('In Stock')}
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-red-500">
+      <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
+      {_('Out of Stock')}
+    </span>
+  );
+}
+
+/* ── Price Display ─────────────── */
+function PriceDisplay({
+  product,
+  size = 'default'
+}: {
+  product: ProductData;
+  size?: 'default' | 'sm';
+}) {
+  const onSale = hasPromotion(product);
+  const priceClass = size === 'sm' ? 'text-base' : 'text-lg';
+  const oldClass = size === 'sm' ? 'text-[11px]' : 'text-xs';
+
+  if (onSale) {
+    return (
+      <div className="flex flex-wrap items-baseline gap-1.5">
+        <span className={`${priceClass} font-extrabold text-primary`}>
+          {product.price.special!.text}
+        </span>
+        <span
+          className={`${oldClass} font-medium text-slate-400 line-through`}
+        >
+          {product.price.regular.text}
+        </span>
+      </div>
+    );
+  }
+  return (
+    <span className={`${priceClass} font-extrabold text-slate-900`}>
+      {product.price.regular.text}
+    </span>
+  );
+}
+
+/* ═══════════════════ Wishlist Heart ═══════════════════ */
+function WishlistHeart({ productId }: { productId: number }) {
+  const wishlist = useOptionalWishlist();
+  const [busy, setBusy] = useState(false);
+  const [pop, setPop] = useState(false);
+
+  if (!wishlist) return null;
+
+  const inWishlist = wishlist.isInWishlist(productId);
+
+  const toggle = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (busy) return;
+    setBusy(true);
+    const added = await wishlist.toggleItem(productId);
+    if (added) {
+      setPop(true);
+      setTimeout(() => setPop(false), 400);
+    }
+    setBusy(false);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      disabled={busy}
+      aria-label={inWishlist ? _('Remove from favorites') : _('Add to favorites')}
+      className={`
+        absolute right-2.5 top-2.5 z-20 flex h-8 w-8 items-center justify-center rounded-full
+        border shadow-sm backdrop-blur-sm transition-all duration-200
+        ${busy ? 'opacity-50' : 'hover:scale-110 active:scale-95'}
+        ${inWishlist
+          ? 'border-rose-200 bg-rose-50/90 text-rose-500'
+          : 'border-white/60 bg-white/80 text-slate-400 hover:text-rose-500'
+        }
+      `}
+    >
+      <Heart
+        className={`h-4 w-4 transition-transform ${pop ? 'scale-125' : ''}`}
+        fill={inWishlist ? 'currentColor' : 'none'}
+        strokeWidth={2}
+      />
+    </button>
+  );
+}
+
+/* ═══════════════════ API helper ═══════════════════ */
 const apiCall = async (url: string, opts: RequestInit = {}) => {
   const res = await fetch(url, {
     headers: { 'Content-Type': 'application/json' },
@@ -156,7 +290,7 @@ const apiCall = async (url: string, opts: RequestInit = {}) => {
   return json;
 };
 
-/* ─────────── Types ─────────── */
+/* ═══════════════════ Shipping Types & Components ═══════════════════ */
 interface ShippingMethodOption {
   id: string;
   code: string;
@@ -164,13 +298,6 @@ interface ShippingMethodOption {
   cost: { value: number; text: string };
 }
 
-interface WhatsAppConfig {
-  enabled: boolean;
-  number: string | null;
-  template: string | null;
-}
-
-/* ─────────── Shipping method selector (mini) ─────────── */
 function ShippingMethodSelector({
   methods,
   loading,
@@ -228,7 +355,6 @@ function ShippingMethodSelector({
   );
 }
 
-/* ─────────── Order Summary (mini) ─────────── */
 function OrderSummaryMini({
   product,
   shippingMethods,
@@ -291,7 +417,7 @@ function OrderSummaryMini({
   );
 }
 
-/* ═══════════════════ BuyNow Checkout Modal (card version) ═══════════════════ */
+/* ═══════════════════ BuyNow Checkout Modal ═══════════════════ */
 function CardBuyNowCheckout({
   product,
   open,
@@ -314,7 +440,6 @@ function CardBuyNowCheckout({
   const lastProvinceRef = useRef<string | null>(null);
   const form = useForm({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
-  // Create cart on first open
   useEffect(() => {
     if (open && !cartId && !creatingCart) {
       setCreatingCart(true);
@@ -336,7 +461,6 @@ function CardBuyNowCheckout({
     }
   }, [open, cartId, creatingCart, product.sku, onClose]);
 
-  // Reset on close
   const handleClose = useCallback(
     (isOpen: boolean) => {
       if (!isOpen) {
@@ -356,7 +480,6 @@ function CardBuyNowCheckout({
     [form, onClose]
   );
 
-  // Fetch shipping methods
   const fetchShippingMethods = useCallback(
     async (cId: string, province: string) => {
       setLoadingShipping(true);
@@ -396,7 +519,6 @@ function CardBuyNowCheckout({
     [form]
   );
 
-  // Watch province changes
   const watchedProvince = form.watch('shippingAddress.province');
   useEffect(() => {
     if (
@@ -414,7 +536,6 @@ function CardBuyNowCheckout({
     }
   }, [watchedProvince, step, cartId, fetchShippingMethods]);
 
-  // Submit order
   const handleSubmitOrder = useCallback(async () => {
     const isValid = await form.trigger();
     if (!isValid) {
@@ -491,7 +612,6 @@ function CardBuyNowCheckout({
         className="card-buynow-dialog-content"
         showCloseButton={step !== 'processing'}
       >
-        {/* Creating cart spinner */}
         {creatingCart && (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
             <Loader2 className="w-7 h-7 animate-spin text-primary" />
@@ -501,7 +621,6 @@ function CardBuyNowCheckout({
           </div>
         )}
 
-        {/* Checkout form */}
         {step === 'form' && !creatingCart && (
           <FormProvider {...form}>
             <form onSubmit={(e) => e.preventDefault()}>
@@ -515,7 +634,6 @@ function CardBuyNowCheckout({
               </DialogHeader>
 
               <div className="space-y-4 mt-3">
-                {/* Email */}
                 <div>
                   <label className="text-xs font-medium mb-1 block">
                     {_('Email')}{' '}
@@ -531,7 +649,6 @@ function CardBuyNowCheckout({
                   />
                 </div>
 
-                {/* Shipping address */}
                 <div>
                   <div className="flex items-center gap-1.5 text-xs font-semibold mb-2">
                     <MapPin className="w-3.5 h-3.5" />
@@ -544,7 +661,6 @@ function CardBuyNowCheckout({
                   />
                 </div>
 
-                {/* Shipping method */}
                 <div>
                   <div className="flex items-center gap-1.5 text-xs font-semibold mb-1.5">
                     <Truck className="w-3.5 h-3.5" />
@@ -558,7 +674,6 @@ function CardBuyNowCheckout({
                   />
                 </div>
 
-                {/* Payment */}
                 <div>
                   <div className="flex items-center gap-1.5 text-xs font-semibold mb-1.5">
                     <CreditCard className="w-3.5 h-3.5" />
@@ -579,7 +694,6 @@ function CardBuyNowCheckout({
                   </div>
                 </div>
 
-                {/* Order summary */}
                 <OrderSummaryMini
                   product={product}
                   shippingMethods={shippingMethods}
@@ -606,7 +720,6 @@ function CardBuyNowCheckout({
           </FormProvider>
         )}
 
-        {/* Success */}
         {step === 'success' && (
           <div className="flex flex-col items-center text-center py-4 gap-3">
             <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center">
@@ -668,38 +781,7 @@ function ProductActionModal({
   const whatsappModuleEnabled = useModuleEnabled('whatsappNotifications');
   const [showCheckout, setShowCheckout] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
-  const [whatsapp, setWhatsapp] = useState<WhatsAppConfig>({
-    enabled: false,
-    number: null,
-    template: null
-  });
-  const [loadedWa, setLoadedWa] = useState(false);
-
-  // Fetch WhatsApp settings on mount
-  useEffect(() => {
-    if (open && !loadedWa) {
-      fetch('/api/graphql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: `{ setting { whatsappEnabled whatsappNumber whatsappMessageTemplate } }`
-        })
-      })
-        .then((r) => r.json())
-        .then((json) => {
-          const s = json?.data?.setting;
-          if (s) {
-            setWhatsapp({
-              enabled: !!s.whatsappEnabled,
-              number: s.whatsappNumber || null,
-              template: s.whatsappMessageTemplate || null
-            });
-          }
-          setLoadedWa(true);
-        })
-        .catch(() => setLoadedWa(true));
-    }
-  }, [open, loadedWa]);
+  const whatsapp = useWhatsAppConfig();
 
   const onSale = hasPromotion(product);
   const displayPrice = onSale
@@ -717,7 +799,6 @@ function ProductActionModal({
     [onClose]
   );
 
-  // WhatsApp handler
   const handleWhatsApp = useCallback(() => {
     const template =
       whatsapp.template ||
@@ -731,12 +812,13 @@ function ProductActionModal({
       .replace(/{price}/g, displayPrice)
       .replace(/{qty}/g, '1')
       .replace(/{url}/g, productUrl);
-    const url = `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(
+      `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`,
+      '_blank'
+    );
     handleClose(false);
   }, [whatsapp, product, displayPrice, handleClose]);
 
-  // Reset on reopen
   useEffect(() => {
     if (!open) {
       setShowCheckout(false);
@@ -744,7 +826,6 @@ function ProductActionModal({
     }
   }, [open]);
 
-  // If showing checkout, render it
   if (showCheckout) {
     return (
       <CardBuyNowCheckout
@@ -773,7 +854,6 @@ function ProductActionModal({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Product preview */}
         <div className="flex gap-3 p-3 rounded-lg bg-slate-50">
           {product.image?.url && (
             <img
@@ -790,9 +870,7 @@ function ProductActionModal({
           </div>
         </div>
 
-        {/* 4 action buttons */}
         <div className="space-y-2.5">
-          {/* Option 1: Buy Now */}
           <button
             type="button"
             onClick={() => setShowCheckout(true)}
@@ -811,7 +889,6 @@ function ProductActionModal({
             </div>
           </button>
 
-          {/* Option 2: WhatsApp (conditional) */}
           {whatsappModuleEnabled && whatsapp.enabled && whatsapp.number && (
             <button
               type="button"
@@ -832,7 +909,6 @@ function ProductActionModal({
             </button>
           )}
 
-          {/* Option 3: Add to cart */}
           <AddToCart
             product={{
               sku: product.sku,
@@ -878,7 +954,6 @@ function ProductActionModal({
             )}
           </AddToCart>
 
-          {/* Option 4: Cancel */}
           <button
             type="button"
             onClick={() => handleClose(false)}
@@ -899,49 +974,15 @@ function ProductActionModal({
   );
 }
 
-/* ═══════════════════ Product Card Action Buttons ═══════════════════ */
-function ProductCardActions({
-  product
-}: {
-  product: ProductData;
-}) {
+/* ═══════════════════ Card Action Buttons ═══════════════════ */
+function ProductCardActions({ product }: { product: ProductData }) {
   const whatsappModuleEnabled = useModuleEnabled('whatsappNotifications');
-  const [whatsapp, setWhatsapp] = useState<WhatsAppConfig>({
-    enabled: false,
-    number: null,
-    template: null
-  });
-  const [loadedWa, setLoadedWa] = useState(false);
+  const whatsapp = useWhatsAppConfig();
   const inStock = product.inventory.isInStock;
   const onSale = hasPromotion(product);
   const displayPrice = onSale
     ? product.price.special!.text
     : product.price.regular.text;
-
-  useEffect(() => {
-    if (!loadedWa) {
-      fetch('/api/graphql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: `{ setting { whatsappEnabled whatsappNumber whatsappMessageTemplate } }`
-        })
-      })
-        .then((r) => r.json())
-        .then((json) => {
-          const setting = json?.data?.setting;
-          if (setting) {
-            setWhatsapp({
-              enabled: !!setting.whatsappEnabled,
-              number: setting.whatsappNumber || null,
-              template: setting.whatsappMessageTemplate || null
-            });
-          }
-          setLoadedWa(true);
-        })
-        .catch(() => setLoadedWa(true));
-    }
-  }, [loadedWa]);
 
   const handleWhatsAppOrder = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -971,102 +1012,51 @@ function ProductCardActions({
   );
 
   return (
-    <>
-      <div className="mt-2 grid grid-cols-2 gap-1.5">
-        <button
-          type="button"
-          disabled={!inStock || !whatsappModuleEnabled || !whatsapp.enabled || !whatsapp.number}
-          onClick={handleWhatsAppOrder}
-          className="flex min-h-[42px] items-center justify-center gap-1.5 rounded-[13px] bg-green-600 px-1.5 text-center text-[12px] font-extrabold leading-tight text-white transition hover:bg-green-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <MessageCircle className="h-4 w-4 flex-shrink-0" />
-          <span className="truncate">{_('Order via WhatsApp')}</span>
-        </button>
+    <div className="mt-auto grid grid-cols-2 gap-1.5 pt-2.5">
+      <button
+        type="button"
+        disabled={!inStock || !whatsappModuleEnabled || !whatsapp.enabled || !whatsapp.number}
+        onClick={handleWhatsAppOrder}
+        className="flex min-h-[38px] items-center justify-center gap-1 rounded-xl bg-green-600 px-2 text-center text-[11px] font-bold leading-tight text-white transition-all hover:bg-green-700 hover:shadow-md active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <MessageCircle className="h-3.5 w-3.5 flex-shrink-0" />
+        <span className="truncate">WhatsApp</span>
+      </button>
 
-        {/* Add to Cart button */}
-        <AddToCart
-          product={{
-            sku: product.sku,
-            isInStock: product.inventory.isInStock
-          }}
-          qty={1}
-          onSuccess={() => toast.success(_('Product added to cart'))}
-          onError={(error) => toast.error(error)}
-        >
-          {(state, actions) => (
-            <button
-              type="button"
-              disabled={!state.canAddToCart || state.isLoading || !inStock}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (inStock) actions.addToCart();
-              }}
-              className="flex min-h-[42px] items-center justify-center gap-1.5 rounded-[13px] border border-slate-200 bg-white px-1.5 text-center text-[12px] font-extrabold leading-tight text-slate-900 transition hover:border-brand-muted hover:bg-brand-soft hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {state.isLoading ? (
-                <Loader2 className="h-4 w-4 flex-shrink-0 animate-spin" />
-              ) : (
-                <ShoppingCart className="h-4 w-4 flex-shrink-0" />
-              )}
-              <span className="truncate">{state.isLoading ? _('Adding...') : _('Add to Cart')}</span>
-            </button>
-          )}
-        </AddToCart>
-      </div>
-    </>
+      <AddToCart
+        product={{
+          sku: product.sku,
+          isInStock: product.inventory.isInStock
+        }}
+        qty={1}
+        onSuccess={() => toast.success(_('Product added to cart'))}
+        onError={(error) => toast.error(error)}
+      >
+        {(state, actions) => (
+          <button
+            type="button"
+            disabled={!state.canAddToCart || state.isLoading || !inStock}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (inStock) actions.addToCart();
+            }}
+            className="flex min-h-[38px] items-center justify-center gap-1 rounded-xl border border-slate-200 bg-white px-2 text-center text-[11px] font-bold leading-tight text-slate-800 transition-all hover:border-primary hover:bg-brand-soft hover:text-primary active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {state.isLoading ? (
+              <Loader2 className="h-3.5 w-3.5 flex-shrink-0 animate-spin" />
+            ) : (
+              <ShoppingCart className="h-3.5 w-3.5 flex-shrink-0" />
+            )}
+            <span className="truncate">{state.isLoading ? _('Adding...') : _('Cart')}</span>
+          </button>
+        )}
+      </AddToCart>
+    </div>
   );
 }
 
-/* ═══════════════ Wishlist Heart Overlay ═══════════════ */
-function WishlistHeart({ productId }: { productId: number }) {
-  const wishlist = useOptionalWishlist();
-  const [busy, setBusy] = useState(false);
-  const [pop, setPop] = useState(false);
-
-  if (!wishlist) return null;
-
-  const inWishlist = wishlist.isInWishlist(productId);
-
-  const toggle = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (busy) return;
-    setBusy(true);
-    const added = await wishlist.toggleItem(productId);
-    if (added) {
-      setPop(true);
-      setTimeout(() => setPop(false), 400);
-    }
-    setBusy(false);
-  };
-
-  return (
-    <button
-      type="button"
-      onClick={toggle}
-      disabled={busy}
-      aria-label={inWishlist ? _('Remove from favorites') : _('Add to favorites')}
-      className={`
-        absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-[13px]
-        border border-slate-200 shadow-sm backdrop-blur-sm transition-all
-        ${busy ? 'opacity-50' : 'hover:scale-110 active:scale-95'}
-        ${inWishlist
-          ? 'bg-rose-50/95 text-rose-500 dark:border-rose-800 dark:bg-rose-900/70 dark:text-rose-300'
-          : 'bg-white/95 text-slate-400 hover:text-rose-500 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-300 dark:hover:text-rose-300'
-        }
-      `}
-    >
-      <Heart
-        className={`h-[18px] w-[18px] transition-transform ${pop ? 'scale-125' : ''}`}
-        fill={inWishlist ? 'currentColor' : 'none'}
-        strokeWidth={2.2}
-      />
-    </button>
-  );
-}
-
-/* ═══════════════════ Main Export ═══════════════════ */
+/* ═══════════════════ Main Product Card ═══════════════════ */
 export const ProductListItemRender = ({
   product,
   imageWidth,
@@ -1085,20 +1075,18 @@ export const ProductListItemRender = ({
   const onSale = hasPromotion(product);
   const discountPercent = getDiscountPercent(product);
   const brand = getProductBrand(product);
-  const badgeLabel = getPromotionLabel(product, discountPercent);
 
   /* ── List layout ─────────────────────────────────────────── */
   if (layout === 'list') {
     return (
-      <article className="group relative flex gap-6 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-brand-muted">
-        {/* Wishlist heart */}
+      <article className="group relative flex gap-4 overflow-hidden rounded-2xl border border-slate-100 bg-white p-3 shadow-sm transition-all duration-200 hover:shadow-md hover:border-slate-200 sm:gap-6 sm:p-4">
         <WishlistHeart productId={product.productId} />
-        {/* Image area with PROMO ribbon */}
+
         <a
           href={product.url}
-          className="relative flex h-40 w-40 flex-shrink-0 items-center justify-center rounded-xl bg-slate-50 p-4"
+          className="relative flex h-28 w-28 flex-shrink-0 items-center justify-center rounded-xl bg-slate-50 p-3 sm:h-40 sm:w-40 sm:p-4"
         >
-          {onSale && <PromoRibbon percent={discountPercent} />}
+          {onSale && <PromoBadge percent={discountPercent} />}
           {product.image ? (
             <Image
               src={product.image.url}
@@ -1114,15 +1102,14 @@ export const ProductListItemRender = ({
           )}
         </a>
 
-        {/* Info */}
-        <div className="flex flex-1 flex-col justify-between py-1">
+        <div className="flex flex-1 flex-col justify-between py-0.5 min-w-0">
           <div>
             {brand && (
-              <p className="mb-1 text-xs font-extrabold uppercase tracking-wide text-primary">
+              <p className="mb-0.5 text-[11px] font-bold uppercase tracking-wide text-primary">
                 {brand}
               </p>
             )}
-            <h3 className="line-clamp-2 text-base font-bold leading-snug text-slate-800">
+            <h3 className="line-clamp-2 text-sm font-bold leading-snug text-slate-800 sm:text-base">
               <a
                 href={product.url}
                 className="transition-colors hover:text-primary"
@@ -1131,39 +1118,15 @@ export const ProductListItemRender = ({
               </a>
             </h3>
 
-            <div className="mt-3">
-              {onSale ? (
-                <div className="flex items-baseline gap-3">
-                  <span className="text-xl font-extrabold text-red-600">
-                    {product.price.special!.text}
-                  </span>
-                  <span className="text-base font-semibold text-slate-500 line-through decoration-slate-400 decoration-2">
-                    {product.price.regular.text}
-                  </span>
-                </div>
-              ) : (
-                <span className="text-xl font-extrabold text-slate-800">
-                  {product.price.regular.text}
-                </span>
-              )}
+            <div className="mt-2">
+              <PriceDisplay product={product} />
             </div>
 
-            <div className="mt-3">
-              {product.inventory.isInStock ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600">
-                  <span className="size-1.5 rounded-full bg-emerald-500" />
-                  {_('In Stock')}
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary">
-                  <span className="size-1.5 rounded-full bg-primary" />
-                  {_('Out of Stock')}
-                </span>
-              )}
+            <div className="mt-2">
+              <StockBadge inStock={product.inventory.isInStock} />
             </div>
           </div>
 
-          {/* Actions for list layout */}
           {showAddToCart && (
             <ProductCardActions product={product} />
           )}
@@ -1174,45 +1137,47 @@ export const ProductListItemRender = ({
 
   /* ── Grid layout ─────────────────────────────────────────── */
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-[0_8px_22px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-1 hover:border-brand-muted hover:shadow-[0_14px_36px_rgba(15,23,42,0.10)] dark:border-slate-800 dark:bg-slate-950">
+    <article className="product-card group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-lg">
       {/* Wishlist heart */}
       <WishlistHeart productId={product.productId} />
+
       {/* Out-of-stock overlay */}
       {!product.inventory.isInStock && (
-        <div className="absolute inset-0 z-[6] flex items-center justify-center bg-white/60 dark:bg-slate-950/60">
-          <span className="rounded-lg bg-slate-800 px-4 py-2 text-sm font-bold uppercase text-white">
+        <div className="absolute inset-0 z-[6] flex items-center justify-center bg-white/60">
+          <span className="rounded-lg bg-slate-800/90 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
             {_('SOLD OUT')}
           </span>
         </div>
       )}
 
-      {/* Image area — PROMO ribbon is INSIDE here */}
+      {/* Image area */}
       <a
         href={product.url}
-        className="relative flex h-[240px] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-brand-soft/40 p-7 dark:from-slate-900 dark:to-slate-950"
+        className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-b from-slate-50 to-white p-5"
       >
-        {onSale && <PromoRibbon percent={discountPercent} />}
+        {onSale && <PromoBadge percent={discountPercent} />}
         {product.image ? (
           <img
             src={product.image.url}
             alt={product.image.alt || product.name}
             loading="lazy"
             decoding="async"
-            className="h-auto max-h-[185px] max-w-[88%] object-contain transition-transform duration-300 group-hover:scale-105"
+            className="h-auto max-h-[85%] max-w-[88%] object-contain transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <ProductNoThumbnail width={imageWidth} height={imageHeight} />
         )}
       </a>
 
-      {/* Info */}
-      <div className="flex flex-1 flex-col border-t border-slate-100 p-4 dark:border-slate-800">
+      {/* Content */}
+      <div className="flex flex-1 flex-col gap-1 border-t border-slate-50 p-3 sm:p-3.5">
         {brand && (
-          <p className="mb-1 text-xs font-extrabold uppercase tracking-wide text-primary">
+          <p className="text-[10px] font-bold uppercase tracking-wide text-primary sm:text-[11px]">
             {brand}
           </p>
         )}
-        <h3 className="line-clamp-2 min-h-[44px] text-base font-extrabold leading-snug text-slate-900 dark:text-slate-100">
+
+        <h3 className="line-clamp-2 min-h-[36px] text-[13px] font-bold leading-snug text-slate-800 sm:text-sm">
           <a
             href={product.url}
             className="transition-colors hover:text-primary"
@@ -1223,37 +1188,16 @@ export const ProductListItemRender = ({
 
         <ProductRating product={product} />
 
-        <div className="mt-1 flex items-end justify-between gap-2">
-          <div className="min-w-0">
-            {onSale ? (
-              <div className="flex flex-wrap items-baseline gap-2">
-                <span className="text-[22px] font-extrabold tracking-tight text-primary">
-                  {product.price.special!.text}
-                </span>
-                <span className="text-xs font-semibold text-slate-400 line-through decoration-slate-400">
-                  {product.price.regular.text}
-                </span>
-              </div>
-            ) : (
-              <p className="text-[22px] font-extrabold tracking-tight text-primary">
-                {product.price.regular.text}
-              </p>
-            )}
-          </div>
-          {product.inventory.isInStock ? (
-            <span className="mb-1 flex-shrink-0 text-[13px] font-extrabold text-emerald-600">
-              {_('In Stock')}
-            </span>
-          ) : (
-            <span className="mb-1 flex-shrink-0 text-[13px] font-extrabold text-primary">
-              {_('Out of Stock')}
-            </span>
-          )}
+        {/* Price + Stock */}
+        <div className="mt-auto flex items-end justify-between gap-1.5 pt-1">
+          <PriceDisplay product={product} size="sm" />
+          <StockBadge inStock={product.inventory.isInStock} />
         </div>
 
         {/* Action buttons */}
         <ProductCardActions product={product} />
       </div>
+
     </article>
   );
 };

@@ -1,11 +1,13 @@
 import { Checkbox } from '@components/common/ui/Checkbox.js';
 import { Label } from '@components/common/ui/Label.js';
+import { DefaultFilterWrapperRender } from '@components/frontStore/catalog/DefaultFilterWrapperRender.js';
 import {
   CategoryFilter,
   FilterInput,
   useProductFilter
 } from '@components/frontStore/catalog/ProductFilter.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
+import { Search, X } from 'lucide-react';
 import React, { useState } from 'react';
 
 export const DefaultCategoryFilterRender: React.FC<{
@@ -14,7 +16,6 @@ export const DefaultCategoryFilterRender: React.FC<{
 }> = ({ categories, currentFilters }) => {
   const { updateFilter } = useProductFilter();
   const [searchTerm, setSearchTerm] = useState('');
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleCategoryChange = (categoryId: string, checked: boolean) => {
     let newFilters = currentFilters.map((f) => ({ ...f }));
@@ -58,7 +59,8 @@ export const DefaultCategoryFilterRender: React.FC<{
     return filter ? filter.value.split(',').length : 0;
   };
 
-  const clearCategoryFilter = () => {
+  const clearCategoryFilter = (e: React.MouseEvent) => {
+    e.stopPropagation();
     const newFilters = currentFilters.filter((f) => f.key !== 'cat');
     updateFilter(newFilters);
   };
@@ -78,78 +80,83 @@ export const DefaultCategoryFilterRender: React.FC<{
   const filteredCategories = getFilteredCategories();
 
   return (
-    <div className="category__filter__section border-b border-slate-200 pb-3 mb-3 dark:border-slate-700">
-      <div className="filter__header flex items-center justify-between mb-2">
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="group flex flex-1 items-center justify-between rounded-lg px-1 py-1.5 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/40"
-        >
-          <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-200">{_('Categories')}</span>
-          <svg
-            className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300 ${
-              isCollapsed ? '-rotate-90' : ''
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
+    <DefaultFilterWrapperRender
+      title={_('Categories')}
+      badge={selectedCount}
+    >
+      <div>
+        {/* Search within categories */}
+        {categories.length > 6 && (
+          <div className="relative mb-3">
+            <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder={_('Search categories...')}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-8 pr-8 text-xs text-slate-700 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary/20"
             />
-          </svg>
-        </button>
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-slate-400 hover:text-slate-600"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
+        )}
 
+        {/* Category options */}
+        <div className="space-y-0.5 max-h-52 overflow-y-auto overscroll-contain pr-1">
+          {filteredCategories.length > 0 ? (
+            filteredCategories.map((category) => {
+              const isSelected = isCategorySelected(
+                category.categoryId.toString()
+              );
+              return (
+                <label
+                  key={category.categoryId}
+                  htmlFor={`category-${category.categoryId}`}
+                  className={`flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-2 text-sm transition-colors ${
+                    isSelected
+                      ? 'bg-brand-soft text-primary'
+                      : 'text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  <Checkbox
+                    id={`category-${category.categoryId}`}
+                    checked={isSelected}
+                    onCheckedChange={(checked) =>
+                      handleCategoryChange(
+                        category.categoryId.toString(),
+                        checked
+                      )
+                    }
+                  />
+                  <span className="flex-1 text-[13px]">{category.name}</span>
+                </label>
+              );
+            })
+          ) : (
+            <p className="py-3 text-center text-xs text-slate-400">
+              {_('No categories found')}
+            </p>
+          )}
+        </div>
+
+        {/* Clear */}
         {selectedCount > 0 && (
           <button
+            type="button"
             onClick={clearCategoryFilter}
-            className="ml-2 text-xs text-slate-400 transition-colors hover:text-primary dark:text-slate-500 dark:hover:text-primary"
-            title={_('Clear')}
+            className="mt-2 text-[11px] font-medium text-slate-400 transition-colors hover:text-red-500"
           >
-            ✕
+            {_('Clear')} ({selectedCount})
           </button>
         )}
       </div>
-
-      {!isCollapsed && (
-        <div className="filter__content">
-          <div className="category__options space-y-2 max-h-48 overflow-y-auto">
-            {filteredCategories.length > 0 ? (
-              filteredCategories.map((category) => {
-                const isSelected = isCategorySelected(
-                  category.categoryId.toString()
-                );
-                return (
-                  <div
-                    key={category.categoryId}
-                    className={`flex items-center space-x-3 cursor-pointer py-2`}
-                  >
-                    <Checkbox
-                      id={`category-${category.categoryId}`}
-                      checked={isSelected}
-                      onCheckedChange={(checked) =>
-                        handleCategoryChange(
-                          category.categoryId.toString(),
-                          checked
-                        )
-                      }
-                    />
-                    <Label htmlFor={`category-${category.categoryId}`}>
-                      {category.name}
-                    </Label>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="text-muted-foreground text-sm text-center py-4">
-                {_('No categories found for "${term}"', { term: searchTerm })}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+    </DefaultFilterWrapperRender>
   );
 };

@@ -137,6 +137,11 @@ export interface EditorProps {
   label?: string;
 }
 
+type AppendEditorRowsEvent = CustomEvent<{
+  name?: string;
+  rows?: Row[];
+}>;
+
 export const Editor: React.FC<EditorProps> = ({ name, value = [], label }) => {
   const [openFileBrowser, setOpenFileBrowser] = React.useState(false);
   const [fileBrowser, setFileBrowser] = React.useState<{
@@ -261,6 +266,34 @@ export const Editor: React.FC<EditorProps> = ({ name, value = [], label }) => {
     };
     initEditors();
   }, [rows.length]);
+
+  React.useEffect(() => {
+    const appendRows = (event: Event) => {
+      const detail = (event as AppendEditorRowsEvent).detail;
+      if (detail?.name !== name || !Array.isArray(detail.rows)) {
+        return;
+      }
+
+      setRows((prevRows) => {
+        const appendedRows = (detail.rows as Row[]).map((row) => ({
+          ...row,
+          className: getRowClasses(row.size),
+          columns: row.columns.map((column) => ({
+            ...column,
+            className: getColumnClasses(column.size)
+          }))
+        }));
+        const newRows = prevRows.concat(appendedRows);
+        setValue(name, newRows, { shouldDirty: true, shouldValidate: true });
+        return newRows;
+      });
+    };
+
+    window.addEventListener('evershop:editor:append-rows', appendRows);
+    return () => {
+      window.removeEventListener('evershop:editor:append-rows', appendRows);
+    };
+  }, [name, setValue]);
 
   const removeRow = (rowId) => {
     setRows(rows.filter((i) => i.id !== rowId));

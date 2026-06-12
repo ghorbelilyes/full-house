@@ -1,6 +1,6 @@
 import { Image } from '@components/common/Image.js';
 import { _ } from '@evershop/evershop/lib/locale/translate/_';
-import { Search, X } from 'lucide-react';
+import { Search, X, Loader2 } from 'lucide-react';
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { useClient } from 'urql';
 
@@ -72,14 +72,12 @@ export function SearchBox({
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
-  // Load keyword from URL on mount
   useEffect(() => {
     const url = new URL(window.location.href);
     const key = url.searchParams.get('keyword');
     if (key) setKeyword(key);
   }, []);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -90,7 +88,6 @@ export function SearchBox({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Close on Escape
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -199,6 +196,7 @@ export function SearchBox({
 
   return (
     <div className="search-container" ref={containerRef}>
+      {/* Search input — styled by Header.scss */}
       <div className="search-input-wrapper">
         <Search className="search-input-icon" />
         <input
@@ -228,17 +226,20 @@ export function SearchBox({
         )}
       </div>
 
-      {/* Dropdown results */}
+      {/* Dropdown results — styled by Header.scss */}
       {enableAutocomplete && showResults && (
         <div className="search-dropdown">
           {isSearching && (
             <div className="search-dropdown__status">
-              Recherche en cours...
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {_('Recherche en cours...')}
+              </span>
             </div>
           )}
           {!isSearching && searchResults.length === 0 && keyword.length >= minSearchLength && (
             <div className="search-dropdown__status">
-              Aucun produit trouvé
+              {_('Aucun produit trouvé')}
             </div>
           )}
           {!isSearching &&
@@ -262,9 +263,13 @@ export function SearchBox({
                   />
                 )}
                 <div className="search-dropdown__info">
-                  <div className="search-dropdown__name">{result.title}</div>
+                  <div className="search-dropdown__name">
+                    {result.title}
+                  </div>
                   {result.price && (
-                    <div className="search-dropdown__price">{result.price}</div>
+                    <div className="search-dropdown__price">
+                      {result.price}
+                    </div>
                   )}
                 </div>
               </a>

@@ -14,15 +14,25 @@ export function CategoryProductsPagination() {
   const limit = products.currentFilters.find(
     (filter) => filter.key === 'limit'
   );
+
+  if (products.total <= (limit ? parseInt(limit.value, 10) : 20)) {
+    return null;
+  }
+
   return (
-    <Pagination
-      total={products.total}
-      limit={limit ? parseInt(limit.value, 10) : 20}
-      currentPage={parseInt(page?.value || '1', 10)}
-    >
-      {(paginationProps) => (
-        <DefaultPaginationRenderer renderProps={paginationProps} />
-      )}
-    </Pagination>
+    <div className="mt-10">
+      <Pagination
+        total={products.total}
+        limit={limit ? parseInt(limit.value, 10) : 20}
+        currentPage={parseInt(page?.value || '1', 10)}
+      >
+        {(paginationProps) => (
+          <DefaultPaginationRenderer
+            renderProps={paginationProps}
+            showInfo
+          />
+        )}
+      </Pagination>
+    </div>
   );
 }

@@ -17,6 +17,7 @@ export interface ProductListProps {
   showAddToCart?: boolean;
   customAddToCartRenderer?: (product: ProductData) => ReactNode;
   renderItem?: (product: ProductData) => ReactNode;
+  onResetFilters?: () => void;
 }
 
 export const ProductList: React.FC<ProductListProps> = ({
@@ -30,7 +31,8 @@ export const ProductList: React.FC<ProductListProps> = ({
   gridColumns = 4,
   showAddToCart = false,
   customAddToCartRenderer,
-  renderItem
+  renderItem,
+  onResetFilters
 }) => {
   if (isLoading) {
     return (
@@ -43,7 +45,12 @@ export const ProductList: React.FC<ProductListProps> = ({
   }
 
   if (!products || products.length === 0) {
-    return <ProductListEmptyRender message={emptyMessage} />;
+    return (
+      <ProductListEmptyRender
+        message={emptyMessage}
+        onResetFilters={onResetFilters}
+      />
+    );
   }
 
   const itemImageWidth =
@@ -53,7 +60,7 @@ export const ProductList: React.FC<ProductListProps> = ({
 
   if (layout === 'list') {
     return (
-      <div className={`flex flex-col gap-6 ${className}`}>
+      <div className={`flex flex-col gap-4 ${className}`}>
         {products.map((product) => (
           <div key={product.productId}>
             {renderItem ? (
@@ -74,28 +81,28 @@ export const ProductList: React.FC<ProductListProps> = ({
     );
   }
 
-  // Grid column classes matching the reference design
+  // Responsive grid: 2 cols mobile, 2-3 tablet, 3-4 desktop
   const gridClassName = (() => {
     switch (gridColumns) {
       case 1:
         return 'grid-cols-1';
       case 2:
-        return 'grid-cols-1 sm:grid-cols-2';
+        return 'grid-cols-2';
       case 3:
-        return 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3';
+        return 'grid-cols-2 md:grid-cols-3';
       case 4:
-        return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+        return 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4';
       case 5:
-        return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
+        return 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
       case 6:
-        return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6';
+        return 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6';
       default:
-        return 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3';
+        return 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4';
     }
   })();
 
   return (
-    <div className={`grid ${gridClassName} gap-5 ${className}`}>
+    <div className={`grid ${gridClassName} gap-3 sm:gap-4 ${className}`}>
       {products.map((product) => (
         <div key={product.productId}>
           {renderItem ? (
