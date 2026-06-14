@@ -1,3 +1,4 @@
+import { getBrandStoreNameFallback } from '@evershop/evershop/lib/branding/getBrandConfig.js';
 import {
   NOTIFICATION_TYPES,
   NotificationType
@@ -7,7 +8,7 @@ import { getEffectiveEmailNotificationSettings } from '../../services/settings.j
 
 function sampleData(settings, type: NotificationType) {
   return {
-    storeName: settings.storeName || 'Protek',
+    storeName: settings.storeName || getBrandStoreNameFallback(),
     storeUrl: settings.storeUrl || '',
     customerName: 'Client Test',
     customerEmail: 'client.test@example.com',

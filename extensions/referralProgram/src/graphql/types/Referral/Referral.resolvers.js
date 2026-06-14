@@ -1,4 +1,5 @@
 import { getSetting } from '@evershop/evershop/setting/services';
+import { getBrandStoreNameFallback } from '@evershop/evershop/lib/branding/getBrandConfig.js';
 import {
   isModuleEnabledSync,
   isModuleAvailableInContract
@@ -27,7 +28,7 @@ async function buildSettings() {
     cookieDurationDays: parseInt(await getSetting('ref_cookie_duration_days', '30'), 10),
     whatsappTemplate: await getSetting(
       'ref_whatsapp_template',
-      'Découvrez Protek ! Utilisez mon lien de parrainage pour une remise : {link}'
+      `Découvrez ${getBrandStoreNameFallback()} ! Utilisez mon lien de parrainage pour une remise : {link}`
     ),
     termsText: await getSetting('ref_terms_text', ''),
     enableInAccount: (await getSetting('ref_enable_in_account', '1')) === '1',

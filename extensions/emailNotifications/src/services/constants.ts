@@ -1,3 +1,5 @@
+import { getBrandStoreNameFallback } from '@evershop/evershop/lib/branding/getBrandConfig.js';
+
 export type EmailProviderCode = 'sendgrid' | 'smtp';
 
 export const SETTINGS_KEY = 'emailNotificationsSettings';
@@ -193,10 +195,10 @@ export const DEFAULT_SETTINGS: EmailNotificationSettings = {
   enabled: false,
   activeProvider: 'sendgrid',
   senderEmail: '',
-  senderName: 'Protek',
+  senderName: getBrandStoreNameFallback(),
   replyToEmail: '',
   adminEmail: '',
-  storeName: 'Protek',
+  storeName: getBrandStoreNameFallback(),
   storeUrl: '',
   testEmailRecipient: '',
   smtp: {
@@ -205,12 +207,12 @@ export const DEFAULT_SETTINGS: EmailNotificationSettings = {
     secure: false,
     username: '',
     fromEmail: '',
-    fromName: 'Protek',
+    fromName: getBrandStoreNameFallback(),
     replyToEmail: ''
   },
   sendgrid: {
     fromEmail: '',
-    fromName: 'Protek',
+    fromName: getBrandStoreNameFallback(),
     replyToEmail: ''
   },
   events: DEFAULT_EVENT_SETTINGS

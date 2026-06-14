@@ -37,8 +37,8 @@ async function install() {
   // eslint-disable-next-line no-console
   console.log(
     kleur.green(
-      boxen('Bienvenue sur Protek', {
-        title: 'Protek',
+      boxen('Bienvenue sur Full House', {
+        title: 'Full House',
         titleAlignment: 'center',
         padding: 1,
         margin: 1,
@@ -192,7 +192,7 @@ async function install() {
 
   /* Start installation */
   const messages = [];
-  messages.push(`\n\n${kleur.green('Protek est en cours d\'installation ☕ ☕ ☕')}`);
+  messages.push(`\n\n${kleur.green('Full House is being installed ☕ ☕ ☕')}`);
   messages.push('Creating .env file');
   const spinner = ora({
     text: kleur.green(messages.join('\n')),
@@ -276,7 +276,7 @@ DB_SSLMODE="${sslMode}"
         'Installation completed!. Run `npm run build` and `npm run start` to launch your store'
       ),
       {
-        title: 'Protek',
+        title: 'Full House',
         titleAlignment: 'center',
         padding: 1,
         margin: 1,

@@ -14,6 +14,7 @@ export const CONSTANTS = Object.freeze({
   ROOTPATH: rootPath,
   LIBPATH: path.resolve(__dirname),
   MODULESPATH: path.resolve(__dirname, '..', 'modules'),
+  BRANDINGPATH: path.resolve(rootPath, 'branding'),
   PUBLICPATH: path.resolve(rootPath, 'public'),
   MEDIAPATH: path.resolve(rootPath, 'media'),
   NODEMODULEPATH: path.resolve(rootPath, 'node_modules'),

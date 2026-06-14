@@ -12,14 +12,14 @@ interface LogoProps {
 }
 export default function Logo({
   themeConfig: {
-    logo: { src, alt = 'Protek', width = 200, height = 50 }
+    logo: { src, alt = 'Store', width = 200, height = 50 }
   }
 }: LogoProps) {
   return (
     <div className="logo">
       {src && (
         <a href="/" className="logo-icon">
-          <img src={src} alt={alt} />
+          <img src={src} alt={alt} width={width} height={height} />
         </a>
       )}
       {!src && (

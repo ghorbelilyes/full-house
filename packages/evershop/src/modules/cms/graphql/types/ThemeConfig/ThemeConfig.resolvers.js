@@ -1,7 +1,7 @@
-import { getConfig } from '../../../../../lib/util/getConfig.js';
+import { getLegacyThemeConfig } from '../../../../../lib/branding/getBrandConfig.js';
 
 export default {
   Query: {
-    themeConfig: () => getConfig('themeConfig')
+    themeConfig: () => getLegacyThemeConfig()
   }
 };

@@ -1,3 +1,4 @@
+import { getBrandStoreDescriptionFallback, getBrandStoreNameFallback } from '../../../../../lib/branding/getBrandConfig.js';
 import { getConfig } from '../../../../../lib/util/getConfig.js';
 
 export default {
@@ -7,7 +8,7 @@ export default {
       if (storeName) {
         return storeName.value;
       } else {
-        return 'Protek';
+        return getBrandStoreNameFallback();
       }
     },
     storeDescription: (setting) => {
@@ -17,7 +18,7 @@ export default {
       if (storeDescription) {
         return storeDescription.value;
       } else {
-        return 'Protek';
+        return getBrandStoreDescriptionFallback();
       }
     },
     storeLanguage: () => getConfig('shop.language', 'en'),

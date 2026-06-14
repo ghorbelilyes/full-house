@@ -1,5 +1,10 @@
 # Full House — Deployment & Workflow Guide
 
+> Current production uses the non-Docker PM2 flow on `212.47.79.230`.
+> Before deploying, follow [VPS-PM2-DEPLOYMENT.md](./VPS-PM2-DEPLOYMENT.md)
+> to preserve `.env`, keep `config/production.json`, back up PostgreSQL, and
+> avoid build memory failures.
+
 ## 📋 Architecture
 
 ```

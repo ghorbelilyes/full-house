@@ -33,6 +33,21 @@ export function Payment() {
     name: 'paymentMethod',
     control: form.control
   });
+  const singlePaymentMethod =
+    availablePaymentMethods?.length === 1 ? availablePaymentMethods[0] : null;
+
+  useEffect(() => {
+    if (
+      singlePaymentMethod &&
+      form.getValues('paymentMethod') !== singlePaymentMethod.code
+    ) {
+      form.setValue('paymentMethod', singlePaymentMethod.code, {
+        shouldDirty: false,
+        shouldTouch: false,
+        shouldValidate: true
+      });
+    }
+  }, [form, singlePaymentMethod]);
 
   useEffect(() => {
     const updatePaymentMethod = async () => {
@@ -57,6 +72,21 @@ export function Payment() {
       updatePaymentMethod();
     }
   }, [paymentMethod]);
+
+  if (singlePaymentMethod) {
+    return (
+      <>
+        <Area id="checkoutPaymentBefore" />
+        <BillingAddress
+          billingAddress={billingAddress}
+          addBillingAddress={addBillingAddress}
+          addingBillingAddress={addingBillingAddress}
+          noShippingRequired={noShippingRequired}
+        />
+        <Area id="checkoutPaymentAfter" />
+      </>
+    );
+  }
 
   return (
     <>

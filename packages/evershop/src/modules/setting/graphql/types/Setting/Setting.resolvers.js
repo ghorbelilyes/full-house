@@ -1,3 +1,4 @@
+import { getBrandStoreNameFallback } from '../../../../../lib/branding/getBrandConfig.js';
 import { select } from '@evershop/postgres-query-builder';
 
 export default {
@@ -13,7 +14,7 @@ export default {
       if (storeName) {
         return storeName.value;
       } else {
-        return 'Protek';
+        return getBrandStoreNameFallback();
       }
     }
   }

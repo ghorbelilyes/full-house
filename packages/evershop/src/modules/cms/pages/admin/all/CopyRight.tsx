@@ -17,7 +17,7 @@ export default function CopyRight({
 
 CopyRight.defaultProps = {
   themeConfig: {
-    copyRight: '© 2025 Protek. Tous droits réservés.'
+    copyRight: `© ${new Date().getFullYear()} Full House. All rights reserved.`
   }
 };
 

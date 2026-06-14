@@ -4,6 +4,7 @@ import { debug, error } from '../../../../lib/log/logger.js';
 import { pool } from '../../../../lib/postgres/connection.js';
 import { buildUrl } from '../../../../lib/router/buildUrl.js';
 import { getConfig } from '../../../../lib/util/getConfig.js';
+import { getBrandStoreNameFallback } from '../../../../lib/branding/getBrandConfig.js';
 import {
   INTERNAL_SERVER_ERROR,
   INVALID_PAYLOAD,
@@ -116,7 +117,7 @@ export default async (
           )}${buildUrl('paypalReturn', { order_id })}`,
           shipping_preference: 'SET_PROVIDED_ADDRESS',
           user_action: 'PAY_NOW',
-          brand_name: await getSetting('storeName', 'Protek')
+          brand_name: await getSetting('storeName', getBrandStoreNameFallback())
         }
       } as CreateOrderRequestBody;
       const shippingAddress = await select()

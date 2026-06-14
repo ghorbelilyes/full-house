@@ -1,6 +1,7 @@
 import { loadOrderData } from '../../services/orderDataLoader.js';
 import { renderDocument, DocumentType, CompanyInfo } from '../../services/templateRenderer.js';
 import { generatePdf } from '../../services/pdfGenerator.js';
+import { getBrandStoreNameFallback } from '@evershop/evershop/lib/branding/getBrandConfig.js';
 import config from 'config';
 
 const VALID_TYPES: DocumentType[] = ['facture', 'bon_commande', 'bon_livraison'];
@@ -42,6 +43,9 @@ export default async function generateDocumentHandler(
 
     // Merge with shop name from config
     try {
+      if (!companyInfo.name) {
+        companyInfo.name = getBrandStoreNameFallback();
+      }
       if (!companyInfo.name && config.has('shop.name')) {
         companyInfo.name = config.get('shop.name') as string;
       }

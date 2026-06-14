@@ -1,5 +1,5 @@
 export default {
   Query: {
-    hello: () => 'Hello Protek!'
+    hello: () => 'Hello Store!'
   }
 };

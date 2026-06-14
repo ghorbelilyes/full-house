@@ -1,0 +1,43 @@
+{
+  "name": "Full House",
+  "content": {
+    "storeName": "Full House",
+    "storeDescription": "Electricity & Security",
+    "copyRight": "© 2026 Full House. All rights reserved."
+  },
+  "logos": {
+    "store": {
+      "src": "/branding/store-logo.png",
+      "alt": "Full House",
+      "width": 400,
+      "height": 100
+    },
+    "admin": {
+      "src": "/branding/admin-logo.png",
+      "alt": "Full House",
+      "width": 80,
+      "height": 80
+    },
+    "email": {
+      "src": "/branding/email-logo.png",
+      "alt": "Full House",
+      "width": 600,
+      "height": 150
+    }
+  },
+  "icons": {
+    "favicon": "/branding/favicon.ico",
+    "appleTouch": "/branding/apple-touch-icon.png",
+    "manifest": "/branding/site.webmanifest",
+    "browserConfig": "/branding/browserconfig.xml",
+    "msTileImage": "/branding/mstile-150x150.png"
+  },
+  "images": {
+    "og": "/branding/og-image.png",
+    "twitter": "/branding/twitter-card.png"
+  },
+  "theme": {
+    "themeColor": "#E87A1E",
+    "themeCssPath": "branding/theme.css"
+  }
+}

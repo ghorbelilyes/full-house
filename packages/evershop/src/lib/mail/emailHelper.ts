@@ -2,6 +2,7 @@ import Handlebars from 'handlebars';
 import { getSetting } from '../../modules/setting/services/setting.js';
 import { countries } from '../locale/countries.js';
 import { provinces } from '../locale/provinces.js';
+import { getBrandConfig, getBrandStoreNameFallback } from '../branding/getBrandConfig.js';
 import { getBaseUrl } from '../util/getBaseUrl.js';
 import { getConfig } from '../util/getConfig.js';
 import { addProcessor, getValue, getValueSync } from '../util/registry.js';
@@ -237,7 +238,10 @@ export async function buildEmailBodyFromTemplate(
  * @returns The prepared email data with store information.
  */
 async function prepareData(data: EmailData): Promise<EmailData> {
-  const logoConfig = getConfig('themeConfig.logo');
+  const brandConfig = getBrandConfig();
+  const logoConfig = brandConfig.logos.email.src
+    ? brandConfig.logos.email
+    : getConfig('themeConfig.logo');
   let logo;
   if (logoConfig) {
     const url = logoConfig.src || '';
@@ -265,7 +269,7 @@ async function prepareData(data: EmailData): Promise<EmailData> {
   const addressPostalCode = await getSetting('storePostalCode', '');
   const storeInformation = {
     logo,
-    storeName: await getSetting('storeName', 'Protek'),
+    storeName: await getSetting('storeName', getBrandStoreNameFallback()),
     storeEmail: await getSetting('storeEmail', ''),
     storeDescription: await getSetting('storeDescription', ''),
     phone: await getSetting('storePhoneNumber', ''),

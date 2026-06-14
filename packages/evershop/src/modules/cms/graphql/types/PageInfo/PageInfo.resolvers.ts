@@ -1,7 +1,8 @@
-import { access } from 'fs/promises';
-import path from 'path';
 import { select } from '@evershop/postgres-query-builder';
-import { CONSTANTS } from '../../../../../lib/helpers.js';
+import {
+  getBrandConfig,
+  getBrandStoreNameFallback
+} from '../../../../../lib/branding/getBrandConfig.js';
 import { translate } from '../../../../../lib/locale/translate/translate.js';
 import { get } from '../../../../../lib/util/get.js';
 import { getBaseUrl } from '../../../../../lib/util/getBaseUrl.js';
@@ -17,7 +18,7 @@ export default {
       title: get(
         context,
         'pageInfo.title',
-        await getSetting('storeName', 'Protek')
+        await getSetting('storeName', getBrandStoreNameFallback())
       ),
       description: get(context, 'pageInfo.description', ''),
       keywords: get(context, 'pageInfo.keywords', []),
@@ -27,13 +28,11 @@ export default {
         get(context, 'currentUrl')
       ),
       favicon: async () => {
-        // Check if a file named favicon.ico exists in the public folder
-        try {
-          await access(path.resolve(CONSTANTS.PUBLICPATH, 'favicon.ico'));
-          return getBaseUrl() + '/assets/favicon.ico';
-        } catch (error) {
+        const favicon = getBrandConfig().icons.favicon;
+        if (!favicon) {
           return null;
         }
+        return favicon.startsWith('http') ? favicon : `${getBaseUrl()}${favicon}`;
       }
     })
   },
@@ -111,7 +110,8 @@ export default {
       }
     },
     ogInfo: async (root, args, context): Promise<OgInfo> => {
-      let logo = getConfig('themeConfig.logo.src');
+      const brandConfig = getBrandConfig();
+      let logo = brandConfig.logos.store.src || getConfig('themeConfig.logo.src');
       const baseUrl = getBaseUrl();
       // Check if logo is a full URL
       // If logo is not set, use default /images/logo.png
@@ -119,11 +119,14 @@ export default {
         // If logo is a relative path, convert to absolute URL
         logo = `${baseUrl}${logo}`;
       }
-      const image = get(
-        context,
-        'pageInfo.ogInfo.image',
-        logo ? `${baseUrl}/images?src=${logo}&w=1200&q=80&h=675&f=png` : ''
-      );
+      const defaultBrandImage = brandConfig.images.og
+        ? brandConfig.images.og.startsWith('http')
+          ? brandConfig.images.og
+          : `${baseUrl}${brandConfig.images.og}`
+        : '';
+      const image = get(context, 'pageInfo.ogInfo.image', defaultBrandImage || (logo
+        ? `${baseUrl}/images?src=${logo}&w=1200&q=80&h=675&f=png`
+        : ''));
 
       return getValueSync<OgInfo>(
         'ogInfo',
@@ -147,12 +150,12 @@ export default {
           twitterSite: get(
             context,
             'pageInfo.ogInfo.twitterSite',
-            await getSetting('storeName', 'Protek')
+            await getSetting('storeName', getBrandStoreNameFallback())
           ),
           twitterCreator: get(
             context,
             'pageInfo.ogInfo.twitterCreator',
-            await getSetting('storeName', 'Protek')
+            await getSetting('storeName', getBrandStoreNameFallback())
           ),
           twitterImage: get(context, 'pageInfo.ogInfo.twitterImage', image)
         },

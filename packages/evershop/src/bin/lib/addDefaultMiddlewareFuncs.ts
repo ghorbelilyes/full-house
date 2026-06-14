@@ -5,6 +5,7 @@ import session from 'express-session';
 import pathToRegexp from 'path-to-regexp';
 import { translate } from '../../lib/locale/translate/translate.js';
 import { debug, warning } from '../../lib/log/logger.js';
+import brandingPublicStatic from '../../lib/middlewares/brandingPublicStatic.js';
 import publicStatic from '../../lib/middlewares/publicStatic.js';
 import themePublicStatic from '../../lib/middlewares/themePublicStatic.js';
 import { pool } from '../../lib/postgres/connection.js';
@@ -40,6 +41,7 @@ export function addDefaultMiddlewareFuncs(app) {
       debug(message);
     });
   });
+  app.use(brandingPublicStatic);
   // Add public static middleware
   app.use(publicStatic);
   // Add theme public static middleware

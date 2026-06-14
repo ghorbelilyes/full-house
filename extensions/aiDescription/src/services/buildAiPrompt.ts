@@ -12,7 +12,7 @@ export interface AiPromptOptions {
 }
 
 export function buildSystemPrompt(): string {
-  return `Tu es un rédacteur e-commerce professionnel spécialisé dans la rédaction de fiches produit pour une boutique en ligne tunisienne (Protek).
+  return `Tu es un rédacteur e-commerce professionnel spécialisé dans la rédaction de fiches produit pour une boutique en ligne tunisienne.
 
 RÈGLES ABSOLUES :
 1. Écris UNIQUEMENT en français.

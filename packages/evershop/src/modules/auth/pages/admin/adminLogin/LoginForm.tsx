@@ -9,6 +9,17 @@ import { LockKeyhole, Mail } from 'lucide-react';
 
 interface LoginFormProps {
   authUrl: string;
+  brandConfig: {
+    name?: string;
+    logos?: {
+      admin?: {
+        src?: string;
+        alt?: string;
+        width?: number;
+        height?: number;
+      };
+    };
+  };
   dashboardUrl: string;
 }
 
@@ -25,8 +36,14 @@ const SubmitButton: React.FC = () => {
   );
 };
 
-export default function LoginForm({ authUrl, dashboardUrl }: LoginFormProps) {
+export default function LoginForm({
+  authUrl,
+  brandConfig,
+  dashboardUrl
+}: LoginFormProps) {
   const [error, setError] = React.useState(null);
+  const adminLogo = brandConfig?.logos?.admin;
+  const adminAlt = adminLogo?.alt || brandConfig?.name || 'Store';
 
   const onSuccess = (response) => {
     if (!response.error) {
@@ -44,12 +61,16 @@ export default function LoginForm({ authUrl, dashboardUrl }: LoginFormProps) {
         }
       `}</style>
       <div className="flex items-center justify-center mb-7">
-        <img
-          src="/logo-icon.png"
-          alt="Protek"
-          width={60}
-          height={60}
-        />
+        {adminLogo?.src ? (
+          <img
+            src={adminLogo.src}
+            alt={adminAlt}
+            width={adminLogo.width || 60}
+            height={adminLogo.height || 60}
+          />
+        ) : (
+          <span className="text-xl font-semibold">{adminAlt}</span>
+        )}
       </div>
       {error && <div className="text-destructive py-2">{error}</div>}
       <Form
@@ -120,5 +141,16 @@ export const query = `
   query Query {
     authUrl: url(routeId: "adminLoginJson")
     dashboardUrl: url(routeId: "dashboard")
+    brandConfig {
+      name
+      logos {
+        admin {
+          src
+          alt
+          width
+          height
+        }
+      }
+    }
   }
 `;

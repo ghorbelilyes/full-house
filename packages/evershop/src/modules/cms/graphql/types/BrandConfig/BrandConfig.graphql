@@ -1,0 +1,49 @@
+type BrandAsset {
+  src: String
+  alt: String
+  width: Int
+  height: Int
+}
+
+type BrandLogos {
+  store: BrandAsset
+  admin: BrandAsset
+  email: BrandAsset
+}
+
+type BrandIcons {
+  favicon: String
+  appleTouch: String
+  manifest: String
+  browserConfig: String
+  msTileImage: String
+}
+
+type BrandImages {
+  og: String
+  twitter: String
+}
+
+type BrandTheme {
+  themeColor: String
+  themeCssPath: String
+}
+
+type BrandContent {
+  storeName: String
+  storeDescription: String
+  copyRight: String
+}
+
+type BrandConfig {
+  name: String
+  logos: BrandLogos
+  icons: BrandIcons
+  images: BrandImages
+  theme: BrandTheme
+  content: BrandContent
+}
+
+extend type Query {
+  brandConfig: BrandConfig
+}

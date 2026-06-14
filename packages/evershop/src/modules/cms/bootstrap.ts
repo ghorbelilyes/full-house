@@ -2,6 +2,7 @@ import path from 'path';
 import { JSONSchemaType } from 'ajv';
 import config from 'config';
 import { CONSTANTS } from '../../lib/helpers.js';
+import { getBrandConfig } from '../../lib/branding/getBrandConfig.js';
 import { defaultPaginationFilters } from '../../lib/util/defaultPaginationFilters.js';
 import { merge } from '../../lib/util/merge.js';
 import { addProcessor } from '../../lib/util/registry.js';
@@ -147,7 +148,7 @@ export default () => {
       scripts: [],
       bases: []
     },
-    copyRight: `© 2025 Protek. Tous droits réservés.`
+    copyRight: getBrandConfig().content.copyRight
   };
   config.util.setModuleDefaults('themeConfig', defaultThemeConfig);
 

@@ -1,3 +1,4 @@
+import { getBrandStoreNameFallback } from '@evershop/evershop/lib/branding/getBrandConfig.js';
 import { pool } from '@evershop/evershop/lib/postgres';
 import { getConfig } from '@evershop/evershop/lib/util/getConfig';
 import { getBaseUrl } from '@evershop/evershop/lib/util/getBaseUrl';
@@ -145,8 +146,8 @@ function withEnvFallbacks(
   const storeName =
     settings.storeName ||
     env('STORE_NAME') ||
-    getConfig('shop.name', '') ||
-    'Protek';
+    getBrandStoreNameFallback() ||
+    getConfig('shop.name', '');
   const storeUrl = settings.storeUrl || env('STORE_URL') || homeUrl;
   const senderEmail =
     settings.senderEmail ||

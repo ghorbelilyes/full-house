@@ -1,5 +1,6 @@
 import { renderDocumentFromString, DocumentType } from '../../services/templateRenderer.js';
 import { OrderData } from '../../services/orderDataLoader.js';
+import { getBrandStoreNameFallback } from '@evershop/evershop/lib/branding/getBrandConfig.js';
 import config from 'config';
 import type { CompanyInfo } from '../../services/templateRenderer.js';
 
@@ -125,6 +126,9 @@ export default async function previewTemplateHandler(request: any, response: any
     try {
       if (config.has('orderDocuments.company')) {
         companyInfo = config.get('orderDocuments.company') as Partial<CompanyInfo>;
+      }
+      if (!companyInfo.name) {
+        companyInfo.name = getBrandStoreNameFallback();
       }
       if (!companyInfo.name && config.has('shop.name')) {
         companyInfo.name = config.get('shop.name') as string;

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { select } from '@evershop/postgres-query-builder';
+import { getBrandConfig, getBrandStoreNameFallback } from '@evershop/evershop/lib/branding/getBrandConfig.js';
 import { pool } from '@evershop/evershop/lib/postgres';
 import { OrderData } from './orderDataLoader.js';
 
@@ -196,11 +197,11 @@ export interface CompanyInfo {
 }
 
 const DEFAULT_COMPANY: CompanyInfo = {
-  name: 'Protek',
+  name: getBrandStoreNameFallback(),
   address: 'Tunisie',
   phone: '',
   email: '',
-  logo: '/logo.png',
+  logo: getBrandConfig().logos.store.src || '/branding/store-logo.png',
   taxId: '',
   rc: ''
 };

@@ -1,6 +1,6 @@
 {
   "shop": {
-    "name": "Protek",
+    "name": "Full House",
     "language": "fr-TN",
     "timezone": "Africa/Tunis",
     "currency": "TND",
@@ -122,64 +122,21 @@
   },
   "themeConfig": {
     "logo": {
-      "alt": "Protek",
-      "src": "/logo.png",
+      "alt": "Full House",
+      "src": "/branding/store-logo.png",
       "width": 320,
       "height": 106
     },
     "headTags": {
-      "links": [
-        {
-          "rel": "icon",
-          "href": "/favicon.ico",
-          "type": "image/x-icon"
-        },
-        {
-          "rel": "icon",
-          "href": "/favicon-32x32.png",
-          "type": "image/png",
-          "sizes": "32x32"
-        },
-        {
-          "rel": "icon",
-          "href": "/favicon-16x16.png",
-          "type": "image/png",
-          "sizes": "16x16"
-        },
-        {
-          "rel": "apple-touch-icon",
-          "href": "/apple-touch-icon.png",
-          "sizes": "180x180"
-        },
-        {
-          "rel": "manifest",
-          "href": "/icons/site.webmanifest"
-        }
-      ],
+      "links": [],
       "metas": [
         {
           "name": "viewport",
           "content": "width=device-width, initial-scale=1"
-        },
-        {
-          "name": "theme-color",
-          "content": "#0A1625"
-        },
-        {
-          "name": "msapplication-TileColor",
-          "content": "#0A1625"
-        },
-        {
-          "name": "msapplication-TileImage",
-          "content": "/icons/mstile-150x150.png"
-        },
-        {
-          "name": "msapplication-config",
-          "content": "/icons/browserconfig.xml"
         }
       ]
     },
-    "copyRight": "© 2025 Protek. Tous droits réservés."
+    "copyRight": "© 2026 Full House. All rights reserved."
   },
   "oms": {
     "order": {
@@ -320,7 +277,7 @@
   },
   "orderDocuments": {
     "company": {
-      "name": "Protek",
+      "name": "Full House",
       "address": "Tunisie",
       "phone": "",
       "email": "",

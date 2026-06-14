@@ -1,4 +1,5 @@
 import { select } from '@evershop/postgres-query-builder';
+import { getBrandStoreNameFallback } from '../../../lib/branding/getBrandConfig.js';
 import { pool } from '../../../lib/postgres/connection.js';
 
 export type Setting = {
@@ -25,7 +26,7 @@ export async function refreshSetting(): Promise<void> {
 }
 
 export async function getStoreName(
-  defaultValue: string = 'Protek'
+  defaultValue: string = getBrandStoreNameFallback()
 ): Promise<string> {
   return await getSetting('storeName', defaultValue);
 }
