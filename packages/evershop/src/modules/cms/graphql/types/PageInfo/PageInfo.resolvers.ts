@@ -5,7 +5,10 @@ import {
 } from '../../../../../lib/branding/getBrandConfig.js';
 import { translate } from '../../../../../lib/locale/translate/translate.js';
 import { get } from '../../../../../lib/util/get.js';
-import { getBaseUrl } from '../../../../../lib/util/getBaseUrl.js';
+import {
+  getBaseUrl,
+  joinBaseUrl
+} from '../../../../../lib/util/getBaseUrl.js';
 import { getConfig } from '../../../../../lib/util/getConfig.js';
 import { getValueSync } from '../../../../../lib/util/registry.js';
 import { OgInfo } from '../../../../../types/pageMeta.js';
@@ -32,7 +35,9 @@ export default {
         if (!favicon) {
           return null;
         }
-        return favicon.startsWith('http') ? favicon : `${getBaseUrl()}${favicon}`;
+        return favicon.startsWith('http')
+          ? favicon
+          : joinBaseUrl(getBaseUrl(), favicon);
       }
     })
   },
@@ -117,12 +122,12 @@ export default {
       // If logo is not set, use default /images/logo.png
       if (logo && !logo.startsWith('http')) {
         // If logo is a relative path, convert to absolute URL
-        logo = `${baseUrl}${logo}`;
+        logo = joinBaseUrl(baseUrl, logo);
       }
       const defaultBrandImage = brandConfig.images.og
         ? brandConfig.images.og.startsWith('http')
           ? brandConfig.images.og
-          : `${baseUrl}${brandConfig.images.og}`
+          : joinBaseUrl(baseUrl, brandConfig.images.og)
         : '';
       const image = get(context, 'pageInfo.ogInfo.image', defaultBrandImage || (logo
         ? `${baseUrl}/images?src=${logo}&w=1200&q=80&h=675&f=png`

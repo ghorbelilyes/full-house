@@ -23,6 +23,9 @@
       "import": "./dist/lib/mail/*.js",
       "types": "./dist/lib/mail/*.d.ts"
     },
+    "./lib/branding/getBrandConfig.js": {
+      "import": "./dist/lib/branding/getBrandConfig.js"
+    },
     "./lib/util/*": {
       "import": "./dist/lib/util/*.js",
       "types": "./dist/lib/util/*.d.ts"

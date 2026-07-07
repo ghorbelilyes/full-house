@@ -1,0 +1,6 @@
+{
+  "methods": ["GET"],
+  "path": "/sitemap.xml",
+  "name": "Sitemap XML",
+  "access": "public"
+}

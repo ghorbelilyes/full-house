@@ -1,0 +1,6 @@
+{
+  "methods": ["GET"],
+  "path": "/robots.txt",
+  "name": "Robots.txt",
+  "access": "public"
+}

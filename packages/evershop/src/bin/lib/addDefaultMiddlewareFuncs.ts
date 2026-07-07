@@ -10,6 +10,7 @@ import publicStatic from '../../lib/middlewares/publicStatic.js';
 import themePublicStatic from '../../lib/middlewares/themePublicStatic.js';
 import { pool } from '../../lib/postgres/connection.js';
 import { getRoutes } from '../../lib/router/Router.js';
+import { getBaseUrl } from '../../lib/util/getBaseUrl.js';
 import { getConfig } from '../../lib/util/getConfig.js';
 import isDevelopmentMode from '../../lib/util/isDevelopmentMode.js';
 import isProductionMode from '../../lib/util/isProductionMode.js';
@@ -20,6 +21,23 @@ import { setPageMetaInfo } from '../../modules/cms/services/pageMetaInfo.js';
 import { getDevMiddleware, getHotMiddleware } from './devEnvHelper.js';
 
 export function addDefaultMiddlewareFuncs(app) {
+  app.use((request, response, next) => {
+    try {
+      const canonicalBaseUrl = new URL(getBaseUrl());
+      const requestHost = request.hostname;
+      const apexHost = canonicalBaseUrl.hostname.replace(/^www\./, '');
+      if (requestHost === apexHost && canonicalBaseUrl.hostname !== apexHost) {
+        return response.redirect(
+          301,
+          `${canonicalBaseUrl.origin}${request.originalUrl}`
+        );
+      }
+    } catch (e) {
+      // Ignore invalid base URL configuration and continue request handling.
+    }
+    return next();
+  });
+
   app.use((request, response, next) => {
     response.debugMiddlewares = [];
     next();
@@ -83,7 +101,12 @@ export function addDefaultMiddlewareFuncs(app) {
   app.use(cookieParser(cookieSecret));
   app.use((request, response, next) => {
     const routes = getRoutes();
-    const method = request.method.toUpperCase();
+    // Express serves HEAD through GET handlers unless a HEAD handler exists,
+    // so route discovery should mirror that behavior.
+    const method =
+      request.method.toUpperCase() === 'HEAD'
+        ? 'GET'
+        : request.method.toUpperCase();
     const requestPath = request.originalUrl.split('?')[0];
     const matchedRoutes = routes.filter((r) => {
       const regexp = pathToRegexp(r.path, []);
@@ -158,7 +181,10 @@ export function addDefaultMiddlewareFuncs(app) {
         return false;
       });
       // Get the current http method
-      const method = request.method.toUpperCase();
+      const method =
+        request.method.toUpperCase() === 'HEAD'
+          ? 'GET'
+          : request.method.toUpperCase();
       // Check if the route supports the current http method
       if (route && route.method.includes(method)) {
         request.currentRoute = route;

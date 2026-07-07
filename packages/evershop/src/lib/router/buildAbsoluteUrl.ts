@@ -1,8 +1,5 @@
-import { normalizePort } from '../../bin/lib/normalizePort.js';
-import { getBaseUrl } from '../../lib/util/getBaseUrl.js';
+import { getBaseUrl, joinBaseUrl } from '../../lib/util/getBaseUrl.js';
 import { buildUrl } from './buildUrl.js';
-
-const port = normalizePort();
 
 /**
  * This function take a route ID, list of params and return the absolute url
@@ -17,6 +14,5 @@ export const buildAbsoluteUrl = (
   params: Record<string, any> = {}
 ) => {
   const url = buildUrl(routeId, params).replace(/^\/|\/$/g, '');
-  const homeUrl = getBaseUrl();
-  return `${homeUrl}/${url}`;
+  return joinBaseUrl(getBaseUrl(), url);
 };

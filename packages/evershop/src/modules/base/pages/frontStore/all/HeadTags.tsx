@@ -12,6 +12,10 @@ interface HeadTagsProps {
     keywords: string[];
     canonicalUrl: string;
     favicon: string;
+    breadcrumbs: Array<{
+      title: string;
+      url: string;
+    }>;
     ogInfo: {
       locale: string;
       title: string;
@@ -26,6 +30,30 @@ interface HeadTagsProps {
       twitterImage: string;
     };
   };
+  currentProduct?: {
+    name: string;
+    sku: string;
+    url: string;
+    metaDescription?: string | null;
+    image?: {
+      url: string;
+    } | null;
+    price?: {
+      regular?: {
+        value: number;
+      } | null;
+      special?: {
+        value: number;
+      } | null;
+    } | null;
+    inventory?: {
+      isInStock?: boolean;
+    } | null;
+    reviewSummary?: {
+      averageRating?: number;
+      totalReviews?: number;
+    } | null;
+  } | null;
   themeConfig: {
     headTags: {
       metas: Array<MetaHTMLAttributes<HTMLMetaElement>>;
@@ -39,11 +67,119 @@ interface HeadTagsProps {
   };
 }
 export default function HeadTags({
-  pageInfo: { title, description, keywords, canonicalUrl, ogInfo, favicon },
+  pageInfo: {
+    title,
+    description,
+    keywords,
+    canonicalUrl,
+    ogInfo,
+    favicon,
+    breadcrumbs
+  },
+  currentProduct,
   themeConfig: {
     headTags: { metas, links, scripts, base }
   }
 }: HeadTagsProps) {
+  let websiteOrigin = '';
+  try {
+    websiteOrigin = new URL(canonicalUrl || ogInfo.url).origin;
+  } catch (e) {
+    websiteOrigin = '';
+  }
+
+  const websiteName = ogInfo.siteName || title;
+  const structuredData: Record<string, unknown>[] = [];
+
+  if (websiteOrigin) {
+    structuredData.push({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: websiteName,
+      url: websiteOrigin,
+      logo: ogInfo.image || favicon || undefined
+    });
+
+    structuredData.push({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: websiteName,
+      url: websiteOrigin,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${websiteOrigin}/search?keyword={search_term_string}`,
+        'query-input': 'required name=search_term_string'
+      }
+    });
+
+    if (breadcrumbs?.length) {
+      structuredData.push({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbs.map((breadcrumb, index) => {
+          const itemUrl = breadcrumb.url.startsWith('http')
+            ? breadcrumb.url
+            : `${websiteOrigin}${breadcrumb.url.startsWith('/') ? '' : '/'}${breadcrumb.url}`;
+
+          return {
+            '@type': 'ListItem',
+            position: index + 1,
+            name: breadcrumb.title,
+            item: itemUrl
+          };
+        })
+      });
+    }
+
+    if (currentProduct?.url) {
+      const productUrl = currentProduct.url.startsWith('http')
+        ? currentProduct.url
+        : `${websiteOrigin}${currentProduct.url}`;
+      const productImage = currentProduct.image?.url
+        ? currentProduct.image.url.startsWith('http')
+          ? currentProduct.image.url
+          : `${websiteOrigin}${currentProduct.image.url}`
+        : ogInfo.image || undefined;
+      const offerPrice =
+        currentProduct.price?.special?.value ??
+        currentProduct.price?.regular?.value;
+
+      structuredData.push({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: currentProduct.name,
+        sku: currentProduct.sku,
+        url: productUrl,
+        description: currentProduct.metaDescription || description,
+        image: productImage ? [productImage] : undefined,
+        brand: {
+          '@type': 'Brand',
+          name: websiteName
+        },
+        offers: offerPrice
+          ? {
+              '@type': 'Offer',
+              url: productUrl,
+              priceCurrency: 'TND',
+              price: offerPrice,
+              availability: currentProduct.inventory?.isInStock
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock'
+            }
+          : undefined,
+        aggregateRating:
+          currentProduct.reviewSummary?.totalReviews &&
+          currentProduct.reviewSummary.totalReviews > 0
+            ? {
+                '@type': 'AggregateRating',
+                ratingValue: currentProduct.reviewSummary.averageRating || 0,
+                reviewCount: currentProduct.reviewSummary.totalReviews
+              }
+            : undefined
+      });
+    }
+  }
+
   React.useEffect(() => {
     const head = document.querySelector('head');
     scripts.forEach((script) => {
@@ -76,6 +212,14 @@ export default function HeadTags({
         <meta name="keywords" content={keywords.join(', ')} />
       )}
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      {structuredData.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData)
+          }}
+        />
+      )}
       {base && <base {...base} />}
       <Og
         type={ogInfo.type}
@@ -107,6 +251,10 @@ export const query = `
       keywords
       canonicalUrl
       favicon
+      breadcrumbs {
+        title
+        url
+      }
       ogInfo {
         locale
         title
@@ -119,6 +267,30 @@ export const query = `
         twitterSite
         twitterCreator
         twitterImage
+      }
+    }
+    currentProduct {
+      name
+      sku
+      url
+      metaDescription
+      image {
+        url
+      }
+      price {
+        regular {
+          value
+        }
+        special {
+          value
+        }
+      }
+      inventory {
+        isInStock
+      }
+      reviewSummary {
+        averageRating
+        totalReviews
       }
     }
     themeConfig {

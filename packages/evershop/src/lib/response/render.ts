@@ -56,14 +56,128 @@ function buildContextData(
   return contextValue;
 }
 
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildDevelopmentHead(pageMeta) {
+  const title = escapeHtml(pageMeta.title || '');
+  const description = escapeHtml(pageMeta.description || '');
+  const canonicalUrl = pageMeta.canonicalUrl || pageMeta.route?.url || '';
+  const ogUrl = pageMeta.ogInfo?.url || canonicalUrl;
+  const ogImage = pageMeta.ogInfo?.image || '';
+  const ogType = pageMeta.ogInfo?.type || 'website';
+  const siteName = pageMeta.ogInfo?.siteName || pageMeta.title || '';
+  const twitterCard = pageMeta.ogInfo?.twitterCard || 'summary';
+  const twitterSite = pageMeta.ogInfo?.twitterSite || siteName;
+  const twitterCreator = pageMeta.ogInfo?.twitterCreator || siteName;
+  const twitterImage = pageMeta.ogInfo?.twitterImage || ogImage;
+  const structuredData = [];
+
+  if (pageMeta.baseUrl) {
+    structuredData.push({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: siteName,
+      url: pageMeta.baseUrl
+    });
+    structuredData.push({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: siteName,
+      url: pageMeta.baseUrl,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${pageMeta.baseUrl}/search?keyword={search_term_string}`,
+        'query-input': 'required name=search_term_string'
+      }
+    });
+  }
+
+  if (
+    pageMeta.baseUrl &&
+    pageMeta.route?.path &&
+    pageMeta.route.path !== '/' &&
+    pageMeta.title
+  ) {
+    structuredData.push({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: `${pageMeta.baseUrl}/`
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: pageMeta.title,
+          item: pageMeta.route.url || `${pageMeta.baseUrl}${pageMeta.route.path}`
+        }
+      ]
+    });
+  }
+
+  return [
+    title ? `<title>${title}</title>` : '',
+    description
+      ? `<meta name="description" content="${description}" />`
+      : '',
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+    canonicalUrl
+      ? `<link rel="canonical" href="${escapeHtml(canonicalUrl)}" />`
+      : '',
+    `<meta property="og:type" content="${escapeHtml(ogType)}" />`,
+    title ? `<meta property="og:title" content="${title}" />` : '',
+    description
+      ? `<meta property="og:description" content="${description}" />`
+      : '',
+    ogImage
+      ? `<meta property="og:image" content="${escapeHtml(ogImage)}" />`
+      : '',
+    ogUrl ? `<meta property="og:url" content="${escapeHtml(ogUrl)}" />` : '',
+    siteName
+      ? `<meta property="og:site_name" content="${escapeHtml(siteName)}" />`
+      : '',
+    pageMeta.ogInfo?.locale
+      ? `<meta property="og:locale" content="${escapeHtml(pageMeta.ogInfo.locale)}" />`
+      : '',
+    `<meta name="twitter:card" content="${escapeHtml(twitterCard)}" />`,
+    title ? `<meta name="twitter:title" content="${title}" />` : '',
+    description
+      ? `<meta name="twitter:description" content="${description}" />`
+      : '',
+    twitterSite
+      ? `<meta name="twitter:site" content="${escapeHtml(twitterSite)}" />`
+      : '',
+    twitterCreator
+      ? `<meta name="twitter:creator" content="${escapeHtml(twitterCreator)}" />`
+      : '',
+    twitterImage
+      ? `<meta name="twitter:image" content="${escapeHtml(twitterImage)}" />`
+      : '',
+    structuredData.length > 0
+      ? `<script type="application/ld+json">${escapeHtml(
+          JSON.stringify(structuredData)
+        )}</script>`
+      : ''
+  ]
+    .filter(Boolean)
+    .join('\n                  ');
+}
+
 function renderDevelopment(
   request: EvershopRequest,
   response: EvershopResponse
 ) {
   const route = request.currentRoute;
-  const classes = route.isAdmin
-    ? `admin ${route.id}`
-    : `frontStore ${route.id}`;
   const configLanguage = getConfig('shop.language', 'en');
   const cookieLanguage = request.cookies?.evershop_language;
   const language = cookieLanguage && ['en', 'fr'].includes(cookieLanguage) ? cookieLanguage : configLanguage;
@@ -86,6 +200,7 @@ function renderDevelopment(
     json: true,
     isScriptContext: true
   });
+  const devHeadMarkup = buildDevelopmentHead(contextValue.config.pageMeta);
   const langCode = request.currentRoute?.isAdmin ? 'en' : language;
   const translations = get(request, 'locals.context.translations', {});
   const translationsScript = Object.keys(translations).length > 0
@@ -95,6 +210,7 @@ function renderDevelopment(
   response.send(`
             <!doctype html><html lang="${langCode}">
                 <head>
+                  ${devHeadMarkup}
                   <script>var eContext = ${safeContextValue};${translationsScript}</script>
                   <script>
                     (function() {
@@ -110,7 +226,7 @@ function renderDevelopment(
                     })();
                   </script>
                 </head>
-                <body class="${classes}">
+                <body class="${route.isAdmin ? `admin ${route.id}` : `frontStore ${route.id}`}">
                 <div id="app"></div>
                  <script defer src="${scriptPath}"></script>
                 </body >

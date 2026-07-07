@@ -1,18 +1,17 @@
-# Protek web app icons
+# Full House web app icons
 
-Generated from `Protek Logo with Silver Shield and Lens.png`.
+This folder contains the current Full House public icon set.
 
-## Main files
-
+Files included:
 - `favicon.ico`
 - `favicon-16x16.png`
 - `favicon-32x32.png`
-- `apple-touch-icon.png` (180x180)
+- `apple-touch-icon.png`
 - `android-chrome-192x192.png`
 - `android-chrome-512x512.png`
-- `maskable-icon-192x192.png`
 - `maskable-icon-512x512.png`
+- `mstile-150x150.png`
 - `site.webmanifest`
-- `html-head-snippet.html`
+- `browserconfig.xml`
 
-Use the contents of `html-head-snippet.html` in your app's `<head>` and serve this folder as `/icons`.
+Use the contents of `html-head-snippet.html` in your app's `<head>` when serving this folder as `/icons`.

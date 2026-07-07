@@ -1,5 +1,5 @@
 import { pool } from '../../../../lib/postgres/connection.js';
-import { getBaseUrl } from '../../../../lib/util/getBaseUrl.js';
+import { getBaseUrl, joinBaseUrl } from '../../../../lib/util/getBaseUrl.js';
 import { getConfig } from '../../../../lib/util/getConfig.js';
 import {
   hasContextValue,
@@ -14,7 +14,7 @@ export default (request, response) => {
   }
   const homeUrl = getBaseUrl();
   setContextValue(request.app, 'homeUrl', homeUrl);
-  setContextValue(request, 'currentUrl', `${homeUrl}${request.originalUrl}`);
+  setContextValue(request, 'currentUrl', joinBaseUrl(homeUrl, request.originalUrl));
   setContextValue(request, 'baseUrl', request.baseUrl);
   setContextValue(request, 'body', request.body);
   setContextValue(request, 'cookies', request.cookies);
